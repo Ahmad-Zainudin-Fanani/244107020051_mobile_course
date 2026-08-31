@@ -1,5 +1,3 @@
-# 244107020051_mobile_course# Portfolio Pemrograman Mobile
-
 ## Identitas Mahasiswa
 
 | Keterangan | Informasi |

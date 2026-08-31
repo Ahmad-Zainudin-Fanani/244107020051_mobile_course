@@ -43,4 +43,4 @@ Pada paradigma UI deklaratif, tampilan layar adalah hasil proyeksi langsung dari
 
 | Tampilan Hasil Awal | Mini Assignment |
 | :---: | :---: |
-| <img src="./Screenshots/sebelum.jpeg" width="400"> | <img src="./Screenshots/sesudah.jpeg" width="400"> |
+| <img src="./Screenshots/sebelum.jpeg" width="250"> | <img src="./Screenshots/sesudah.jpeg" width="250"> |

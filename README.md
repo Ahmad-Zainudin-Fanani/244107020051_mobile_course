@@ -15,7 +15,7 @@ Portfolio ini berisi rangkuman materi serta tugas yang dikerjakan selama proses 
 | Pertemuan | Materi | Keterangan | Dokumentasi |
 |:---:|---|:---:|---|
 | 1 | Pengenalan Ekosistem Mobile dan Flutter Refresh | Selesai | [Lihat Materi dan Tugas](./01-week-1-mobile-development-ecosystem-flutter-refresh) |
-| 2 | Declarative UI dan Responsive Design | Belum dikerjakan | - |
+| 2 | Declarative UI dan Responsive Design | Selesai | [Lihat Materi dan Tugas](./02-week-2-declarative-ui-responsive-design) |
 | 3 | Navigation dan State Management | Belum dikerjakan | - |
 | 4 | Form dan Pengolahan Data Input | Belum dikerjakan | - |
 | 5 | API dan Asynchronous Programming | Belum dikerjakan | - |

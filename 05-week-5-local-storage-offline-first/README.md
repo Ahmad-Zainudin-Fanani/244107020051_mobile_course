@@ -180,7 +180,7 @@ Menambahkan halaman detail catatan menggunakan `GoRouter` dengan *path* `/note/:
 - `lib/router.dart`: Berisi konfigurasi navigasi GoRouter.
 - `lib/pages/note_detail_page.dart`: Berisi halaman detail yang di-supply oleh `noteDetailProvider` yang mengambil dari repositori (`NoteRepository.getNote(id)`).
 
-<img src="screenshots/detail_note.png" style="display: block; margin: 0 auto;">
+<img src="Screenshots/detail_note.png" width="300">
 
 ---
 
@@ -208,4 +208,4 @@ Sebagai fitur penutup berstandar industri, saya telah mengimplementasikan:
 - **Pengaturan Persisten:** Beralih antara tema gelap/terang serta menyimpan data riwayat waktu aplikasi terakhir dibuka (menggunakan `SharedPreferences`), yang diimplementasikan pada halaman Pengaturan.
 - **Dokumentasi Aturan Konflik:** Mendefinisikan dan mendokumentasikan aturan resolusi konflik secara eksplisit di dalam file `sync.dart`.
 
-<img src="screenshots/miniindustry.png" style="display: block; margin: 0 auto;">
+<img src="Screenshots/miniindustry.png" width="300">

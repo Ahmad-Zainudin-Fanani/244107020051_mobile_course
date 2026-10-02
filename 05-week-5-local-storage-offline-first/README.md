@@ -179,6 +179,7 @@ Logika *cache posts* dan `syncNotes` dipisahkan ke dalam file `lib/data/sync.dar
 Menambahkan halaman detail catatan menggunakan `GoRouter` dengan *path* `/note/:id`. Data yang ditampilkan pada halaman detail dibaca langsung dari repositori lokal (*Single Source of Truth*), bukan diover oper dari halaman *list*.
 - `lib/router.dart`: Berisi konfigurasi navigasi GoRouter.
 - `lib/pages/note_detail_page.dart`: Berisi halaman detail yang di-supply oleh `noteDetailProvider` yang mengambil dari repositori (`NoteRepository.getNote(id)`).
+
 <img src="screenshots/detail_note.png" style="display: block; margin: 0 auto;">
 
 ---
@@ -206,4 +207,5 @@ Terdapat beberapa kendala di mana pengujian praktikum awal tidak lolos. Berikut 
 Sebagai fitur penutup berstandar industri, saya telah mengimplementasikan:
 - **Pengaturan Persisten:** Beralih antara tema gelap/terang serta menyimpan data riwayat waktu aplikasi terakhir dibuka (menggunakan `SharedPreferences`), yang diimplementasikan pada halaman Pengaturan.
 - **Dokumentasi Aturan Konflik:** Mendefinisikan dan mendokumentasikan aturan resolusi konflik secara eksplisit di dalam file `sync.dart`.
+
 <img src="screenshots/miniindustry.png" style="display: block; margin: 0 auto;">

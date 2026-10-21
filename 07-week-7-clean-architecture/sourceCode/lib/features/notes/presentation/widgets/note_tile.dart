@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../data/local/note.dart';
+import '../../../../core/format.dart';
+import '../../domain/entities/note.dart';
 
 class NoteTile extends StatelessWidget {
   const NoteTile({
@@ -17,7 +18,7 @@ class NoteTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(note.title),
-      subtitle: Text('Note created at ${note.updatedAt.toIso8601String()}'),
+      subtitle: Text('Catatan diperbarui: ${formatDisplayDate(note.updatedAt)}'),
       trailing: note.dirty
           ? const Icon(Icons.cloud_upload_outlined, color: Colors.orange)
           : null,

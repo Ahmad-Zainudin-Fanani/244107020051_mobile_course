@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../data/sync.dart';
-import '../data/local/note.dart';
+import '../../../../data/sync.dart' show forceOfflineProvider;
+import '../providers/notes_providers.dart';
+import '../widgets/error_view.dart';
 import '../widgets/note_tile.dart';
-
-final notesProvider = FutureProvider.autoDispose<List<Note>>((ref) async {
-  final repo = ref.read(noteRepositoryProvider);
-  return repo.fetchNotes();
-});
 
 class NotesPage extends ConsumerWidget {
   const NotesPage({super.key});
@@ -45,7 +41,7 @@ class NotesPage extends ConsumerWidget {
       body: notesAsyncValue.when(
         data: (notes) {
           if (notes.isEmpty) {
-            return const Center(child: Text('No notes yet.'));
+            return const Center(child: Text('Belum ada catatan.'));
           }
           return ListView.builder(
             itemCount: notes.length,
@@ -69,15 +65,27 @@ class NotesPage extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, _) => ErrorView(
+          message: '$err',
+          onRetry: () => ref.invalidate(notesProvider),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final title = 'New Note ${DateTime.now().second}';
-          await ref.read(noteRepositoryProvider).addNote(title: title);
-          ref.invalidate(notesProvider);
-          // Cobaan sinkronisasi setiap kali catatan baru ditambahkan
-          _syncData(context, ref);
+          final title = 'Catatan Baru ${DateTime.now().second}';
+          final result = await ref.read(addNoteProvider).call(title: title);
+          if (result.failure != null) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(result.failure!.message)),
+              );
+            }
+          } else {
+            ref.invalidate(notesProvider);
+            if (context.mounted) {
+              _syncData(context, ref);
+            }
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -87,23 +95,35 @@ class NotesPage extends ConsumerWidget {
   Future<void> _syncData(BuildContext context, WidgetRef ref) async {
     final repo = ref.read(noteRepositoryProvider);
     try {
-      final synced = await ref.read(syncServiceProvider).syncNotes(repo);
-      if (synced > 0) {
+      final countResult = await repo.countDirty();
+      final dirtyCount = countResult.count;
+      if (ref.read(forceOfflineProvider)) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('Mode Offline aktif. Tidak dapat sinkron.')),
+          );
+        }
+        return;
+      }
+      if (dirtyCount > 0) {
+        await Future.delayed(const Duration(seconds: 1));
+        await repo.markAllSynced();
         ref.invalidate(notesProvider);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sync successful!')),
+            const SnackBar(content: Text('Sinkronisasi berhasil!')),
           );
         }
       } else if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('All synced up!')),
-          );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Semua catatan sudah tersinkron.')),
+        );
       }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: $e')),
+          SnackBar(content: Text('Gagal sinkron: $e')),
         );
       }
     }

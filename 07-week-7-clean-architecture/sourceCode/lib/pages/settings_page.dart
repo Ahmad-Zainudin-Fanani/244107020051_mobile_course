@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/prefs.dart';
+import '../data/sync.dart';
 
 final prefsRepositoryProvider = Provider((ref) => PrefsRepository());
 final darkModeProvider =
@@ -31,29 +32,58 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = ref.watch(darkModeProvider).value ?? false;
+    final isOffline = ref.watch(forceOfflineProvider);
     final lastOpenedAsync = ref.watch(lastOpenedProvider);
-    
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text(
+          'Pengaturan',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        ),
+      ),
       body: ListView(
         children: [
+          const SizedBox(height: 8),
           SwitchListTile(
-            title: const Text('Dark Mode'),
-            subtitle: const Text('Toggle between light and dark theme'),
+            secondary: const Icon(Icons.nightlight_round, size: 24),
+            title: const Text(
+              'Tema Gelap',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: const Text('Disimpan sebagai preferensi lokal'),
             value: isDark,
             onChanged: (val) => ref.read(darkModeProvider.notifier).toggle(),
           ),
-          const Divider(),
+          const SizedBox(height: 6),
+          SwitchListTile(
+            secondary: const Icon(Icons.cloud_outlined, size: 24),
+            title: const Text(
+              'Paksa Mode Offline',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: const Text('Catatan tidak menggunakan sinkronisasi server'),
+            value: isOffline,
+            onChanged: (val) =>
+                ref.read(forceOfflineProvider.notifier).toggle(val),
+          ),
+          const SizedBox(height: 6),
           lastOpenedAsync.when(
             data: (lastOpened) => ListTile(
-              leading: const Icon(Icons.history),
-              title: const Text('Last Opened'),
-              subtitle: Text(lastOpened ?? 'Never'),
+              leading: const Icon(Icons.access_time, size: 24),
+              title: const Text(
+                'Terakhir Dibuka',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(lastOpened ?? 'Baru saja'),
             ),
             loading: () => const ListTile(
-              leading: Icon(Icons.history),
-              title: Text('Last Opened'),
-              subtitle: Text('Loading...'),
+              leading: Icon(Icons.access_time, size: 24),
+              title: Text(
+                'Terakhir Dibuka',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text('Memuat...'),
             ),
             error: (err, stack) => const SizedBox(),
           ),

@@ -113,51 +113,47 @@ Clean Architecture menetapkan hierarki ketergantungan terarah ke dalam. Lapisan 
 
 ### 3.2 Struktur Direktori Berbasis Fitur (*Feature-First Layout*)
 
-Penyusunan kode diorganisasikan per fitur fungsional untuk mendukung modularitas dan skalabilitas proyek:
+Penyusunan kode diorganisasikan per fitur fungsional dengan Clean Architecture penuh pada modul `features/notes/` serta arsitektur pendukung yang modular:
 
 ```text
-lib/
+sourceCode/lib/
 ├── core/
-│   ├── failures.dart                                # Definisi Failure tersegel (Sealed Class murni Dart)
-│   └── format.dart                                  # Helper pemformatan tanggal & status murni (unit-testable)
+│   ├── failures.dart                                # Hierarki Failure sealed class murni Dart
+│   └── format.dart                                  # Helper pemformatan tanggal & status murni Dart (testable)
 ├── features/
-│   ├── notes/
-│   │   ├── domain/
-│   │   │   ├── entities/
-│   │   │   │   └── note.dart                        # Objek entitas bisnis murni (steril dari Flutter/SQLite)
-│   │   │   ├── repositories/
-│   │   │   │   └── note_repository.dart             # Kontrak antarmuka repositori murni
-│   │   │   └── usecases/
-│   │   │       ├── get_notes.dart                   # Use case pengambilan data catatan (Dart Record)
-│   │   │       └── add_note.dart                    # Use case pembuatan catatan + validasi bisnis
-│   │   ├── data/
-│   │   │   ├── models/
-│   │   │   │   └── note_model.dart                  # Model transfer data (toMap, fromMap, toEntity)
-│   │   │   └── repositories/
-│   │   │       └── note_repository_impl.dart        # Implementasi konkret SQLite berbasis kontrak domain
-│   │   └── presentation/
-│   │       ├── providers/
-│   │       │   └── notes_providers.dart             # Riverpod StateNotifier & Dependency Injection wiring
-│   │       ├── pages/
-│   │       │   ├── notes_page.dart                  # Halaman daftar catatan berbasis state murni
-│   │       │   └── note_detail_page.dart            # Halaman detail catatan
-│   │       └── widgets/
-│   │           ├── error_view.dart                  # Widget penanganan status galat interaktif
-│   │           └── note_tile.dart                   # Komponen kartu catatan (hanya menerima entitas Note)
-│   └── settings/
+│   └── notes/
 │       ├── domain/
-│       │   └── repositories/
-│       │       └── settings_repository.dart         # Kontrak preferensi tema & konfigurasi luring
+│       │   ├── entities/
+│       │   │   └── note.dart                        # Objek entitas bisnis murni (steril dari Flutter & SQLite)
+│       │   ├── repositories/
+│       │   │   └── note_repository.dart             # Kontrak antarmuka repositori murni (abstract interface)
+│       │   └── usecases/
+│       │       ├── get_notes.dart                   # Use case pengambilan data catatan (Dart Record result)
+│       │       └── add_note.dart                    # Use case penambahan catatan + validasi bisnis
 │       ├── data/
+│       │   ├── models/
+│       │   │   └── note_model.dart                  # Model transfer data SQLite (toMap, fromMap, toEntity)
 │       │   └── repositories/
-│       │       └── settings_repository_impl.dart    # Implementasi preferensi berbasis SharedPreferences
+│       │       └── note_repository_impl.dart        # Implementasi konkret repositori SQLite berbasis kontrak domain
 │       └── presentation/
 │           ├── providers/
-│           │   └── settings_providers.dart          # Pengelola state tema gelap dan toggle luring
-│           └── pages/
-│               └── settings_page.dart               # Tampilan opsi pengaturan aplikasi
-├── router.dart                                      # Konfigurasi rute navigasi terpusat (GoRouter)
-└── main.dart                                        # Titik masuk utama aplikasi & pembungkus ProviderScope
+│           │   └── notes_providers.dart             # Riverpod Notifier, Provider wiring & Dependency Injection
+│           ├── pages/
+│           │   ├── notes_page.dart                  # UI utama daftar catatan bersih, responsif & modern
+│           │   └── note_detail_page.dart            # Halaman detail rincian catatan
+│           └── widgets/
+│               ├── error_view.dart                  # Widget penanganan status galat interaktif
+│               └── note_tile.dart                   # Komponen kartu catatan kustom dengan aksen indikator warna
+├── pages/
+│   ├── settings_page.dart                           # Halaman pengaturan modern (Tema Gelap, Mode Offline, Riwayat)
+│   └── posts_page.dart                              # Halaman pelengkap sinkronisasi data remote
+├── data/
+│   ├── local/
+│   │   └── db.dart                                  # SQLite Database helper & inisialisasi tabel
+│   ├── prefs.dart                                   # SharedPreferences repository untuk preferensi lokal
+│   └── sync.dart                                    # Layanan sinkronisasi luring/daring & network provider
+├── router.dart                                      # Konfigurasi rute navigasi terpusat (GoRouter & NavigationBar)
+└── main.dart                                        # Titik masuk utama aplikasi, Material 3 Slate & Emerald theme
 ```
 
 ---
@@ -180,6 +176,12 @@ lib/
 #### 4. Injeksi Ketergantungan (*Dependency Injection*) Terpusat
 - Pengikatan dependensi dipusatkan pada berkas provider Riverpod (`notes_providers.dart`).
 - Widget UI hanya mengamati status via `ref.watch(notesProvider)` tanpa pernah membuat instansi repositori secara manual (`new NoteRepository()`).
+
+#### 5. Pembaruan Desain Antarmuka & UX Modern (Slate & Emerald Theme)
+- **Sistem Pewarnaan *Slate & Emerald*:** Menggantikan skema warna default dengan palet modern profesional: Hijau Zamrud/Emerald (`#0F766E`) sebagai warna primer dan *Slate* (`#0F172A` / `#1E293B`) untuk tema gelap.
+- **Kapsul Input Kilat (*Quick-Add Capsule*):** Bilah input instan di atas daftar catatan yang memfasilitasi penambahan catatan cepat dengan tombol kirim berputar.
+- **Kartu Catatan Beraksen Vertikal (*Accent Border Indicator*):** Setiap kartu catatan (`NoteTile`) memiliki indikator bar warna di sisi kiri (Oranye/Amber `#D97706` untuk catatan *Belum Sinkron*, Hijau Zamrud `#0F766E` untuk catatan *Tersinkron*).
+- **Struktur Pengaturan Berkelompok (*Grouped Settings Card*):** Menu pengaturan ditata ke dalam kartu terpisah (*Tampilan & Tema*, *Jaringan & Sinkronisasi*, dan *Riwayat Aktivitas*) yang menyajikan opsi *Beralih ke Mode Offline* dan *Tema Gelap*.
 
 ---
 
@@ -320,23 +322,84 @@ Bagi tim pengembang berskala kecil (1–3 orang), penerapan Clean Architecture y
 
 ---
 
-## 6. Dokumentasi Komparasi Antarmuka (Before & After)
+## 6. Dokumentasi Hasil Implementasi Antarmuka (Hasil Akhir / After)
 
-Meskipun fondasi arsitektur internal dirombak secara total, pengalaman pengguna (*user experience*) dan fungsionalitas aplikasi tetap konsisten dan bekerja secara identik:
+Berikut adalah dokumentasi hasil akhir antarmuka aplikasi catatan (*offline-first note app*) setelah diimplementasikan menggunakan arsitektur bersih (**Clean Architecture Feature-First**) serta sentuhan desain antarmuka modern berbasis palet **Slate & Emerald**:
 
-| Komponen Tampilan | Sebelum Refactor (Week 5 - Monolith) | Sesudah Refactor (Week 7 - Clean Architecture) |
-| :--- | :---: | :---: |
-| **Daftar Catatan & Indikator** | ![Before Add Note](Screenshots/badge_before.png) | ![After Clean List](Screenshots/badge_after.png) |
-| **Form Tambah Catatan** | ![Before Form](Screenshots/add_note.png) | ![After Clean Add](Screenshots/add_note_after.png) |
-| **Pengaturan Tema (Dark/Light)** | ![Before Dark Mode](Screenshots/dark_mode.png) | ![After Light Mode](Screenshots/dark_mode_after.png) |
-| **Status Sinkronisasi Data** | ![Before Sync](Screenshots/note_badge_synced_on.png) | ![After Synced](Screenshots/status_sinkronasi.png) |
+### 6.1 Halaman Utama Catatan & Indikator Status (Mode Terang / Light Theme)
+
+Antarmuka beranda menyajikan daftar catatan yang terstruktur, indikator sinkronisasi real-time, kolom input instan (*quick-add capsule*), serta kartu catatan dengan aksen visual yang membedakan status sinkronisasi data secara tegas.
+
+<div align="center">
+  <img src="Screenshots/badge.jpeg" alt="Tampilan Halaman Utama Catatan - Light Theme" width="250">
+  <p><em>Gambar 6.1: Halaman utama aplikasi dalam Mode Terang menampilkan Quick-Add Capsule, kartu catatan kustom beraksen warna, dan indikator sinkronisasi.</em></p>
+</div>
+
+- **Header Reaktif & Real-time Counter:** Judul *"Catatan Saya"* dilengkapi dengan subtitle dinamis (`2 catatan • 1 perlu sinkron`) yang terikat langsung dengan data SQLite via Riverpod `countDirtyProvider`.
+- **Indikator Badge AppBar:** Ikon sinkronisasi di kanan atas secara otomatis memunculkan lencana merah berangka apabila terdapat catatan lokal yang belum disinkronkan.
+- **Kapsul Input Kilat (*Quick-Add Capsule*):** Bilah input teks instan (*"Tulis catatan cepat di sini..."*) dengan tombol kirim bulat hijau zamrud (*Emerald*) untuk mencatat ide tanpa harus membuka dialog baru.
+- **Kartu Catatan Kustom (*NoteTile*):** Setiap kartu catatan dilengkapi dengan aksen bar vertikal di sisi kiri:
+  - **Aksen Amber (`#D97706`):** Menandai catatan lokal dengan status belum tersinkron (*dirty*) beserta chip *"☁ Belum Sinkron"*.
+  - **Aksen Emerald (`#0F766E`):** Menandai catatan yang telah tersimpan rapi di basis data dengan chip *"☁ Tersinkron"*.
+- **Helper Format Waktu Terisolasi:** Tanggal dan waktu pada setiap kartu diformat secara bersih (`YYYY-MM-DD HH:mm`) menggunakan fungsi murni `formatDateTime()` dari `lib/core/format.dart`.
+- **Floating Action Button (FAB):** Tombol aksi mengambang berbentuk kapsul memanjang bertuliskan `+ Buat Catatan`.
+- **Navigasi Terpusat Material 3:** Bilah navigasi bawah (*NavigationBar*) terintegrasi via `GoRouter` untuk berpindah cepat antara tab *Catatan* dan tab *Pengaturan*.
+
+---
+
+### 6.2 Form Pembuatan Catatan Baru (Modal Bottom Sheet)
+
+Fitur penambahan catatan lengkap disajikan melalui *Modal Bottom Sheet* yang muncul dengan animasi halus dari bawah layar.
+
+<div align="center">
+  <img src="Screenshots/add_note.jpeg" alt="Form Modal Bottom Sheet Buat Catatan Baru" width="250">
+  <p><em>Gambar 6.2: Modal Bottom Sheet form penambahan catatan baru dengan pengikatan ke Use Case AddNote.</em></p>
+</div>
+
+- **Desain Formulir Bersih & Terfokus:** Menggunakan kontainer bersudut melengkung halus (*rounded top corners*) dan tombol silang (*X*) untuk membatalkan pengisian.
+- **Input Judul Catatan:** Dilengkapi label outline aktif berwarna hijau zamrud (*Emerald*) dan ikon `title_rounded`.
+- **Input Deskripsi Catatan (Opsional):** Area teks multilini untuk menuangkan rincian isi catatan.
+- **Aksi Penyimpanan Terstandar:** Tombol aksi utama *"✓ Simpan ke Database"* memanggil Use Case `AddNote` melalui Riverpod `notesActionProvider`.
+- **Validasi Bisnis di Lapisan Domain:** Judul catatan diverifikasi secara otomatis oleh aturan bisnis domain sebelum dikirim ke lapisan data SQLite, memastikan tidak ada catatan kosong yang tersimpan.
+
+---
+
+### 6.3 Halaman Pengaturan & Mode Gelap (Grouped Card Settings)
+
+Halaman pengaturan mengelompokkan preferensi aplikasi ke dalam kartu-kartu visual terpisah untuk meningkatkan keterbacaan (*readability*) dan kenyamanan pengguna.
+
+<div align="center">
+  <img src="Screenshots/dark_mode.jpeg" alt="Halaman Pengaturan - Grouped Card Settings" width="250">
+  <p><em>Gambar 6.3: Halaman pengaturan aplikasi dalam Mode Gelap dengan pengelompokan opsi kartu modern.</em></p>
+</div>
+
+- **Kategori TAMPILAN & TEMA:** Kartu yang memuat sakelar (*SwitchListTile*) **Tema Gelap** untuk beralih instan antara mode terang (*Light Mode*) dan gelap (*Dark Mode*), dikendalikan oleh `DarkModeNotifier`.
+- **Kategori JARINGAN & SINKRONISASI:** Kartu yang memuat sakelar **Beralih ke Mode Offline** (*Simpan catatan di basis data lokal tanpa sinkronisasi*) yang mengendalikan state `forceOfflineProvider`.
+- **Kategori RIWAYAT AKTIVITAS:** Kartu informasi **Terakhir Dibuka** yang menampilkan waktu akses sesi pengguna secara persisten dari penyimpanan lokal `SharedPreferences`.
+
+---
+
+### 6.4 Tampilan Utama dalam Mode Gelap & Sinkronisasi Data Real-time
+
+Menampilkan adaptabilitas antarmuka pada tema gelap dengan kontras visual optimal dan pembaruan reaktif data catatan.
+
+<div align="center">
+  <img src="Screenshots/status_sinkronasi.jpeg" alt="Tampilan Beranda Catatan - Dark Mode & Sinkronisasi Real-time" width="250">
+  <p><em>Gambar 6.4: Tampilan beranda aplikasi dalam Mode Gelap dengan counter real-time (3 catatan, 2 perlu sinkron).</em></p>
+</div>
+
+- **Estetika Slate Gelap Modern:** Menggunakan latar belakang gelap Slate (`#0F172A`) dan kartu Slate (`#1E293B`) yang dipadukan dengan aksen Emerald (`#0F766E`), menciptakan antarmuka yang elegan dan nyaman di mata pada malam hari.
+- **Pembaruan Reaktif Sinkronisasi:** Saat catatan baru ditambahkan, counter pada subtitle langsung diperbarui secara otomatis menjadi `3 catatan • 2 perlu sinkron` serta lencana merah pada ikon AppBar berganti menjadi angka `2`.
+- **Ketegasan Status Setiap Item:** Pengguna dapat dengan mudah membedakan catatan yang belum tersinkron (kartu dengan aksen Amber dan chip *"Belum Sinkron"*) dengan catatan yang sudah aman tersinkronisasi (kartu dengan aksen Emerald dan chip *"Tersinkron"*).
 
 ---
 
 ## 7. Kesimpulan
 
-Refaktorisasi proyek `week5_offline_notes` menuju **Clean Architecture** dengan pendekatan **Feature-First** berhasil diselesaikan dengan hasil:
-- Pemisahan tanggung jawab yang tegas antara **Domain**, **Data**, dan **Presentation**.
-- Terpenuhinya aturan ketergantungan (*The Dependency Rule*) dengan bukti 0 pelanggaran pada pengujian statis (*ripgrep*).
-- Sterilitas total pada lapisan domain sehingga logika bisnis dapat diuji secara terisolasi menggunakan *fake repository* dengan waktu eksekusi milidetik.
-- Kode yang lebih terstruktur, mudah dipelihara, dan siap untuk dikembangkan lebih lanjut secara kolaboratif.
+Refaktorisasi proyek `week5_offline_notes` menuju **Clean Architecture** dengan pendekatan **Feature-First** serta pembaruan antarmuka modern berhasil diselesaikan dengan hasil:
+1. **Pemisahan Tanggung Jawab (*Separation of Concerns*):** Modul fitur `features/notes/` terbagi secara tegas ke dalam lapisan **Domain**, **Data**, dan **Presentation**.
+2. **Ketaatan Aturan Dependensi (*The Dependency Rule*):** Lapisan domain berdiri murni tanpa satupun ketergantungan pada pustaka framework eksternal (terbukti 0 temuan pada inspeksi statis *ripgrep*).
+3. **Penerapan Prinsip SOLID yang Konsisten:** Single Responsibility Principle diwujudkan melalui isolasi Use Case dan Helper murni, serta Dependency Inversion Principle ditegakkan melalui kontrak abstraksi repositori dan injeksi Riverpod.
+4. **Kemudahan Pengujian Terisolasi (*Testability*):** Logika bisnis domain dan fungsi helper berhasil diuji menggunakan *Fake Repository* dengan kelulusan unit test 100% tanpa memerlukan database SQLite sungguhan.
+5. **Peningkatan Pengalaman Pengguna (UI/UX):** Antarmuka diperbarui secara profesional dengan palet warna modern *Slate & Emerald*, kartu beraksen indikator status sinkronisasi, kapsul input cepat, modal bottom sheet, dan menu pengaturan terkelompok.
+

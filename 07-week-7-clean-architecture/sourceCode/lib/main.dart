@@ -25,48 +25,61 @@ class MyApp extends ConsumerWidget {
     final isDarkMode = ref.watch(darkModeProvider).value ?? false;
     final router = ref.watch(routerProvider);
 
-    const tealPrimary = Color(0xFF00796B);
+    // Palet warna modern bergaya Slate & Emerald (Linear / Notion style)
+    const primaryAccent = Color(0xFF0D9488); // Teal-600
+    const primaryAccentLight = Color(0xFF14B8A6);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Catatan Offline',
+      title: 'Catatan Saya',
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.light,
-        scaffoldBackgroundColor: const Color(0xFFF2F6F4),
+        scaffoldBackgroundColor: const Color(0xFFF8FAFC), // Slate-50
         colorScheme: ColorScheme.fromSeed(
-          seedColor: tealPrimary,
+          seedColor: primaryAccent,
           brightness: Brightness.light,
-          primary: tealPrimary,
+          primary: primaryAccent,
+          surface: Colors.white,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF2F6F4),
-          foregroundColor: Colors.black87,
+          backgroundColor: Color(0xFFF8FAFC),
+          foregroundColor: Color(0xFF0F172A), // Slate-900
           elevation: 0,
+          scrolledUnderElevation: 0,
         ),
-        cardTheme: const CardThemeData(
+        cardTheme: CardThemeData(
           color: Colors.white,
           elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFFE2E8F0)), // Slate-200
+          ),
         ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0D1412),
+        scaffoldBackgroundColor: const Color(0xFF0F172A), // Slate-900
         colorScheme: ColorScheme.fromSeed(
-          seedColor: tealPrimary,
+          seedColor: primaryAccent,
           brightness: Brightness.dark,
-          primary: const Color(0xFF26A69A),
-          surface: const Color(0xFF151E1B),
+          primary: primaryAccentLight,
+          surface: const Color(0xFF1E293B), // Slate-800
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF0D1412),
-          foregroundColor: Colors.white,
+          backgroundColor: Color(0xFF0F172A),
+          foregroundColor: Color(0xFFF8FAFC),
           elevation: 0,
+          scrolledUnderElevation: 0,
         ),
-        cardTheme: const CardThemeData(
-          color: Color(0xFF16201D),
+        cardTheme: CardThemeData(
+          color: const Color(0xFF1E293B), // Slate-800
           elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFF334155)), // Slate-700
+          ),
         ),
       ),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,

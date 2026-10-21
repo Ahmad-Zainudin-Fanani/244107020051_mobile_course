@@ -34,6 +34,7 @@ class SettingsPage extends ConsumerWidget {
     final isDark = ref.watch(darkModeProvider).value ?? false;
     final isOffline = ref.watch(forceOfflineProvider);
     final lastOpenedAsync = ref.watch(lastOpenedProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,52 +44,113 @@ class SettingsPage extends ConsumerWidget {
         ),
       ),
       body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         children: [
-          const SizedBox(height: 8),
-          SwitchListTile(
-            secondary: const Icon(Icons.nightlight_round, size: 24),
-            title: const Text(
-              'Tema Gelap',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            subtitle: const Text('Disimpan sebagai preferensi lokal'),
-            value: isDark,
-            onChanged: (val) => ref.read(darkModeProvider.notifier).toggle(),
-          ),
-          const SizedBox(height: 6),
-          SwitchListTile(
-            secondary: const Icon(Icons.cloud_outlined, size: 24),
-            title: const Text(
-              'Paksa Mode Offline',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            subtitle: const Text('Catatan tidak menggunakan sinkronisasi server'),
-            value: isOffline,
-            onChanged: (val) =>
-                ref.read(forceOfflineProvider.notifier).toggle(val),
-          ),
-          const SizedBox(height: 6),
-          lastOpenedAsync.when(
-            data: (lastOpened) => ListTile(
-              leading: const Icon(Icons.access_time, size: 24),
-              title: const Text(
-                'Terakhir Dibuka',
-                style: TextStyle(fontWeight: FontWeight.w600),
+          // Section 1: Tampilan
+          _buildSectionHeader('TAMPILAN & TEMA', isDark),
+          _buildCard(
+            isDark,
+            [
+              SwitchListTile(
+                secondary: Icon(
+                  isDark ? Icons.dark_mode : Icons.light_mode,
+                  color: theme.colorScheme.primary,
+                ),
+                title: const Text(
+                  'Tema Gelap',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+                subtitle: const Text('Beralih antara tema terang dan gelap'),
+                value: isDark,
+                onChanged: (_) =>
+                    ref.read(darkModeProvider.notifier).toggle(),
               ),
-              subtitle: Text(lastOpened ?? 'Baru saja'),
-            ),
-            loading: () => const ListTile(
-              leading: Icon(Icons.access_time, size: 24),
-              title: Text(
-                'Terakhir Dibuka',
-                style: TextStyle(fontWeight: FontWeight.w600),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          // Section 2: Jaringan & Sinkronisasi
+          _buildSectionHeader('JARINGAN & SINKRONISASI', isDark),
+          _buildCard(
+            isDark,
+            [
+              SwitchListTile(
+                secondary: Icon(
+                  Icons.cloud_off_outlined,
+                  color: theme.colorScheme.primary,
+                ),
+                title: const Text(
+                  'Beralih ke Mode Offline',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+                subtitle: const Text(
+                    'Simpan catatan di basis data lokal tanpa sinkronisasi'),
+                value: isOffline,
+                onChanged: (val) =>
+                    ref.read(forceOfflineProvider.notifier).toggle(val),
               ),
-              subtitle: Text('Memuat...'),
-            ),
-            error: (err, stack) => const SizedBox(),
+            ],
+          ),
+
+          const SizedBox(height: 18),
+
+          // Section 3: Informasi Sesi
+          _buildSectionHeader('RIWAYAT AKTIVITAS', isDark),
+          _buildCard(
+            isDark,
+            [
+              lastOpenedAsync.when(
+                data: (lastOpened) => ListTile(
+                  leading: Icon(
+                    Icons.history_rounded,
+                    color: theme.colorScheme.primary,
+                  ),
+                  title: const Text(
+                    'Terakhir Dibuka',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+                  ),
+                  subtitle: Text(lastOpened ?? 'Sesi pertama saat ini'),
+                ),
+                loading: () => const ListTile(
+                  leading: Icon(Icons.history_rounded),
+                  title: Text('Terakhir Dibuka'),
+                  subtitle: Text('Memuat riwayat...'),
+                ),
+                error: (err, _) => const SizedBox(),
+              ),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 0.8,
+          color: isDark ? const Color(0xFF94A3B8) : const Color(0xFF64748B),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard(bool isDark, List<Widget> children) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E293B) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0),
+        ),
+      ),
+      child: Column(children: children),
     );
   }
 }

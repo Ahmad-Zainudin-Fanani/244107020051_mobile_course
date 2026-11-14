@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../core/format.dart';
 import '../../domain/entities/note.dart';
 
+/// Kartu satu catatan.
+///
+/// Catatan performa:
+/// - Tidak memakai `IntrinsicHeight`. Sebelumnya `IntrinsicHeight` memaksa
+///   layout dua kali untuk setiap item, dan biaya itu dibayar lagi setiap kali
+///   item masuk viewport saat daftar di-scroll.
+/// - Tidak memakai `ClipRRect`. Garis aksen kiri digambar sebagai
+///   `Positioned` di dalam `Stack`, sehingga tidak ada `saveLayer` per item.
 class NoteTile extends StatelessWidget {
   const NoteTile({super.key, required this.note, this.onTap, this.onLongPress});
 
@@ -40,123 +48,130 @@ class NoteTile extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Garis Aksen Vertikal Unik di sisi kiri kartu
-              Container(width: 5, color: accentColor),
-
-              // Isi Konten Catatan
-              Expanded(
-                child: InkWell(
-                  onTap: onTap,
-                  onLongPress: onLongPress,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
+      child: Stack(
+        children: [
+          // Garis aksen vertikal di sisi kiri kartu. `Positioned` mengikuti
+          // tinggi konten tanpa perlu `IntrinsicHeight`.
+          Positioned(
+            left: 1,
+            top: 1,
+            bottom: 1,
+            width: 4,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: accentColor,
+                borderRadius: const BorderRadius.horizontal(
+                  left: Radius.circular(15),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: InkWell(
+              onTap: onTap,
+              onLongPress: onLongPress,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Baris Judul & Badge Status
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Baris Judul & Badge Status
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                note.title,
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                        Expanded(
+                          child: Text(
+                            note.title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
                             ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                color: badgeBg,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    note.dirty
-                                        ? Icons.cloud_upload_outlined
-                                        : Icons.cloud_done_outlined,
-                                    size: 13,
-                                    color: badgeText,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    note.dirty ? 'Belum Sinkron' : 'Tersinkron',
-                                    style: TextStyle(
-                                      color: badgeText,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // Cuplikan Isi Catatan
-                        if (note.body.isNotEmpty) ...[
-                          const SizedBox(height: 6),
-                          Text(
-                            note.body,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: isDark
-                                  ? const Color(0xFF94A3B8)
-                                  : const Color(0xFF64748B),
-                              height: 1.35,
-                            ),
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                        ],
-
-                        const SizedBox(height: 12),
-
-                        // Footer Informasi Waktu
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.schedule,
-                              size: 13,
-                              color: isDark
-                                  ? const Color(0xFF64748B)
-                                  : const Color(0xFF94A3B8),
-                            ),
-                            const SizedBox(width: 5),
-                            Text(
-                              formatDisplayDate(note.updatedAt),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: isDark
-                                    ? const Color(0xFF64748B)
-                                    : const Color(0xFF94A3B8),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: badgeBg,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                note.dirty
+                                    ? Icons.cloud_upload_outlined
+                                    : Icons.cloud_done_outlined,
+                                size: 13,
+                                color: badgeText,
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 4),
+                              Text(
+                                note.dirty ? 'Belum Sinkron' : 'Tersinkron',
+                                style: TextStyle(
+                                  color: badgeText,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+
+                    // Cuplikan Isi Catatan
+                    if (note.body.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        note.body,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF64748B),
+                          height: 1.35,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+
+                    const SizedBox(height: 12),
+
+                    // Footer Informasi Waktu
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          size: 13,
+                          color: isDark
+                              ? const Color(0xFF64748B)
+                              : const Color(0xFF94A3B8),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          formatDisplayDate(note.updatedAt),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isDark
+                                ? const Color(0xFF64748B)
+                                : const Color(0xFF94A3B8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -43,6 +43,26 @@ final noteDetailProvider = FutureProvider.autoDispose.family<Note?, int>((
   return result.note;
 });
 
+/// Statistik ringkas daftar catatan (total dan jumlah yang belum sinkron).
+///
+/// Dihitung sekali setiap daftar berubah, bukan setiap widget dibangun.
+/// Sebelumnya `NotesPage` menjalankan `notes.where((n) => n.dirty).length`
+/// langsung di dalam `build`, sehingga setiap ketikan pada kolom pencarian
+/// memindai ulang seluruh 1.500 catatan.
+///
+/// Nilai balik berupa record, yang perbandingannya berdasarkan isi field:
+/// bila total dan dirty tidak berubah, Riverpod tidak memicu rebuild.
+final noteStatsProvider = Provider.autoDispose<({int total, int dirty})>((ref) {
+  final notes = ref.watch(notesProvider).value ?? const <Note>[];
+  var dirty = 0;
+  for (final note in notes) {
+    if (note.dirty) {
+      dirty++;
+    }
+  }
+  return (total: notes.length, dirty: dirty);
+});
+
 /// Kata kunci pencarian judul yang sedang aktif.
 ///
 /// Provider ini mengikuti siklus hidup halaman catatan. Saat pengguna pindah

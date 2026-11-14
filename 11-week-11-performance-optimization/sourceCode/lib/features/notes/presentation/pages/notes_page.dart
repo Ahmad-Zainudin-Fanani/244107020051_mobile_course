@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/validation.dart';
-import '../../../../data/sync.dart' show forceOfflineProvider;
 import '../providers/notes_providers.dart';
-import '../widgets/error_view.dart';
-import '../widgets/note_tile.dart';
-import '../widgets/search_empty_view.dart';
+import '../widgets/note_search_field.dart';
+import '../widgets/notes_app_bar.dart';
+import '../widgets/notes_list.dart';
+import '../widgets/quick_add_bar.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -17,297 +18,59 @@ class NotesPage extends ConsumerStatefulWidget {
 }
 
 class _NotesPageState extends ConsumerState<NotesPage> {
+  /// Jeda sebelum kata kunci dipakai menyaring. Tanpa jeda ini, setiap
+  /// karakter memicu satu penyaringan penuh atas seluruh daftar catatan.
+  static const _searchDebounce = Duration(milliseconds: 250);
+
   final TextEditingController _quickController = TextEditingController();
   final TextEditingController _searchController = TextEditingController();
+  Timer? _searchTimer;
 
   @override
   void dispose() {
+    _searchTimer?.cancel();
     _quickController.dispose();
     _searchController.dispose();
     super.dispose();
   }
 
+  void _onSearchChanged(String value) {
+    _searchTimer?.cancel();
+    if (value.isEmpty) {
+      ref.read(searchQueryProvider.notifier).clear();
+      return;
+    }
+    _searchTimer = Timer(_searchDebounce, () {
+      if (!mounted) return;
+      ref.read(searchQueryProvider.notifier).update(value);
+    });
+  }
+
   void _clearSearch() {
+    _searchTimer?.cancel();
     _searchController.clear();
     ref.read(searchQueryProvider.notifier).clear();
   }
 
   @override
   Widget build(BuildContext context) {
-    final notesAsyncValue = ref.watch(notesProvider);
-    final filteredNotesAsyncValue = ref.watch(filteredNotesProvider);
-    final searchQuery = ref.watch(searchQueryProvider);
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
-    final notesList = notesAsyncValue.value ?? [];
-    final dirtyCount = notesList.where((n) => n.dirty).length;
-
+    // Halaman ini sengaja tidak mengamati provider data apa pun. Judul dan
+    // statistik ditangani NotesAppBar, daftar ditangani NotesList, sehingga
+    // perubahan kata kunci hanya membangun ulang subtree yang benar-benar
+    // berubah.
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Catatan Saya',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-            ),
-            Text(
-              dirtyCount > 0
-                  ? '${notesList.length} catatan • $dirtyCount perlu sinkron'
-                  : '${notesList.length} catatan • Semua tersinkron',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: isDark
-                    ? const Color(0xFF94A3B8)
-                    : const Color(0xFF64748B),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                const Icon(Icons.sync_rounded, size: 26),
-                if (dirtyCount > 0)
-                  Positioned(
-                    top: -2,
-                    right: -2,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEF4444), // Red-500
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '$dirtyCount',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            tooltip: 'Sinkronkan Sekarang',
-            onPressed: () => _syncData(context, ref),
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
+      appBar: const NotesAppBar(),
       body: Column(
         children: [
-          // Quick Input Bar Desain Bersih
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Container(
-              height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF334155)
-                      : const Color(0xFFE2E8F0),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.edit_outlined,
-                    color: isDark
-                        ? const Color(0xFF64748B)
-                        : const Color(0xFF94A3B8),
-                    size: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _quickController,
-                      decoration: InputDecoration(
-                        hintText: 'Tulis catatan cepat di sini...',
-                        hintStyle: TextStyle(
-                          color: isDark
-                              ? const Color(0xFF64748B)
-                              : const Color(0xFF94A3B8),
-                          fontSize: 14,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                      ),
-                      onSubmitted: (_) => _handleQuickAdd(),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: _handleQuickAdd,
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.arrow_upward_rounded,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          QuickAddBar(controller: _quickController, onSubmit: _handleQuickAdd),
+          NoteSearchField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            onClear: _clearSearch,
           ),
-
-          // Kolom pencarian judul
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Container(
-              height: 46,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E293B) : Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF334155)
-                      : const Color(0xFFE2E8F0),
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.search_rounded,
-                    size: 20,
-                    color: isDark
-                        ? const Color(0xFF64748B)
-                        : const Color(0xFF94A3B8),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      textInputAction: TextInputAction.search,
-                      decoration: InputDecoration(
-                        hintText: 'Cari judul catatan...',
-                        hintStyle: TextStyle(
-                          color: isDark
-                              ? const Color(0xFF64748B)
-                              : const Color(0xFF94A3B8),
-                          fontSize: 14,
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                      ),
-                      onChanged: (value) =>
-                          ref.read(searchQueryProvider.notifier).update(value),
-                    ),
-                  ),
-                  if (searchQuery.isNotEmpty)
-                    InkWell(
-                      onTap: _clearSearch,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.close_rounded,
-                          size: 18,
-                          color: isDark
-                              ? const Color(0xFF94A3B8)
-                              : const Color(0xFF64748B),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-
-          // Daftar Catatan
-          Expanded(
-            child: filteredNotesAsyncValue.when(
-              data: (visibleNotes) {
-                if (notesList.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.auto_stories_outlined,
-                            size: 64,
-                            color: isDark
-                                ? const Color(0xFF334155)
-                                : const Color(0xFFCBD5E1),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Belum Ada Catatan',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: isDark
-                                  ? const Color(0xFFF1F5F9)
-                                  : const Color(0xFF1E293B),
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Mulai tuliskan ide atau pekerjaan Anda hari ini.',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: isDark
-                                  ? const Color(0xFF94A3B8)
-                                  : const Color(0xFF64748B),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                if (visibleNotes.isEmpty) {
-                  return SearchEmptyView(
-                    query: searchQuery,
-                    onClear: _clearSearch,
-                  );
-                }
-                return RefreshIndicator(
-                  onRefresh: () async => ref.invalidate(notesProvider),
-                  child: ListView.builder(
-                    padding: const EdgeInsets.only(top: 4, bottom: 88),
-                    itemCount: visibleNotes.length,
-                    itemBuilder: (context, index) {
-                      final note = visibleNotes[index];
-                      return NoteTile(
-                        note: note,
-                        onTap: () {
-                          if (note.id != null) {
-                            context.push('/note/${note.id}');
-                          }
-                        },
-                        onLongPress: () =>
-                            _confirmDelete(context, ref, note.id!),
-                      );
-                    },
-                  ),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => ErrorView(
-                message: '$err',
-                onRetry: () => ref.invalidate(notesProvider),
-              ),
-            ),
-          ),
+          Expanded(child: NotesList(onClearSearch: _clearSearch)),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -472,79 +235,5 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         );
       },
     );
-  }
-
-  void _confirmDelete(BuildContext context, WidgetRef ref, int id) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Hapus Catatan?'),
-        content: const Text('Catatan ini akan dihapus dari basis data lokal.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFEF4444),
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () async {
-              Navigator.pop(dialogContext);
-              await ref.read(noteRepositoryProvider).deleteNote(id);
-              ref.invalidate(notesProvider);
-            },
-            child: const Text('Hapus'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _syncData(BuildContext context, WidgetRef ref) async {
-    final repo = ref.read(noteRepositoryProvider);
-    try {
-      final isOffline = ref.read(forceOfflineProvider);
-      if (isOffline) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Mode Offline aktif. Tidak dapat menyinkronkan.'),
-              backgroundColor: Colors.orange,
-            ),
-          );
-        }
-        return;
-      }
-
-      final countResult = await repo.countDirty();
-      final dirtyCount = countResult.count;
-      if (dirtyCount > 0) {
-        await Future.delayed(const Duration(milliseconds: 500));
-        await repo.markAllSynced();
-        ref.invalidate(notesProvider);
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Berhasil! Seluruh catatan telah disinkronkan.'),
-              backgroundColor: Color(0xFF10B981),
-            ),
-          );
-        }
-      } else if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Semua catatan sudah berstatus tersinkron.'),
-          ),
-        );
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Gagal sinkron: $e')));
-      }
-    }
   }
 }

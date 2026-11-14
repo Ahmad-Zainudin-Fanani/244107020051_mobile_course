@@ -7,6 +7,7 @@ import '../../../../data/sync.dart' show forceOfflineProvider;
 import '../providers/notes_providers.dart';
 import '../widgets/error_view.dart';
 import '../widgets/note_tile.dart';
+import '../widgets/search_empty_view.dart';
 
 class NotesPage extends ConsumerStatefulWidget {
   const NotesPage({super.key});
@@ -17,16 +18,25 @@ class NotesPage extends ConsumerStatefulWidget {
 
 class _NotesPageState extends ConsumerState<NotesPage> {
   final TextEditingController _quickController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void dispose() {
     _quickController.dispose();
+    _searchController.dispose();
     super.dispose();
+  }
+
+  void _clearSearch() {
+    _searchController.clear();
+    ref.read(searchQueryProvider.notifier).clear();
   }
 
   @override
   Widget build(BuildContext context) {
     final notesAsyncValue = ref.watch(notesProvider);
+    final filteredNotesAsyncValue = ref.watch(filteredNotesProvider);
+    final searchQuery = ref.watch(searchQueryProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -156,11 +166,75 @@ class _NotesPageState extends ConsumerState<NotesPage> {
             ),
           ),
 
+          // Kolom pencarian judul
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Container(
+              height: 46,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF334155)
+                      : const Color(0xFFE2E8F0),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.search_rounded,
+                    size: 20,
+                    color: isDark
+                        ? const Color(0xFF64748B)
+                        : const Color(0xFF94A3B8),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration(
+                        hintText: 'Cari judul catatan...',
+                        hintStyle: TextStyle(
+                          color: isDark
+                              ? const Color(0xFF64748B)
+                              : const Color(0xFF94A3B8),
+                          fontSize: 14,
+                        ),
+                        border: InputBorder.none,
+                        isDense: true,
+                      ),
+                      onChanged: (value) =>
+                          ref.read(searchQueryProvider.notifier).update(value),
+                    ),
+                  ),
+                  if (searchQuery.isNotEmpty)
+                    InkWell(
+                      onTap: _clearSearch,
+                      borderRadius: BorderRadius.circular(16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 18,
+                          color: isDark
+                              ? const Color(0xFF94A3B8)
+                              : const Color(0xFF64748B),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+
           // Daftar Catatan
           Expanded(
-            child: notesAsyncValue.when(
-              data: (notes) {
-                if (notes.isEmpty) {
+            child: filteredNotesAsyncValue.when(
+              data: (visibleNotes) {
+                if (notesList.isEmpty) {
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
@@ -200,13 +274,19 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                     ),
                   );
                 }
+                if (visibleNotes.isEmpty) {
+                  return SearchEmptyView(
+                    query: searchQuery,
+                    onClear: _clearSearch,
+                  );
+                }
                 return RefreshIndicator(
                   onRefresh: () async => ref.invalidate(notesProvider),
                   child: ListView.builder(
                     padding: const EdgeInsets.only(top: 4, bottom: 88),
-                    itemCount: notes.length,
+                    itemCount: visibleNotes.length,
                     itemBuilder: (context, index) {
-                      final note = notes[index];
+                      final note = visibleNotes[index];
                       return NoteTile(
                         note: note,
                         onTap: () {

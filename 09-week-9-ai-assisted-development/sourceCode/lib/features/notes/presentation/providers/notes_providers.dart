@@ -44,6 +44,10 @@ final noteDetailProvider = FutureProvider.autoDispose.family<Note?, int>((
 });
 
 /// Kata kunci pencarian judul yang sedang aktif.
+///
+/// Provider ini mengikuti siklus hidup halaman catatan. Saat pengguna pindah
+/// tab, query ikut dibuang supaya daftar tidak tetap tersaring tanpa teks di
+/// kolom cari.
 class SearchQueryNotifier extends Notifier<String> {
   @override
   String build() => '';
@@ -53,9 +57,10 @@ class SearchQueryNotifier extends Notifier<String> {
   void clear() => state = '';
 }
 
-final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(
-  SearchQueryNotifier.new,
-);
+final searchQueryProvider =
+    NotifierProvider.autoDispose<SearchQueryNotifier, String>(
+      SearchQueryNotifier.new,
+    );
 
 /// Daftar catatan yang sudah disaring berdasarkan judul.
 ///

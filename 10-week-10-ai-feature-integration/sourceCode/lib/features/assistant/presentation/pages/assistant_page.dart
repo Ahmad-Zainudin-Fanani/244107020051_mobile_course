@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../notes/domain/entities/note.dart';
-import '../../../notes/presentation/providers/notes_providers.dart';
 import '../providers/assistant_providers.dart';
 import '../widgets/assistant_empty_view.dart';
 import '../widgets/chat_bubble.dart';
@@ -37,11 +35,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     if (text.isEmpty) return;
 
     final includeContext = ref.read(includeNotesContextProvider);
-    final titles = includeContext
-        ? (ref.read(notesProvider).value ?? const <Note>[])
-              .map((note) => note.title)
-              .toList()
-        : const <String>[];
+    final titles = ref.read(assistantContextTitlesProvider);
 
     ref
         .read(chatControllerProvider.notifier)
@@ -71,8 +65,18 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(chatControllerProvider);
     final includeContext = ref.watch(includeNotesContextProvider);
+    final contextTitles = ref.watch(assistantContextTitlesProvider);
     final hasKey = ref.watch(apiKeyStatusProvider).value;
     final theme = Theme.of(context);
+
+    final String contextLabel;
+    if (!includeContext) {
+      contextLabel = 'Sertakan judul catatan (opsional)';
+    } else if (contextTitles.isEmpty) {
+      contextLabel = 'Memuat judul catatan…';
+    } else {
+      contextLabel = '${contextTitles.length} judul catatan akan disertakan';
+    }
 
     ref.listen(chatControllerProvider, (_, _) => _scrollToBottom());
 
@@ -131,7 +135,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Sertakan judul catatan (opsional)',
+                      contextLabel,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

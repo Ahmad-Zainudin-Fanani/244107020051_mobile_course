@@ -263,7 +263,7 @@ Ringkasan; bukti lengkap ada di [`docs/ai-log.md`](docs/ai-log.md).
 | Retry otomatis tanpa batas | Memperburuk rate limit dan biaya | **Ditolak**, percobaan ulang manual + batas sesi |
 | `temperature`/`top_p` untuk konsistensi | Dokumentasi: Gemini 4 & 3.6+ mengabaikan parameter itu | **Ditolak**, hanya `max_output_tokens` |
 | Jawaban demo saat key belum ada | Menampilkan jawaban palsu sebagai AI | **Ditolak**, empty state + banner jujur |
-| Konteks judul kosong di perangkat | Saklar menyala tetapi AI menjawab "tidak ada judul"; `notesProvider` autoDispose dimulai ulang saat tab berganti | **Diperbaiki** dengan `assistantContextTitlesProvider` + 4 test regresi (Issue #17) |
+| Konteks judul kosong di perangkat | Saklar menyala tetapi AI menjawab "tidak ada judul"; `notesProvider` autoDispose dimulai ulang saat tab berganti | **Diperbaiki** dengan `assistantContextTitlesProvider` + 4 test regresi (Issue #17, PR #18) |
 
 ---
 
@@ -282,7 +282,7 @@ Issue #14
 Issue #17 (ditemukan saat uji dengan key sungguhan)
   -> branch fix/17-assistant-context-titles dari develop
   -> test regresi konteks judul -> provider turunan + label jumlah judul
-  -> PR -> CI hijau -> merge ke develop
+  -> PR #18 -> CI hijau -> merge ke develop
   -> release PR develop -> main -> back-merge main -> develop
 ```
 

@@ -61,6 +61,39 @@ Fokus: kebenaran, pembatalan stream, privasi data, biaya API, test.
 Abaikan style. Beri temuan dengan level blocker/saran + alasan.
 ```
 
+### 1.1 Prompt sistem dan user prompt fitur
+
+Prompt di atas dipakai untuk **membangun** fitur. Prompt yang benar-benar dikirim aplikasi ke Gemini saat pengguna bertanya ada di `lib/features/assistant/domain/usecases/build_system_prompt.dart`:
+
+```text
+Kamu asisten catatan pribadi di aplikasi "Catatan Saya".
+Aturan wajib:
+- Jawab dalam Bahasa Indonesia dengan maksimal tiga kalimat.
+- Gunakan hanya konteks judul catatan yang diberikan.
+- Jika konteks tidak cukup, katakan bahwa kamu belum tahu dan minta pengguna membuka catatan terkait.
+- Jangan mengarang isi catatan yang tidak ada.
+- Jangan meminta atau menyebut NIK, nomor telepon, alamat, atau data pribadi lain.
+```
+
+Jika saklar konteks menyala, blok berikut ditambahkan setelah aturan (maksimal 20 judul, tiap judul dipotong 60 karakter):
+
+```text
+Konteks judul catatan pengguna (hanya judul, tanpa isi):
+- Rencana rapat
+- Belanja harian
+- ...
+```
+
+Contoh **user prompt** yang dipakai saat verifikasi:
+
+```text
+Sebutkan tiga judul catatan yang cocok untuk rencana belanja bulanan.
+Ringkas daftar judul catatan saya.
+Sebutkan tiga manfaat mencatat pengeluaran harian.
+```
+
+Isi catatan tidak pernah masuk ke prompt; hanya judul, dan hanya bila pengguna menyalakan saklar.
+
 ---
 
 ## 2. Output awal AI
@@ -91,6 +124,33 @@ await for (final chunk in assistant.streamAnswer(...)) {
 ```
 
 Draf itu terlihat rapi dan sebagian besar bisa dikompilasi. Kesalahannya justru ada di bagian yang ditulis paling percaya diri: nama model, nama API Riverpod, dan arti "berhenti".
+
+### 2.1 Output awal dari Gemini saat fitur dijalankan
+
+Sebelum bug konteks diperbaiki, aplikasi mengirim pertanyaan **"Ringkas daftar judul catatan saya"** dengan saklar konteks menyala, dan Gemini membalas:
+
+```text
+Maaf, saya belum tahu karena tidak ada judul catatan yang diberikan.
+```
+
+Balasan itu jujur, tetapi membuktikan konteks tidak sampai ke server. Setelah `assistantContextTitlesProvider` diperbaiki dan aplikasi dipasang ulang, pertanyaan yang sama menghasilkan:
+
+```text
+Daftar catatanmu terdiri dari "Rencana rapat", "Belanja harian", dan
+"Belanja bulanan". Selain itu, ada juga catatan berjudul "Review PR
+Minggu 8" dan "Belajar Clean Architecture".
+```
+
+Output itu cocok dengan label di layar, **"5 judul catatan akan disertakan"**, dan dengan daftar catatan di perangkat. Bukti: [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
+
+Contoh output streaming lain dari Gemini untuk pertanyaan **"Sebutkan tiga judul catatan yang cocok untuk rencana belanja bulanan"**:
+
+```text
+1. Belanja Bulanan Supermarket
+2. Stok Kebutuhan Dapur
+3. Daftar Belanja Rutin
+```
+
 
 ---
 

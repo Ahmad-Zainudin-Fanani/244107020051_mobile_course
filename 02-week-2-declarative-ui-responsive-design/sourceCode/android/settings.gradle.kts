@@ -1,3 +1,5 @@
+rootProject.name = "responsive_dashboard_android"
+
 pluginManagement {
     val flutterSdkPath =
         run {

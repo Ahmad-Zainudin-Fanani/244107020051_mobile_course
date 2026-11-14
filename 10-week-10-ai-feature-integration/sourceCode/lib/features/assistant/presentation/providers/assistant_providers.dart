@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../notes/presentation/providers/notes_providers.dart';
 import '../../data/api_key_store.dart';
 import '../../data/gemini_assistant.dart';
 import '../../domain/entities/chat_message.dart';
@@ -56,6 +57,20 @@ final includeNotesContextProvider =
     NotifierProvider<IncludeNotesContextNotifier, bool>(
       IncludeNotesContextNotifier.new,
     );
+
+/// Judul catatan yang benar-benar dikirim sebagai konteks.
+///
+/// `notesProvider` bersifat autoDispose, sedangkan `MainLayout` hanya
+/// membangun satu halaman pada satu waktu. Membacanya sekali saat tombol
+/// kirim ditekan bisa mendapat state loading, sehingga judul tidak pernah
+/// terkirim. Provider ini memantau daftar selama halaman Asisten hidup dan
+/// hanya mengembalikan judul saat pengguna menyalakan saklar.
+final assistantContextTitlesProvider = Provider<List<String>>((ref) {
+  if (!ref.watch(includeNotesContextProvider)) return const [];
+  final notes = ref.watch(notesProvider).value;
+  if (notes == null) return const [];
+  return [for (final note in notes) note.title];
+});
 
 /// Seluruh state layar asisten.
 class ChatState {

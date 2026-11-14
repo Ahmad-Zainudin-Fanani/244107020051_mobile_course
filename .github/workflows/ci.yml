@@ -50,3 +50,19 @@ jobs:
       - name: Week 9 - unit tests
         working-directory: 09-week-9-ai-assisted-development/sourceCode
         run: flutter test
+
+      - name: Week 10 - install dependencies
+        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        run: flutter pub get
+
+      - name: Week 10 - static analysis
+        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        run: flutter analyze
+
+      - name: Week 10 - formatting check
+        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Week 10 - unit tests
+        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        run: flutter test

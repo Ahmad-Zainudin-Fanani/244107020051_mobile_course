@@ -23,4 +23,5 @@ Portfolio ini berisi rangkuman materi serta tugas yang dikerjakan selama proses 
 | 7 | Ujian Tengah Semester / UTS Project | Selesai | [Lihat Materi dan Tugas](./07-week-7-clean-architecture) |
 | 8 | Mid Project Review & Code Review | Selesai | [Lihat Materi dan Tugas](./08-week-8-mid-project-review) |
 | 9 | AI-Assisted Development (Search + Empty State) | Selesai | [Lihat Materi dan Tugas](./09-week-9-ai-assisted-development) |
-| 10–16 | Materi dan proyek lanjutan | Belum dikerjakan | - |
+| 10 | AI Feature Integration (Chat Asisten Gemini + Secure API Key) | Selesai | [Lihat Materi dan Tugas](./10-week-10-ai-feature-integration) |
+| 11-16 | Materi dan proyek lanjutan | Belum dikerjakan | - |

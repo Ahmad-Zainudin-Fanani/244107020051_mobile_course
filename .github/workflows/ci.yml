@@ -10,9 +10,6 @@ jobs:
   verify:
     name: analyze, format, test
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 08-week-8-mid-project-review/sourceCode
 
     steps:
       - uses: actions/checkout@v4
@@ -22,14 +19,34 @@ jobs:
           flutter-version: '3.47.2'
           cache: true
 
-      - name: Install dependencies
+      - name: Week 8 - install dependencies
+        working-directory: 08-week-8-mid-project-review/sourceCode
         run: flutter pub get
 
-      - name: Static analysis
+      - name: Week 8 - static analysis
+        working-directory: 08-week-8-mid-project-review/sourceCode
         run: flutter analyze
 
-      - name: Formatting check
+      - name: Week 8 - formatting check
+        working-directory: 08-week-8-mid-project-review/sourceCode
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Unit tests
+      - name: Week 8 - unit tests
+        working-directory: 08-week-8-mid-project-review/sourceCode
+        run: flutter test
+
+      - name: Week 9 - install dependencies
+        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        run: flutter pub get
+
+      - name: Week 9 - static analysis
+        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        run: flutter analyze
+
+      - name: Week 9 - formatting check
+        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Week 9 - unit tests
+        working-directory: 09-week-9-ai-assisted-development/sourceCode
         run: flutter test

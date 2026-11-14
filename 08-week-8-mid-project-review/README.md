@@ -64,7 +64,7 @@ Alur yang dijalankan:
 Issue #1
   -> branch feature/1-notes-validation (dari develop)
   -> commit kecil: chore baseline -> feat validasi -> ci -> docs
-  -> PR #2 "Closes #1" -> review checklist -> squash merge ke develop
+  -> PR #2 "Closes #1" -> review checklist -> merge commit ke develop
   -> branch fitur dihapus, issue tertutup otomatis
 ```
 
@@ -91,7 +91,7 @@ Audit riwayat lama dan tabel perbaikan tiga pesan commit tersedia di [`docs/revi
 | Issue | [#1 — Validasi judul catatan terpusat + feedback input kosong](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/1) |
 | Branch | `feature/1-notes-validation` → `develop` |
 | Pull Request | [#2 — feat(notes): validasi judul kosong terpusat + test](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2) |
-| Strategi merge | Squash merge, branch fitur dihapus setelah merge |
+| Strategi merge | Merge commit (setiap commit sudah logis), branch fitur dihapus setelah merge |
 
 Template PR yang dipakai:
 

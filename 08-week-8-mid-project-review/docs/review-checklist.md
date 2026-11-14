@@ -85,7 +85,7 @@ Tiga pesan commit lama ditulis ulang ke format `tipe(scope): deskripsi`. Tabel i
 - [x] Isi PR memuat masalah → solusi → cara uji → bukti screenshot.
 - [x] Ukuran perubahan fitur < 300 baris (4 berkas, ±60 baris efektif); salinan baseline dipisah pada commit `chore`.
 - [x] `flutter analyze`, `dart format`, dan `flutter test` hijau sebelum meminta review.
-- [x] PR ditutup dengan `Closes #1`, lalu di-squash merge dan branch fitur dihapus.
+- [x] PR ditutup dengan `Closes #1`, lalu di-merge (merge commit) dan branch fitur dihapus.
 
 ---
 
@@ -153,7 +153,7 @@ Dijalankan di `08-week-8-mid-project-review/sourceCode`:
 
 1. Author memperbaiki R1, R2, R4, R5 dan meminta re-review.
 2. Re-review: `flutter analyze`, `dart format`, `flutter test`, dan uji manual quick-add kosong.
-3. Merge memakai **squash** agar commit perantara baseline tidak memenuhi history `develop`.
+3. Merge memakai **merge commit** agar history commit baseline, fitur, CI, dan dokumentasi tetap dapat ditelusuri; squash hanya dipakai bila commit perantara berantakan.
 4. PR memakai `Closes #1`; issue tertutup otomatis setelah merge.
 5. Branch `feature/1-notes-validation` dihapus setelah merge agar daftar branch tetap pendek.
 6. Saran R3 (pemecahan `build()`) dicatat sebagai kandidat issue refactor berikutnya, bukan dipaksakan ke PR ini.

@@ -4,7 +4,7 @@
 **NIM:** 244107020051  
 **Proyek:** `week5_offline_notes` (Clean Architecture Minggu 7)  
 **Branch kerja:** `feature/1-notes-validation` → `develop`  
-**PR:** [#2](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2)
+**PR:** [#2](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2) (fitur) dan [#4](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/4) (perbaikan lanjutan)
 
 ---
 
@@ -59,6 +59,8 @@ d2db220 Delete Pertemuan06/ANN directory
   remotes/origin/main
 ```
 
+> Snapshot diambil saat audit. Temuan `origin/HEAD -> origin/main` langsung ditindaklanjuti: default branch diubah ke `develop`, sehingga kondisi akhirnya `origin/HEAD -> origin/develop` (diverifikasi dengan `git remote set-head origin -a`).
+
 ---
 
 ## 2. Perbaikan Pesan Commit Lama
@@ -86,6 +88,8 @@ Tiga pesan commit lama ditulis ulang ke format `tipe(scope): deskripsi`. Tabel i
 - [x] Ukuran perubahan fitur < 300 baris (4 berkas, ±60 baris efektif); salinan baseline dipisah pada commit `chore`.
 - [x] `flutter analyze`, `dart format`, dan `flutter test` hijau sebelum meminta review.
 - [x] PR ditutup dengan `Closes #1`, lalu di-merge (merge commit) dan branch fitur dihapus.
+- [x] Perbaikan lanjutan mengikuti alur yang sama: Issue #3 -> `fix/3-weekly-cleanup` -> PR #4 (24 baris) -> merge commit `c47a996` -> branch dihapus.
+- [x] `git stash list` kosong; tidak ada perubahan lokal yang menggantung.
 
 ---
 
@@ -156,7 +160,7 @@ Dijalankan di `08-week-8-mid-project-review/sourceCode`:
 3. Merge memakai **merge commit** agar history commit baseline, fitur, CI, dan dokumentasi tetap dapat ditelusuri; squash hanya dipakai bila commit perantara berantakan.
 4. PR memakai `Closes #1`; issue tertutup otomatis setelah merge.
 5. Branch `feature/1-notes-validation` dihapus setelah merge agar daftar branch tetap pendek.
-6. Saran R3 (pemecahan `build()`) dicatat sebagai kandidat issue refactor berikutnya, bukan dipaksakan ke PR ini.
+6. Saran AI A6 (memecah `build()` `NotesPage`) dicatat sebagai kandidat issue refactor berikutnya, bukan dipaksakan ke PR ini; R3 (validasi tetap milik domain) dipertahankan sebagai keputusan arsitektur.
 
 ---
 
@@ -169,3 +173,6 @@ Dijalankan di `08-week-8-mid-project-review/sourceCode`:
 | Workflow CI | `Screenshots/verif_ci.png` |
 | Aplikasi berjalan | `Screenshots/app_home.png` |
 | Validasi judul kosong | `Screenshots/app_validation.png` |
+| Analyze project Minggu 5 setelah perbaikan | `Screenshots/verif_fix_week5.png` |
+| Issue lanjutan | https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/3 |
+| Pull Request lanjutan | https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/4 |

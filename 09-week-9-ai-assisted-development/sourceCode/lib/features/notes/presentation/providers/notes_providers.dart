@@ -1,0 +1,71 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../data/local/db.dart';
+import '../../data/repositories/note_repository_impl.dart';
+import '../../domain/entities/note.dart';
+import '../../domain/repositories/note_repository.dart';
+import '../../domain/usecases/add_note.dart';
+import '../../domain/usecases/get_notes.dart';
+import '../../domain/usecases/search_notes.dart';
+
+// Injeksi Repositori Data Layer (implementasi konkret dengan openDb yang dapat ditukar saat test)
+final noteRepositoryProvider = Provider<NoteRepository>((ref) {
+  return NoteRepositoryImpl(openDb: openNotesDb);
+});
+
+// Injeksi Use Cases Domain Layer (menerima kontrak abstraksi, bukan konkrit)
+final getNotesProvider = Provider<GetNotes>((ref) {
+  return GetNotes(ref.watch(noteRepositoryProvider));
+});
+
+final addNoteProvider = Provider<AddNote>((ref) {
+  return AddNote(ref.watch(noteRepositoryProvider));
+});
+
+// Presentation Layer State: UI mengamati provider ini
+final notesProvider = FutureProvider.autoDispose<List<Note>>((ref) async {
+  final result = await ref.watch(getNotesProvider).call();
+  if (result.failure != null) {
+    throw Exception(result.failure!.message);
+  }
+  return result.notes;
+});
+
+final noteDetailProvider = FutureProvider.autoDispose.family<Note?, int>((
+  ref,
+  id,
+) async {
+  final repo = ref.watch(noteRepositoryProvider);
+  final result = await repo.getNote(id);
+  if (result.failure != null) {
+    throw Exception(result.failure!.message);
+  }
+  return result.note;
+});
+
+/// Kata kunci pencarian judul yang sedang aktif.
+class SearchQueryNotifier extends Notifier<String> {
+  @override
+  String build() => '';
+
+  void update(String value) => state = value;
+
+  void clear() => state = '';
+}
+
+final searchQueryProvider = NotifierProvider<SearchQueryNotifier, String>(
+  SearchQueryNotifier.new,
+);
+
+/// Daftar catatan yang sudah disaring berdasarkan judul.
+///
+/// Penyaringan dilakukan oleh use case domain, bukan di widget, sehingga
+/// perilakunya bisa diuji tanpa membangun UI.
+final filteredNotesProvider = Provider.autoDispose<AsyncValue<List<Note>>>((
+  ref,
+) {
+  final query = ref.watch(searchQueryProvider);
+  return ref
+      .watch(notesProvider)
+      .whenData((notes) => searchNotesByTitle(notes, query));
+});

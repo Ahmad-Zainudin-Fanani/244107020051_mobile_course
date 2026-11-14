@@ -6,7 +6,8 @@
 **Basis Proyek:** `week5_offline_notes` — hasil refaktor Clean Architecture Minggu 7  
 **Tautan Repositori:** [244107020051_mobile_course](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course)  
 **Issue:** [#1 Validasi judul catatan terpusat + feedback input kosong](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/1)  
-**Pull Request:** [#2 feat(notes): validasi judul kosong terpusat + test](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2)
+**Pull Request:** [#2 feat(notes): validasi judul kosong terpusat + test](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2)  
+**Pull Request lanjutan:** [#4 fix: rapikan nama project Android minggu 2-3 dan guard context.mounted minggu 5](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/4)
 
 ---
 
@@ -22,7 +23,7 @@ Aplikasi berjalan identik dengan akhir Minggu 7, dengan satu perbaikan perilaku 
 | `flutter analyze` | 0 issue | **Lolos** — No issues found! |
 | `dart format --set-exit-if-changed .` | 0 file berubah | **Lolos** |
 | `flutter test` | Semua hijau | **Lolos** — 10 test |
-| PR kecil melalui review | ≥ 1 PR | **Lolos** — PR #2 |
+| PR kecil melalui review | ≥ 1 PR | **Lolos** — PR #2 (fitur) dan PR #4 (24 baris) |
 | README, screenshot, cara menjalankan | Lengkap | **Lolos** |
 | Dokumentasi AI + keputusan final | Lengkap | **Lolos** — `docs/ai-review-vs-keputusan.md` |
 
@@ -44,6 +45,8 @@ Supaya PR tetap kecil dan dapat direview cepat, perubahan dibatasi pada satu mas
 | `lib/features/notes/domain/usecases/add_note.dart` | Memakai validator bersama |
 | `lib/features/notes/presentation/pages/notes_page.dart` | Quick-add menampilkan error; modal memakai validator yang sama |
 | `test/validate_note_test.dart` | **Baru** — 4 unit test kasus kosong, whitespace, valid, dan trim |
+
+**Catatan ukuran PR.** PR #2 menampilkan 174 berkas karena memuat salinan baseline project Minggu 7 (±18 ribu baris) yang memang belum ada di repositori. Diff yang direview untuk logika fitur hanya **4 berkas / 62 baris** pada commit `feat(notes)`. Sebagai pembanding, PR lanjutan #4 hanya **24 baris pada 4 berkas** dan selesai dalam satu putaran review.
 
 ---
 
@@ -91,7 +94,10 @@ Audit riwayat lama dan tabel perbaikan tiga pesan commit tersedia di [`docs/revi
 | Issue | [#1 — Validasi judul catatan terpusat + feedback input kosong](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/1) |
 | Branch | `feature/1-notes-validation` → `develop` |
 | Pull Request | [#2 — feat(notes): validasi judul kosong terpusat + test](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/2) |
-| Strategi merge | Merge commit (setiap commit sudah logis), branch fitur dihapus setelah merge |
+| Issue lanjutan | [#3 — rapikan nama project Android minggu 2-3 dan guard `context.mounted` minggu 5](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/3) |
+| Branch lanjutan | `fix/3-weekly-cleanup` → `develop` |
+| Pull Request lanjutan | [#4 — fix: rapikan nama project Android minggu 2-3 dan guard `context.mounted` minggu 5](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/4) |
+| Strategi merge | Merge commit pada kedua PR (setiap commit sudah logis), branch dihapus setelah merge |
 
 Template PR yang dipakai:
 
@@ -202,7 +208,7 @@ Setiap temuan yang diterima memiliki bukti (`grep`/hasil test), dan setiap penol
 ├── docs/
 │   ├── review-checklist.md            # audit Git, review checklist, kesiapan mid semester
 │   └── ai-review-vs-keputusan.md      # prompt AI, temuan, verifikasi, keputusan final
-├── Screenshots/
+├── Screenshots/                       # kapital, konsisten dengan folder minggu sebelumnya
 │   ├── app_home.png                   # aplikasi berjalan
 │   ├── app_add_note.png               # form tambah catatan
 │   ├── app_validation.png             # SnackBar validasi judul kosong
@@ -210,6 +216,7 @@ Setiap temuan yang diterima memiliki bukti (`grep`/hasil test), dan setiap penol
 │   ├── verif_dart_format.png
 │   ├── verif_flutter_test.png
 │   ├── verif_ci.png
+│   ├── verif_fix_week5.png            # analyze project Minggu 5 setelah perbaikan
 │   ├── verif_issue.png
 │   └── verif_pr.png
 └── sourceCode/                        # project Flutter (lanjutan Minggu 7)
@@ -301,7 +308,7 @@ Untuk menguji validasi secara manual:
 
 ## 13. Kesimpulan
 
-1. **Disiplin Git:** `main` tidak disentuh langsung; pekerjaan dilakukan pada `feature/1-notes-validation` dari `develop` dan masuk melalui PR #2.
+1. **Disiplin Git:** `main` tidak disentuh langsung; pekerjaan dilakukan pada `feature/1-notes-validation` dari `develop` dan masuk melalui PR #2, lalu perbaikan lanjutan `fix/3-weekly-cleanup` masuk melalui PR #4.
 2. **Commit dan PR berkualitas:** commit dipisah per tujuan (baseline, fitur, CI, docs) dan PR memuat masalah, solusi, cara uji, serta bukti mesin hijau.
 3. **Review yang dapat ditindaklanjuti:** lima temuan review (dua kebenaran, satu arsitektur, satu test, satu keterbacaan) selesai sebelum merge.
 4. **Otomatisasi:** `flutter analyze`, `dart format`, `flutter test`, dan CI menutup celah review gaya/spasi.

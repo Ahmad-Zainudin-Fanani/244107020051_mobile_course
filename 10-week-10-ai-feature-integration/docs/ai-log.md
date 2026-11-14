@@ -214,6 +214,41 @@ $ Get-ChildItem lib/features/assistant/domain -Recurse -Filter *.dart |
 
 `flutter analyze` bersih, sehingga tidak ada import lintas layer yang lolos.
 
+### 3.6 Konteks judul hilang justru di perangkat
+
+Bug ini tidak ditemukan oleh unit test mana pun, tetapi langsung terlihat pada percobaan pertama dengan API key sungguhan. Saklar **Sertakan judul catatan** menyala, label UI setuju, tetapi Gemini membalas:
+
+```text
+Maaf, saya belum tahu karena tidak ada judul catatan yang diberikan.
+```
+
+Penyebabnya bukan prompt, melainkan siklus hidup provider. `MainLayout` memakai `body: _pages[_currentIndex]`, jadi `NotesPage` dibuang saat pengguna pindah ke tab Asisten. `notesProvider` adalah `FutureProvider.autoDispose`; ketika tombol kirim ditekan, provider itu baru mulai memuat ulang dan `.value` masih `null`.
+
+```dart
+final titles = includeContext
+    ? (ref.read(notesProvider).value ?? const <Note>[]) // null saat loading
+          .map((note) => note.title)
+          .toList()
+    : const <String>[];
+```
+
+**Keputusan:** jangan membaca provider sekali saat tombol ditekan. Tambahkan provider turunan yang memantau daftar selama halaman Asisten hidup, dan tampilkan jumlah judul yang benar-benar akan dikirim:
+
+```dart
+final assistantContextTitlesProvider = Provider<List<String>>((ref) {
+  if (!ref.watch(includeNotesContextProvider)) return const [];
+  final notes = ref.watch(notesProvider).value;
+  if (notes == null) return const [];
+  return [for (final note in notes) note.title];
+});
+```
+
+Hasil di perangkat: label berubah menjadi **"5 judul catatan akan disertakan"**, dan balasan AI menyebut kelima judul catatan (`Rencana rapat`, `Belanja harian`, `Belanja bulanan`, `Review PR Minggu 8`, `Belajar Clean Architecture`). Bukti: [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
+
+Empat test regresi mengunci perilaku ini: konteks mati tidak membaca judul, daftar termuat mengirim judul, daftar yang masih dimuat tidak dikirim setengah jadi, dan mematikan saklar mengosongkan konteks lagi. Total suite menjadi 43 test hijau.
+
+Key yang dipakai untuk verifikasi dihapus dari perangkat setelah pengujian (status kembali **Belum diatur**). Karena key itu sempat dibagikan di luar aplikasi, key tersebut harus dicabut di AI Studio dan diganti.
+
 ---
 
 ## 4. Saran AI yang ditolak
@@ -240,8 +275,8 @@ $ Get-ChildItem lib/features/assistant/domain -Recurse -Filter *.dart |
 | `lib/features/assistant/domain/services/ai_assistant.dart` | **Tulis manual** | Kontrak + `AssistantException` dengan `canRetry` supaya UI tidak menebak jenis kegagalan. |
 | `lib/features/assistant/data/gemini_assistant.dart` | **Tolak draf, tulis manual** | Endpoint dan model diganti ke Interactions API + `gemini-3.5-flash-lite`; parser SSE dibuat tahan event rusak. |
 | `lib/features/assistant/data/api_key_store.dart` | **Tolak draf prefs, tulis manual** | `flutter_secure_storage` di balik kontrak, key `gemini_api_key`. |
-| `lib/features/assistant/presentation/providers/assistant_providers.dart` | **Terima + refactor** | Draf memakai `await for`; diganti `StreamSubscription` + `Completer` agar stop benar-benar menutup stream. Ditambah cache, batas sesi, dan `store: false`. |
-| `lib/features/assistant/presentation/pages/assistant_page.dart` | **Terima + rapikan** | Error banner, saklar konteks, tombol stop, dan tautan ke Pengaturan. |
+| `lib/features/assistant/presentation/providers/assistant_providers.dart` | **Terima + refactor** | Draf memakai `await for`; diganti `StreamSubscription` + `Completer` agar stop benar-benar menutup stream. Ditambah cache, batas sesi, `store: false`, dan `assistantContextTitlesProvider` setelah bug konteks ditemukan di perangkat. |
+| `lib/features/assistant/presentation/pages/assistant_page.dart` | **Terima + rapikan** | Error banner, saklar konteks dengan jumlah judul, tombol stop, dan tautan ke Pengaturan. |
 | `lib/features/assistant/presentation/widgets/chat_bubble.dart` | **Terima** | `SelectableText` + indikator streaming kecil. |
 | `lib/features/assistant/presentation/widgets/assistant_empty_view.dart` | **Terima + ubah teks** | Teks AI terlalu panjang; dipersingkat dan menyebut data apa yang dikirim. |
 | `lib/features/assistant/presentation/widgets/api_key_card.dart` | **Terima + perbaiki** | `.valueOrNull` → `.value`, validasi panjang key, konfirmasi sebelum hapus. |
@@ -250,6 +285,7 @@ $ Get-ChildItem lib/features/assistant/domain -Recurse -Filter *.dart |
 | `test/gemini_stream_test.dart` | **Tulis manual** | 6 kasus: request benar, event rusak, 401, 429, error di tengah stream, stream tanpa teks. |
 | `test/chat_controller_test.dart` | **Tulis manual** | 8 kasus: tanpa key, penggabungan chunk, konteks opt-in, cache, batas sesi, cancel, error, clear. |
 | `test/build_system_prompt_test.dart` | **Tulis manual** | 5 kasus batas judul dan privasi. |
+| `test/assistant_context_test.dart` | **Tulis manual** | 4 kasus regresi konteks judul setelah bug ditemukan di perangkat. |
 | Dependency baru (`google_generative_ai`, `dio`, dll.) | **Tolak** | Satu endpoint HTTP + SSE cukup dengan `http`; SDK pihak ketiga menambah permukaan dependensi tanpa manfaat. |
 
 ---
@@ -268,10 +304,16 @@ Perangkat: `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 13
 | Konteks nyala | aktifkan saklar, kirim pertanyaan | System prompt memuat judul catatan | Lolos |
 | Hentikan jawaban | kirim pertanyaan, tekan tombol stop | Teks parsial dipertahankan, diberi akhiran "(dihentikan)" | Lolos |
 | Hapus percakapan | ikon tempat sampah | Daftar pesan dan banner error kosong | Lolos |
+| Simpan key sungguhan | Pengaturan → tempel key → Simpan | Status **Tersimpan**, kolom dikosongkan, key tidak ditampilkan lagi | Lolos |
+| Balasan Gemini sungguhan | kirim "Sebutkan tiga judul catatan yang cocok untuk rencana belanja bulanan" | Teks muncul bertahap lewat SSE, berakhir dengan jawaban utuh | Lolos |
+| Konteks judul terkirim | nyalakan saklar → label "5 judul catatan akan disertakan" → kirim pertanyaan | Balasan menyebut kelima judul catatan perangkat | Lolos setelah perbaikan [#17](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/17) |
+| Hapus key setelah uji | Pengaturan → Hapus key → konfirmasi | Status kembali **Belum diatur** | Lolos |
 
-Balasan AI sungguhan tidak bisa diambil karena belum ada API key saat pengerjaan. Jalur yang terbukti di perangkat adalah seluruh alur UI dan fallback; jalur jaringan dibuktikan lewat 6 test parser SSE dengan respons tiruan, dan akan diverifikasi ulang oleh pengguna setelah key diisi.
+Percobaan pertama dengan key sungguhan justru membongkar bug yang tidak terlihat oleh 39 test: saklar konteks menyala, tetapi Gemini membalas "tidak ada judul catatan yang diberikan". Penyebab dan perbaikannya ada di bagian 3.6. Setelah perbaikan dipasang ulang, balasan menyebut kelima judul catatan perangkat.
 
-Bukti visual: [`../Screenshots/assistant_empty.png`](../Screenshots/assistant_empty.png), [`../Screenshots/assistant_no_key.png`](../Screenshots/assistant_no_key.png), [`../Screenshots/settings_api_key.png`](../Screenshots/settings_api_key.png).
+Key uji sudah dihapus dari perangkat setelah verifikasi. Karena key tersebut sempat dibagikan di luar aplikasi, key itu wajib dicabut di AI Studio dan diganti; tidak ada key yang ditulis ke repo, dokumentasi, atau screenshot.
+
+Bukti visual: [`../Screenshots/assistant_empty.png`](../Screenshots/assistant_empty.png), [`../Screenshots/assistant_no_key.png`](../Screenshots/assistant_no_key.png), [`../Screenshots/settings_api_key.png`](../Screenshots/settings_api_key.png), [`../Screenshots/settings_key_saved.png`](../Screenshots/settings_key_saved.png), [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
 
 ---
 
@@ -284,13 +326,13 @@ $ flutter analyze
 No issues found! (ran in 4.1s)
 
 $ dart format --output=none --set-exit-if-changed .
-Formatted 50 files (0 changed)
+Formatted 51 files (0 changed)
 
 $ flutter test
-00:02 +39: All tests passed!
+00:02 +43: All tests passed!
 ```
 
-`flutter test` mencakup 17 test lama Minggu 5-9 dan 22 test baru untuk fitur asisten.
+`flutter test` mencakup 17 test lama Minggu 5-9 dan 26 test baru untuk fitur asisten (22 test awal + 4 test regresi konteks dari Issue #17).
 
 Bukti CI pada PR: [`verif_pr.png`](../Screenshots/verif_pr.png) dan [`verif_ci.png`](../Screenshots/verif_ci.png).
 
@@ -307,3 +349,7 @@ Bukti CI pada PR: [`verif_pr.png`](../Screenshots/verif_pr.png) dan [`verif_ci.p
 **Keputusan tersulit** adalah menolak fallback demo. Demo lokal akan membuat screenshot terlihat lebih meyakinkan tanpa API key, tetapi itu berarti menampilkan jawaban palsu sebagai jawaban AI. Saya memilih empty state + banner yang jujur, dan menutupi jalur jaringan dengan test parser SSE yang deterministik.
 
 **Yang akan saya ubah lain kali:** menulis test pembatalan dan test error sebelum implementasi, bukan sesudah. Dua bug desain di atas (cancel dan `.valueOrNull`) akan langsung terlihat di menit pertama bila test ditulis lebih dulu.
+
+**Pelajaran dari verifikasi dengan key sungguhan:** 39 test hijau tidak membuktikan integrasi antarhalaman berjalan. Bug konteks judul hanya muncul karena `NotesPage` sudah dibuang ketika tab Asisten dibuka, keadaan yang tidak pernah dibuat oleh unit test provider. Yang membongkarnya adalah satu balasan AI yang menyebut "tidak ada judul catatan" pada percobaan pertama. Pelajarannya: uji jalur nyata lebih awal, dan jangan menganggap "UI terlihat benar" sebagai bukti data benar-benar terkirim.
+
+**Tentang key yang terekspos:** key uji sempat dibagikan lewat chat sebelum dipakai. Key itu tidak pernah masuk repo, test, atau screenshot, tetapi tetap dianggap bocor dan dihapus dari perangkat. Untuk proyek berikutnya, urutannya harus dibalik: buat key khusus uji, batasi kuotanya, dan cabut segera setelah verifikasi selesai.

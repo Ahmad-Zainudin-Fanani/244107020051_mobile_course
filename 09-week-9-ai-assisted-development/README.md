@@ -213,6 +213,8 @@ Commit yang dibuat:
 
 Branch `main` tetap hanya menerima perubahan lewat PR rilis, dan `develop` menjadi target default PR fitur.
 
+Bukti alur di GitHub: [`verif_issue.png`](Screenshots/verif_issue.png) (issue #8), [`verif_pr.png`](Screenshots/verif_pr.png) (checks PR #9), dan [`verif_ci.png`](Screenshots/verif_ci.png) (Actions run).
+
 ---
 
 ## 9. Struktur folder

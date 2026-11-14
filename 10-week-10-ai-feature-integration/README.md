@@ -264,8 +264,27 @@ Commit yang dibuat:
 | `feat(assistant): tambah kontrak domain, klien Gemini, dan penyimpanan key` | Domain, SSE client, secure storage, dependensi |
 | `feat(assistant): pasang tab Asisten, pengaturan key, dan test alur chat` | UI, navigasi, manifest, 22 test |
 | `docs: catat prompt, halusinasi, dan keputusan AI` | `docs/ai-log.md` + README + screenshot |
+| `docs: tautkan issue dan pull request fitur asisten` | Tautan Issue #14 dan PR #15 |
+| `docs: simpan bukti issue, PR, dan CI dari GitHub` | `verif_issue.png`, `verif_pr.png`, `verif_ci.png` |
 
 `main` tetap hanya menerima perubahan lewat PR rilis, dan `develop` menjadi target default PR fitur.
+
+Bukti alur di GitHub:
+
+<div align="center">
+  <img src="Screenshots/verif_issue.png" alt="Issue 14" width="700">
+  <p><em>Gambar 9.1: Issue #14 sebagai titik awal branch fitur.</em></p>
+</div>
+
+<div align="center">
+  <img src="Screenshots/verif_pr.png" alt="Checks PR 15" width="700">
+  <p><em>Gambar 9.2: PR #15 — check <code>analyze, format, test</code> hijau.</em></p>
+</div>
+
+<div align="center">
+  <img src="Screenshots/verif_ci.png" alt="Actions run" width="700">
+  <p><em>Gambar 9.3: GitHub Actions run #27 selesai sukses dalam 1m 52s.</em></p>
+</div>
 
 ---
 
@@ -279,7 +298,10 @@ Commit yang dibuat:
 ├── Screenshots/
 │   ├── assistant_empty.png
 │   ├── assistant_no_key.png
-│   └── settings_api_key.png
+│   ├── settings_api_key.png
+│   ├── verif_issue.png
+│   ├── verif_pr.png
+│   └── verif_ci.png
 └── sourceCode/
     ├── lib/features/assistant/
     │   ├── domain/{entities,services,usecases}/

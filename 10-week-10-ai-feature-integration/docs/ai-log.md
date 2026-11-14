@@ -292,6 +292,8 @@ $ flutter test
 
 `flutter test` mencakup 17 test lama Minggu 5-9 dan 22 test baru untuk fitur asisten.
 
+Bukti CI pada PR: [`verif_pr.png`](../Screenshots/verif_pr.png) dan [`verif_ci.png`](../Screenshots/verif_ci.png).
+
 ---
 
 ## 8. Refleksi

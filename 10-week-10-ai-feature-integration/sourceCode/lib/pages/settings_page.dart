@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/prefs.dart';
 import '../data/sync.dart';
+import '../features/assistant/presentation/widgets/api_key_card.dart';
 
 final prefsRepositoryProvider = Provider((ref) => PrefsRepository());
 final darkModeProvider = AsyncNotifierProvider<DarkModeNotifier, bool>(
@@ -113,6 +114,12 @@ class SettingsPage extends ConsumerWidget {
               error: (err, _) => const SizedBox(),
             ),
           ]),
+
+          const SizedBox(height: 18),
+
+          // Section 4: Asisten AI
+          _buildSectionHeader('ASISTEN AI (GEMINI)', isDark),
+          _buildCard(isDark, [const ApiKeyCard()]),
         ],
       ),
     );

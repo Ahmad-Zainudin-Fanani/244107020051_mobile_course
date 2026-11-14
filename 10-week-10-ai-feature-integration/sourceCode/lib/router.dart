@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import 'features/assistant/presentation/pages/assistant_page.dart';
 import 'features/notes/presentation/pages/notes_page.dart';
 import 'features/notes/presentation/pages/note_detail_page.dart';
 import 'pages/settings_page.dart';
@@ -35,7 +36,7 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   int _currentIndex = 0;
-  final _pages = const [NotesPage(), SettingsPage()];
+  final _pages = const [NotesPage(), AssistantPage(), SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,11 @@ class _MainLayoutState extends State<MainLayout> {
             icon: Icon(Icons.edit_note_outlined),
             selectedIcon: Icon(Icons.edit_note),
             label: 'Catatan',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.auto_awesome_outlined),
+            selectedIcon: Icon(Icons.auto_awesome),
+            label: 'Asisten',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings_outlined),

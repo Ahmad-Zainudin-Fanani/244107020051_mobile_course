@@ -57,6 +57,8 @@ Output: struktur folder + kode per layer + daftar error + minimal 5 test.
 
 Tiga hal yang saya tegaskan karena draf pertama salah ke arah sana: **hanya judul** (bukan isi catatan), **default mati** (bukan aktif), dan **stop harus menutup koneksi** (bukan hanya menghentikan loop).
 
+System prompt yang benar-benar dikirim ke Gemini saat runtime, contoh user prompt, dan output awal Gemini ada di [`docs/ai-log.md` §1.1 dan §2.1](docs/ai-log.md).
+
 Prompt review tahap kedua dipakai setelah fitur hijau, dengan fokus kebenaran, pembatalan stream, privasi, dan biaya. Dari situ muncul temuan blocker: pembatalan versi pertama tidak benar-benar menutup koneksi HTTP.
 
 ---
@@ -350,6 +352,22 @@ Bukti alur di GitHub:
 ---
 
 ## 11. Refleksi
+
+### 11.1 Jawaban pertanyaan refleksi modul
+
+**Fitur AI mana yang diintegrasikan dan mengapa?**
+Saya memilih **chat asisten** karena project ini sudah punya daftar catatan berjudul, sehingga konteks yang aman (hanya judul) tersedia tanpa fitur baru di sisi data. Chat juga tidak meminta izin kamera atau mikrofon, biayanya mudah dibatasi lewat `max_output_tokens` dan kuota, serta memperlihatkan dua hal yang dinilai di modul: streaming dan fallback. OCR, Speech-to-Text, dan Image Understanding tidak dipakai karena modul meminta **salah satu** fitur AI, dan menambahkannya akan memperbesar permukaan privasi tanpa manfaat untuk aplikasi catatan.
+
+**Bagaimana privasi pengguna dilindungi?**
+Isi catatan tidak pernah dikirim; hanya judul, maksimal 20, masing-masing dipotong 60 karakter, dan hanya jika pengguna menyalakan saklar (default mati). Setiap request memakai `store: false` agar riwayat tidak menetap di server. API key disimpan di `flutter_secure_storage`, tidak pernah ditulis ke kode, test, atau dokumentasi. System prompt melarang meminta NIK, nomor telepon, dan alamat. Screenshot hanya memakai catatan contoh.
+
+**Fallback apa yang disediakan jika layanan AI error?**
+Tanpa key, tab Asisten menampilkan banner **"API key Gemini belum diatur"** dan tautan ke Pengaturan, bukan jawaban palsu. Status 401/403/404/429/5xx dan timeout 30 detik dipetakan ke pesan yang berbeda; tidak ada retry otomatis. Saat pengguna menekan stop, teks parsial dipertahankan dan koneksi ditutup. Percakapan bisa dibersihkan, dan pertanyaan tanpa konteks dilayani cache agar tidak memanggil API berulang.
+
+**Satu hal yang dipelajari tentang UX fitur AI di mobile?**
+Rasa percaya datang dari kejujuran status, bukan dari jawaban yang selalu ada. Menampilkan jumlah judul yang benar-benar dikirim ("5 judul catatan akan disertakan") dan mengakui "saya belum tahu" lebih baik daripada demo palsu; justru label itulah yang membongkar bug konteks di perangkat.
+
+### 11.2 Catatan tambahan
 
 **Halusinasi paling menonjol** adalah `gemini-pro:generateContent` yang masih dipakai contoh modul. Nama model itu sudah tidak ada di halaman resmi, dan bentuk endpoint-nya sudah berganti ke Interactions API. Saya menemukannya bukan dengan membaca sekilas, tetapi dengan menghitung kemunculan string di halaman dokumentasi dan mencocokkan setiap parameter (`store`, `system_instruction`, `alt=sse`, `x-goog-api-key`) sebelum menulis kode.
 

@@ -6,6 +6,7 @@
 **Basis Proyek:** `week5_offline_notes` — hasil Minggu 9 (`09-week-9-ai-assisted-development`)
 **Tautan Repositori:** [244107020051_mobile_course](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course)
 **Issue:** [#14 Asisten chat AI Gemini dengan API key aman dan fallback](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/14)
+**Pull Request:** [#15 feat(assistant): integrasi chat AI Gemini dengan key aman dan fallback](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/15)
 **Log AI:** [`docs/ai-log.md`](docs/ai-log.md)
 
 ---

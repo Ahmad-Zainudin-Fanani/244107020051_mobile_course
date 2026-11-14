@@ -6,6 +6,7 @@
 **Basis proyek:** `week5_offline_notes` hasil Minggu 9, disalin apa adanya dari `09-week-9-ai-assisted-development/sourceCode`
 **Branch:** `feature/14-ai-assistant-chat` → `develop` → `main`
 **Issue:** [#14](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/14)
+**Pull Request:** [#15](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/15)
 
 > AI dipakai untuk membuat draf dan sebagai reviewer awal. Setiap baris saya baca, setiap API saya cocokkan dengan dokumentasi resmi, dan setiap keputusan di bawah ini bisa saya jelaskan tanpa membuka AI.
 

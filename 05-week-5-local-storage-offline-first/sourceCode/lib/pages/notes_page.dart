@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../data/sync.dart';
 import '../data/local/note.dart';
 import '../widgets/note_tile.dart';
@@ -77,7 +78,9 @@ class NotesPage extends ConsumerWidget {
           await ref.read(noteRepositoryProvider).addNote(title: title);
           ref.invalidate(notesProvider);
           // Cobaan sinkronisasi setiap kali catatan baru ditambahkan
-          _syncData(context, ref);
+          if (context.mounted) {
+            _syncData(context, ref);
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -91,20 +94,17 @@ class NotesPage extends ConsumerWidget {
       if (synced > 0) {
         ref.invalidate(notesProvider);
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sync successful!')),
-          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text('Sync successful!')));
         }
       } else if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('All synced up!')),
-          );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('All synced up!')));
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sync failed: $e')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Sync failed: $e')));
       }
     }
   }

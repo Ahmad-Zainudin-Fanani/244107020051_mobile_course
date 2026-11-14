@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/validation.dart';
 import '../../../../data/sync.dart' show forceOfflineProvider;
 import '../providers/notes_providers.dart';
 import '../widgets/error_view.dart';
@@ -245,11 +246,17 @@ class _NotesPageState extends ConsumerState<NotesPage> {
   }
 
   void _handleQuickAdd() async {
-    final text = _quickController.text.trim();
-    if (text.isEmpty) return;
+    final text = _quickController.text;
+    final titleError = validateNoteTitle(text);
+    if (titleError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(titleError), backgroundColor: Colors.red),
+      );
+      return;
+    }
 
     _quickController.clear();
-    final result = await ref.read(addNoteProvider).call(title: text);
+    final result = await ref.read(addNoteProvider).call(title: text.trim());
     if (!mounted) return;
 
     if (result.failure != null) {
@@ -347,11 +354,12 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                   onPressed: () async {
                     final title = titleController.text.trim();
                     final body = bodyController.text.trim();
+                    final titleError = validateNoteTitle(title);
 
-                    if (title.isEmpty) {
+                    if (titleError != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Judul catatan tidak boleh kosong.'),
+                        SnackBar(
+                          content: Text(titleError),
                           backgroundColor: Colors.red,
                         ),
                       );

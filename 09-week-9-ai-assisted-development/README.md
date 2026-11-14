@@ -7,6 +7,7 @@
 **Tautan Repositori:** [244107020051_mobile_course](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course)
 **Issue:** [#8 Cari catatan berdasarkan judul dengan empty state](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/8)
 **Pull Request:** [#9 feat(notes): cari catatan berdasarkan judul dengan empty state](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/9)
+**Pull Request perbaikan:** [#12 fix(notes): query pencarian dibuang saat halaman catatan ditinggalkan](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/12)
 **Log AI:** [`docs/ai-log.md`](docs/ai-log.md)
 
 ---
@@ -30,8 +31,8 @@ Yang penting dari minggu ini bukan jumlah kode yang dihasilkan AI, tetapi jejak 
 | Fitur kecil di atas project lama | 1 fitur | **Lolos** — pencarian judul + empty state |
 | Aturan pencarian di domain | Tidak di widget | **Lolos** — `searchNotesByTitle` |
 | `flutter analyze` | 0 issue | **Lolos** — `No issues found!` |
-| `dart format --set-exit-if-changed .` | 0 file berubah | **Lolos** — `33 files (0 changed)` |
-| `flutter test` | Semua hijau | **Lolos** — 16 test |
+| `dart format --set-exit-if-changed .` | 0 file berubah | **Lolos** — `34 files (0 changed)` |
+| `flutter test` | Semua hijau | **Lolos** — 17 test |
 | Dokumentasi AI | Prompt + halusinasi + tolak/terima | **Lolos** — [`docs/ai-log.md`](docs/ai-log.md) |
 | Uji di perangkat nyata | Android 13 | **Lolos** — `2209116AG` / `5751c2fd0013` |
 
@@ -85,16 +86,17 @@ Tidak ada akses database dari widget, dan aturan filter tidak bergantung pada Fl
 
 ## 4. Perubahan kode
 
-Diff fitur terhadap baseline Minggu 8: **6 berkas, +265 / −5 baris**.
+Diff fitur terhadap baseline Minggu 8: **7 berkas, +289 / −5 baris**.
 
 | Berkas | Perubahan |
 | :--- | :--- |
 | `lib/features/notes/domain/usecases/search_notes.dart` | **Baru** — fungsi murni `searchNotesByTitle` |
-| `lib/features/notes/presentation/providers/notes_providers.dart` | `SearchQueryNotifier`, `searchQueryProvider`, `filteredNotesProvider` |
+| `lib/features/notes/presentation/providers/notes_providers.dart` | `SearchQueryNotifier`, `searchQueryProvider` (autoDispose), `filteredNotesProvider` |
 | `lib/features/notes/presentation/pages/notes_page.dart` | Kolom cari, daftar memakai hasil filter, tombol hapus |
 | `lib/features/notes/presentation/widgets/search_empty_view.dart` | **Baru** — empty state yang bisa diuji |
 | `test/search_notes_test.dart` | **Baru** — 5 unit test aturan pencarian |
 | `test/search_empty_view_test.dart` | **Baru** — widget test empty state |
+| `test/search_query_lifecycle_test.dart` | **Baru** — regresi query dibuang saat halaman ditinggalkan |
 
 Baseline project Minggu 8 disalin lebih dulu pada commit `chore`, sehingga diff fitur tetap kecil dan mudah direview.
 
@@ -132,13 +134,13 @@ Uji manual:
 
 ```text
 $ flutter analyze
-No issues found! (ran in 6.2s)
+No issues found! (ran in 4.3s)
 
 $ dart format --output=none --set-exit-if-changed .
-Formatted 33 files (0 changed)
+Formatted 34 files (0 changed)
 
 $ flutter test
-00:00 +16: All tests passed!
+00:00 +17: All tests passed!
 ```
 
 <div align="center">
@@ -153,7 +155,7 @@ $ flutter test
 
 <div align="center">
   <img src="Screenshots/verif_flutter_test.png" alt="Hasil flutter test" width="650">
-  <p><em>Gambar 6.3: 16 test lulus, termasuk 5 test pencarian dan 1 widget test empty state.</em></p>
+  <p><em>Gambar 6.3: 17 test lulus, termasuk 5 test pencarian, 1 widget test empty state, dan 1 test siklus hidup query.</em></p>
 </div>
 
 ### 6.2 Bukti di perangkat
@@ -175,6 +177,20 @@ Diambil dari `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 
   <p><em>Gambar 6.6: Query <code>zzz</code> menampilkan empty state dan tombol hapus pencarian.</em></p>
 </div>
 
+### 6.3 Perbaikan siklus hidup pencarian
+
+Review tahap kedua menemukan bug: setelah mencari lalu pindah tab, kolom cari kosong tetapi daftar tetap tersaring. Penyebabnya query hidup lebih lama daripada halaman. Sesudah provider dibuat `autoDispose`, seluruh catatan kembali tampil.
+
+<div align="center">
+  <img src="Screenshots/fix_search_state_before.png" alt="Sebelum perbaikan: kolom kosong tapi daftar tersaring" width="260">
+  <p><em>Gambar 6.7: Sebelum perbaikan — kolom cari kosong, tetapi hanya dua catatan <code>Belanja</code> yang tampil.</em></p>
+</div>
+
+<div align="center">
+  <img src="Screenshots/fix_search_state_after.png" alt="Sesudah perbaikan: seluruh catatan tampil" width="260">
+  <p><em>Gambar 6.8: Sesudah perbaikan — pindah tab mengembalikan seluruh catatan dan mengosongkan pencarian.</em></p>
+</div>
+
 ---
 
 ## 7. Temuan AI dan keputusan
@@ -188,6 +204,7 @@ Ringkasan; detail bukti ada di [`docs/ai-log.md`](docs/ai-log.md).
 | Tambah package `fuzzy` | Tidak perlu untuk kebutuhan *contains* | **Ditolak**, tanpa dependency baru |
 | Pindahkan pencarian ke `WHERE title LIKE ?` | Memutus kontrak repository dan sulit diuji tanpa DB | **Ditolak**, tetap filter di domain murni |
 | Empty state teks polos | Tidak bisa diuji sendiri | **Diterima + refactor** jadi `SearchEmptyView` |
+| Query hidup lebih lama dari halaman (review R1) | Reproduksi pindah tab: kolom kosong tetapi daftar tetap tersaring; test regresi merah `Actual: 'belanja'` | **Diterima + diperbaiki** dengan `autoDispose` |
 
 ---
 
@@ -198,6 +215,9 @@ Issue #8
   -> branch feature/8-search-notes dari develop
   -> chore baseline -> feat domain+test -> feat UI -> docs screenshot -> docs laporan
   -> PR #9 "Closes #8" -> CI hijau -> merge commit ke develop
+  -> review tahap kedua menemukan bug siklus hidup query -> Issue #11
+  -> branch fix/11-search-query-lifecycle -> test merah -> fix autoDispose
+  -> PR #12 "Closes #11" -> CI hijau -> merge commit ke develop
   -> release PR develop -> main -> back-merge main -> develop
 ```
 
@@ -210,6 +230,7 @@ Commit yang dibuat:
 | `feat: pasang kolom cari dan empty state di daftar catatan` | Provider, UI, widget empty state |
 | `docs: simpan tangkapan layar pencarian dari HP 2209116AG` | 3 screenshot perangkat |
 | `docs: catat prompt, halusinasi, dan keputusan AI` | `docs/ai-log.md`, README, bukti verifikasi |
+| `fix: buang kata kunci pencarian saat halaman catatan ditinggalkan` | `autoDispose` + test regresi siklus hidup query |
 
 Branch `main` tetap hanya menerima perubahan lewat PR rilis, dan `develop` menjadi target default PR fitur.
 
@@ -228,15 +249,20 @@ Bukti alur di GitHub: [`verif_issue.png`](Screenshots/verif_issue.png) (issue #8
 │   ├── app_notes_home.png
 │   ├── app_search_results.png
 │   ├── app_search_empty.png
+│   ├── fix_search_state_before.png
+│   ├── fix_search_state_after.png
 │   ├── verif_flutter_analyze.png
 │   ├── verif_dart_format.png
-│   └── verif_flutter_test.png
+│   ├── verif_flutter_test.png
+│   ├── verif_issue.png
+│   ├── verif_pr.png
+│   └── verif_ci.png
 └── sourceCode/
     ├── lib/features/notes/domain/usecases/search_notes.dart
     ├── lib/features/notes/presentation/providers/notes_providers.dart
     ├── lib/features/notes/presentation/pages/notes_page.dart
     ├── lib/features/notes/presentation/widgets/search_empty_view.dart
-    └── test/search_notes_test.dart, test/search_empty_view_test.dart
+    └── test/search_notes_test.dart, test/search_empty_view_test.dart, test/search_query_lifecycle_test.dart
 ```
 
 ---
@@ -248,3 +274,5 @@ Halusinasi yang paling jelas adalah `notesProvider.notifier.search()`. AI menuli
 Refactor terpenting adalah memindahkan aturan pencarian dari `build()` ke `searchNotesByTitle`. Sejak itu, lima kasus bisa diuji dalam milidetik tanpa widget atau database. Keputusan tersulit adalah menolak pencarian berbasis SQL yang terdengar lebih "scalable" — untuk ukuran data aplikasi ini, jalur itu hanya menambah bagian yang harus diuji tanpa manfaat nyata.
 
 Ke depannya, saya akan tetap memakai AI untuk draf dan review awal, tetapi dengan dua kebiasaan yang terbukti berguna minggu ini: **tulis test sebelum percaya**, dan **minta bukti analyzer/grep untuk setiap API yang namanya tidak saya kenal**.
+
+Review tahap kedua memberi pelajaran tambahan: semua test bisa hijau sementara perilaku antarhalaman tetap salah. Bug query yang bertahan setelah pindah tab tidak terlihat dari unit test domain, dan baru terbukti lewat reproduksi di perangkat plus satu test siklus hidup. Sejak itu, saya tidak menganggap "test hijau" sebagai akhir verifikasi, tetapi sebagai syarat minimum.

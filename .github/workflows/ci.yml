@@ -66,3 +66,19 @@ jobs:
       - name: Week 10 - unit tests
         working-directory: 10-week-10-ai-feature-integration/sourceCode
         run: flutter test
+
+      - name: Week 11 - install dependencies
+        working-directory: 11-week-11-performance-optimization/sourceCode
+        run: flutter pub get
+
+      - name: Week 11 - static analysis
+        working-directory: 11-week-11-performance-optimization/sourceCode
+        run: flutter analyze
+
+      - name: Week 11 - formatting check
+        working-directory: 11-week-11-performance-optimization/sourceCode
+        run: dart format --output=none --set-exit-if-changed lib test integration_test tool
+
+      - name: Week 11 - unit and widget tests
+        working-directory: 11-week-11-performance-optimization/sourceCode
+        run: flutter test

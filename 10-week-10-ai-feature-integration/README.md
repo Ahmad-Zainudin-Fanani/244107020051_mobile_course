@@ -31,8 +31,8 @@ Fitur yang ditambahkan:
 | Streaming + bisa dihentikan | Tombol stop menutup koneksi | **Lolos** — `StreamSubscription.cancel()` |
 | Privasi | Data minimal, opt-in | **Lolos** — hanya judul, default mati, `store: false` |
 | `flutter analyze` | 0 issue | **Lolos** — `No issues found!` |
-| `dart format --set-exit-if-changed .` | 0 file berubah | **Lolos** — `50 files (0 changed)` |
-| `flutter test` | Semua hijau | **Lolos** — 39 test |
+| `dart format --set-exit-if-changed .` | 0 file berubah | **Lolos** — `51 files (0 changed)` |
+| `flutter test` | Semua hijau | **Lolos** — 43 test |
 | Dokumentasi AI | Prompt + halusinasi + tolak/terima | **Lolos** — [`docs/ai-log.md`](docs/ai-log.md) |
 | Uji di perangkat nyata | Android 13 | **Lolos** — `2209116AG` / `5751c2fd0013` |
 
@@ -96,13 +96,13 @@ Pemisahan layer:
 | `data` | `GeminiAssistant` (SSE), `SecureApiKeyStore` | menyentuh widget |
 | `presentation` | provider, `ChatController`, halaman, widget | memanggil `http` langsung |
 
-`AiAssistant` dan `ApiKeyStore` adalah kontrak, sehingga 22 test baru berjalan tanpa jaringan dan tanpa platform channel.
+`AiAssistant` dan `ApiKeyStore` adalah kontrak, sehingga 26 test baru berjalan tanpa jaringan dan tanpa platform channel.
 
 ---
 
 ## 4. Perubahan kode
 
-Diff fitur terhadap baseline Minggu 9: **20 berkas, +1949 / −1 baris** (di luar `pubspec.lock` dan registrant plugin hasil generate).
+Diff fitur terhadap baseline Minggu 9: **21 berkas, +2047 / −1 baris** (di luar `pubspec.lock` dan registrant plugin hasil generate).
 
 | Berkas | Perubahan |
 | :--- | :--- |
@@ -119,7 +119,7 @@ Diff fitur terhadap baseline Minggu 9: **20 berkas, +1949 / −1 baris** (di lua
 | `lib/router.dart` | Tab ketiga **Asisten** |
 | `lib/pages/settings_page.dart` | Section `ASISTEN AI (GEMINI)` |
 | `android/app/src/main/AndroidManifest.xml` | Izin `INTERNET` |
-| `test/*` (6 berkas) | **Baru** — 22 test unit/widget |
+| `test/*` (7 berkas) | **Baru** — 26 test unit/widget |
 
 Baseline Minggu 9 disalin lebih dulu pada commit `chore`, sehingga diff fitur tetap kecil dan mudah direview.
 
@@ -159,6 +159,15 @@ Uji manual tanpa key:
 4. Buka Pengaturan, tempel key pendek → ditolak dengan pesan validasi.
 5. Hapus percakapan lewat ikon tempat sampah → daftar pesan kosong.
 
+Uji manual dengan key sungguhan:
+
+1. Simpan key di Pengaturan → status **Tersimpan**, kolom dikosongkan.
+2. Nyalakan **Sertakan judul catatan** → label berubah menjadi "5 judul catatan akan disertakan".
+3. Kirim **"Ringkas daftar judul catatan saya"** → balasan menyebut kelima judul catatan perangkat.
+4. Matikan saklar → label kembali "Sertakan judul catatan (opsional)" dan pertanyaan berikutnya tidak membawa judul.
+5. Hapus key → status **Belum diatur**, tab Asisten kembali menampilkan fallback.
+6. Cabut key tersebut di AI Studio karena sudah dipakai untuk pengujian.
+
 ---
 
 ## 6. Hasil pengujian
@@ -170,19 +179,20 @@ $ flutter analyze
 No issues found! (ran in 4.1s)
 
 $ dart format --output=none --set-exit-if-changed .
-Formatted 50 files (0 changed)
+Formatted 51 files (0 changed)
 
 $ flutter test
-00:02 +39: All tests passed!
+00:02 +43: All tests passed!
 ```
 
-22 test baru:
+26 test baru:
 
 | Berkas | Jumlah | Cakupan |
 | :--- | :---: | :--- |
 | `test/build_system_prompt_test.dart` | 5 | aturan prompt, batas judul, pemotongan, blok konteks |
 | `test/gemini_stream_test.dart` | 6 | bentuk request, event rusak, 401, 429, error mid-stream, stream kosong |
 | `test/chat_controller_test.dart` | 8 | tanpa key, penggabungan chunk, konteks opt-in, cache, batas sesi, cancel, error, clear |
+| `test/assistant_context_test.dart` | 4 | konteks mati, daftar termuat, daftar masih dimuat, saklar dimatikan lagi |
 | `test/assistant_empty_view_test.dart` | 1 | contoh pertanyaan meneruskan pilihan |
 | `test/api_key_card_test.dart` | 2 | simpan key valid, tolak key pendek |
 
@@ -205,7 +215,19 @@ Diambil dari `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 
   <p><em>Gambar 6.3: Kartu API key di Pengaturan — status "Belum diatur", kolom key tersembunyi, dan tombol simpan.</em></p>
 </div>
 
-Balasan AI sungguhan belum bisa diambil karena API key belum tersedia saat pengerjaan. Jalur jaringan dibuktikan lewat 6 test parser SSE dengan respons tiruan; seluruh alur UI, validasi, dan fallback dibuktikan di perangkat.
+<div align="center">
+  <img src="Screenshots/settings_key_saved.png" alt="Status key tersimpan" width="260">
+  <p><em>Gambar 6.4: Setelah key disimpan — status berubah menjadi "Tersimpan", kolom dikosongkan, dan key tidak pernah ditampilkan.</em></p>
+</div>
+
+<div align="center">
+  <img src="Screenshots/assistant_reply.png" alt="Balasan Gemini sungguhan di perangkat" width="260">
+  <p><em>Gambar 6.5: Balasan Gemini sungguhan dengan konteks lima judul catatan perangkat.</em></p>
+</div>
+
+Verifikasi dengan key sungguhan juga menemukan satu bug nyata: percobaan pertama membalas "tidak ada judul catatan yang diberikan" meski saklar konteks menyala. Penyebabnya `notesProvider` bersifat `autoDispose` dan `NotesPage` dibuang saat tab berganti, sehingga daftar judul masih loading ketika tombol kirim ditekan. Perbaikan dan 4 test regresinya ada di Issue [#17](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/17).
+
+Key yang dipakai untuk verifikasi sudah dihapus dari perangkat setelah pengujian. Karena key tersebut sempat dibagikan di luar aplikasi, key itu harus dicabut di AI Studio dan diganti dengan yang baru; tidak ada key yang tersimpan di repo, dokumentasi, atau screenshot.
 
 ---
 
@@ -215,6 +237,7 @@ Balasan AI sungguhan belum bisa diambil karena API key belum tersedia saat penge
 | :--- | :--- | :--- |
 | API key bocor dari repo | Kredit API dipakai orang lain | Key hanya di `flutter_secure_storage`; tidak ada key di kode, test, atau commit; input lewat Pengaturan |
 | Key bocor dari perangkat | Penyalahgunaan kuota | Key bisa dihapus dari Pengaturan; pengguna diarahkan membatasi kuota di Google Cloud |
+| Key terekspos saat pengujian manual | Key dipakai orang lain | Key uji dihapus dari perangkat setelah verifikasi dan wajib dicabut di AI Studio; key baru tidak pernah ditempel ke chat/issue/commit |
 | Isi catatan pribadi terkirim ke pihak ketiga | Kebocoran data pengguna | Isi catatan **tidak pernah** dikirim; hanya judul, maksimal 20, dan hanya bila saklar dinyalakan (default mati) |
 | Riwayat percakapan tersimpan di server AI | Data menetap di luar kendali | `store: false` pada setiap request; riwayat hanya di memori aplikasi |
 | Biaya membengkak karena pemakaian berulang | Tagihan tak terduga | Batas 20 permintaan per sesi, satu permintaan aktif pada satu waktu, `max_output_tokens: 512`, cache untuk pertanyaan tanpa konteks |
@@ -240,6 +263,7 @@ Ringkasan; bukti lengkap ada di [`docs/ai-log.md`](docs/ai-log.md).
 | Retry otomatis tanpa batas | Memperburuk rate limit dan biaya | **Ditolak**, percobaan ulang manual + batas sesi |
 | `temperature`/`top_p` untuk konsistensi | Dokumentasi: Gemini 4 & 3.6+ mengabaikan parameter itu | **Ditolak**, hanya `max_output_tokens` |
 | Jawaban demo saat key belum ada | Menampilkan jawaban palsu sebagai AI | **Ditolak**, empty state + banner jujur |
+| Konteks judul kosong di perangkat | Saklar menyala tetapi AI menjawab "tidak ada judul"; `notesProvider` autoDispose dimulai ulang saat tab berganti | **Diperbaiki** dengan `assistantContextTitlesProvider` + 4 test regresi (Issue #17) |
 
 ---
 
@@ -250,9 +274,15 @@ Issue #14
   -> branch feature/14-ai-assistant-chat dari develop
   -> chore: salin baseline Minggu 9
   -> feat: domain + klien Gemini + secure storage
-  -> feat: tab Asisten + Pengaturan + 22 test
+  -> feat: tab Asisten + Pengaturan + test alur chat
   -> docs: ai-log + README + screenshot perangkat
-  -> PR "Closes #14" -> CI hijau -> merge ke develop
+  -> PR #15 "Closes #14" -> CI hijau -> merge ke develop
+  -> release PR #16 develop -> main -> back-merge main -> develop
+
+Issue #17 (ditemukan saat uji dengan key sungguhan)
+  -> branch fix/17-assistant-context-titles dari develop
+  -> test regresi konteks judul -> provider turunan + label jumlah judul
+  -> PR -> CI hijau -> merge ke develop
   -> release PR develop -> main -> back-merge main -> develop
 ```
 
@@ -266,6 +296,8 @@ Commit yang dibuat:
 | `docs: catat prompt, halusinasi, dan keputusan AI` | `docs/ai-log.md` + README + screenshot |
 | `docs: tautkan issue dan pull request fitur asisten` | Tautan Issue #14 dan PR #15 |
 | `docs: simpan bukti issue, PR, dan CI dari GitHub` | `verif_issue.png`, `verif_pr.png`, `verif_ci.png` |
+| `fix(assistant): kirim judul catatan walau tab Catatan sudah ditutup` | Provider konteks + label jumlah judul + 4 test regresi |
+| `docs: catat verifikasi dengan key sungguhan dan bug konteks` | Screenshot balasan nyata, angka test baru, Issue #17 |
 
 `main` tetap hanya menerima perubahan lewat PR rilis, dan `develop` menjadi target default PR fitur.
 
@@ -298,7 +330,9 @@ Bukti alur di GitHub:
 ├── Screenshots/
 │   ├── assistant_empty.png
 │   ├── assistant_no_key.png
+│   ├── assistant_reply.png
 │   ├── settings_api_key.png
+│   ├── settings_key_saved.png
 │   ├── verif_issue.png
 │   ├── verif_pr.png
 │   └── verif_ci.png
@@ -324,3 +358,5 @@ Bukti alur di GitHub:
 **Keputusan tersulit** adalah menolak fallback demo. Demo akan membuat screenshot terlihat lebih meyakinkan, tetapi berarti memalsukan jawaban AI. Saya memilih empty state dan banner yang jujur, lalu menutupi jalur jaringan dengan test parser yang deterministik.
 
 **Yang akan saya bawa ke Minggu 11:** test untuk kasus gagal dan pembatalan ditulis lebih dulu, bukan sesudah fitur "terlihat jalan". Dua bug desain minggu ini akan tertangkap di menit pertama bila urutannya dibalik.
+
+**Pelajaran tambahan dari verifikasi dengan key sungguhan:** 39 test hijau tidak menjamin integrasi antarhalaman benar. Bug konteks judul hanya muncul karena `NotesPage` sudah dibuang saat tab Asisten dibuka, sesuatu yang tidak pernah terjadi di unit test provider. Satu screenshot balasan AI yang menyebut "tidak ada judul" cukup untuk membongkar asumsi itu, dan 4 test regresi membuatnya tidak terulang.

@@ -2,7 +2,41 @@
 
 **Nama  :** Ahmad Zainudin Fanani  
 **NIM   :** 244107020051  
-**Kelas :** TI-3D  
+**Kelas :** TI-3D
+
+---
+
+## Tujuan
+
+Menerapkan UI deklaratif dan tata letak responsif: memilih antara `GridView`
+dan `LayoutBuilder`, lalu memastikan layout tetap rapi di layar sempit maupun
+lebar.
+
+## Fitur
+
+- Profil dasar dan kartu informasi akademik.
+- Grid 1 kolom pada layar sempit dan 2 kolom pada layar lebar (breakpoint 700).
+- Toggle mode gelap dengan atribut `Semantics` agar ramah pembaca layar.
+- Eksperimen overflow untuk memahami batas penggunaan `Expanded`.
+
+## Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `cupertino_icons` | ^1.0.8 (ikon bawaan) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## Cara Menjalankan
+
+```bash
+cd 02-week-2-declarative-ui-responsive-design
+flutter pub get
+flutter run      # putar orientasi untuk melihat perubahan jumlah kolom
+flutter test     # 2 widget test
+flutter analyze
+```
 
 ---
 

@@ -247,6 +247,8 @@ flutter test
 
 ## 5. AI Challenge & Refleksi Kritis Arsitektur
 
+Dokumen lengkap prompt dan hasil evaluasinya: [`docs/ai_challenge.md`](docs/ai_challenge.md).
+
 ### 5.1 Prompt Tantangan AI
 
 Dalam merancang restrukturisasi arsitektur ini, diajukan prompt telaah arsitektural berikut kepada asisten AI:

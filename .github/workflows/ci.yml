@@ -19,6 +19,95 @@ jobs:
           flutter-version: '3.47.2'
           cache: true
 
+      # Minggu 1-7 belum dicek format karena kodenya memakai gaya lama
+      # (formatter baru akan mengubah banyak berkas). Analisis dan test tetap
+      # dijalankan supaya kegagalan seperti widget test bawaan template
+      # langsung terdeteksi.
+
+      - name: Week 1 - install dependencies
+        working-directory: 01-week-1-mobile-development-ecosystem-flutter-refresh
+        run: flutter pub get
+
+      - name: Week 1 - static analysis
+        working-directory: 01-week-1-mobile-development-ecosystem-flutter-refresh
+        run: flutter analyze
+
+      - name: Week 1 - widget test
+        working-directory: 01-week-1-mobile-development-ecosystem-flutter-refresh
+        run: flutter test
+
+      - name: Week 2 - install dependencies
+        working-directory: 02-week-2-declarative-ui-responsive-design
+        run: flutter pub get
+
+      - name: Week 2 - static analysis
+        working-directory: 02-week-2-declarative-ui-responsive-design
+        run: flutter analyze
+
+      - name: Week 2 - widget tests
+        working-directory: 02-week-2-declarative-ui-responsive-design
+        run: flutter test
+
+      - name: Week 3 - install dependencies
+        working-directory: 03-week-3-navigation-state-management
+        run: flutter pub get
+
+      - name: Week 3 - static analysis
+        working-directory: 03-week-3-navigation-state-management
+        run: flutter analyze
+
+      - name: Week 3 - unit and widget tests
+        working-directory: 03-week-3-navigation-state-management
+        run: flutter test
+
+      - name: Week 4 - install dependencies
+        working-directory: 04-week-4-networking-rest-api
+        run: flutter pub get
+
+      - name: Week 4 - static analysis
+        working-directory: 04-week-4-networking-rest-api
+        run: flutter analyze
+
+      - name: Week 4 - unit and widget tests
+        working-directory: 04-week-4-networking-rest-api
+        run: flutter test
+
+      - name: Week 5 - install dependencies
+        working-directory: 05-week-5-local-storage-offline-first
+        run: flutter pub get
+
+      - name: Week 5 - static analysis
+        working-directory: 05-week-5-local-storage-offline-first
+        run: flutter analyze
+
+      - name: Week 5 - widget test
+        working-directory: 05-week-5-local-storage-offline-first
+        run: flutter test
+
+      - name: Week 6 - install dependencies
+        working-directory: 06-week-6-authentication-security-fcm
+        run: flutter pub get
+
+      - name: Week 6 - static analysis
+        working-directory: 06-week-6-authentication-security-fcm
+        run: flutter analyze
+
+      - name: Week 6 - unit and widget tests
+        working-directory: 06-week-6-authentication-security-fcm
+        run: flutter test
+
+      - name: Week 7 - install dependencies
+        working-directory: 07-week-7-clean-architecture
+        run: flutter pub get
+
+      - name: Week 7 - static analysis
+        working-directory: 07-week-7-clean-architecture
+        run: flutter analyze
+
+      - name: Week 7 - unit and widget tests
+        working-directory: 07-week-7-clean-architecture
+        run: flutter test
+
       - name: Week 8 - install dependencies
         working-directory: 08-week-8-mid-project-review
         run: flutter pub get

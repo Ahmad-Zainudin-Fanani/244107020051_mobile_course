@@ -2,7 +2,43 @@
 
 **Nama  :** Ahmad Zainudin Fanani  
 **NIM   :** 244107020051  
-**Kelas :** TI-3D  
+**Kelas :** TI-3D
+
+---
+
+## Tujuan
+
+Melatih navigasi antarhalaman dengan GoRouter dan pengelolaan state dengan
+Riverpod, termasuk kapan `setState` masih cukup dan kapan state harus naik ke
+provider.
+
+## Fitur
+
+- Daftar ToDo: menambah tugas, menandai selesai, dan memfilter.
+- Halaman detail dengan `context.push` serta perpindahan tab dengan `context.go`.
+- Daftar produk asinkron yang menangani `loading`, `error` + retry, dan `data`.
+- Halaman statistik (`StatsPage`) memakai `AsyncNotifierProvider`.
+- Navigasi bawah (`NavigationBar`) antara ToDo dan Stats.
+
+## Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `go_router` | ^18.0.1 (navigasi deklaratif) |
+| `flutter_riverpod` | ^3.4.3 (state management) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## Cara Menjalankan
+
+```bash
+cd 03-week-3-navigation-state-management
+flutter pub get
+flutter run
+flutter test     # 4 test
+flutter analyze
+```
 
 ---
 

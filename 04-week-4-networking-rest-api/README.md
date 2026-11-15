@@ -58,6 +58,14 @@ Aplikasi mampu menangani berbagai kondisi respon jaringan dan menerjemahkannya k
 
 Pada halaman **PagedPostPage**, data diunduh per 10 item (`_page=N&_limit=10`). Ketika layar di-scroll mendekati batas bawah, data halaman berikutnya otomatis dimuat tanpa me-load ulang seluruh halaman.
 
+### 3. Hasil Pengujian Otomatis
+
+Seluruh 8 unit dan widget test lulus, dijalankan dari folder minggu ini:
+
+| `flutter test` |
+| :---: |
+| <img src="screenshots/passed2.png" width="700"> |
+
 ---
 
 ## 🔧 Refactoring & Navigasi Detail Post
@@ -70,9 +78,16 @@ Pada halaman **PagedPostPage**, data diunduh per 10 item (`_page=N&_limit=10`). 
    - Menambahkan dependency `go_router` dan membuat `PostDetailPage` untuk menampilkan judul dan body lengkap.
    - Menggunakan `singlePostProvider(id)` yang efisien: Pertama mengecek cache memori dari list yang sudah dimuat; jika tidak ada, baru memanggil API `fetchPost(id)`.
 
+| Halaman Detail Post (`/post/18`) |
+| :---: |
+| <img src="screenshots/detail.jpeg" height="450"> |
+
 ---
 
 ## 🤖 Laporan AI Challenge & Verifikasi Mandiri
+
+Dokumen lengkap (prompt, checklist, dan temuan verifikasi) ada di
+[`docs/ai_challenge.md`](docs/ai_challenge.md).
 
 ### Prompt yang Digunakan:
 > *"Buatkan repository layer Flutter untuk endpoint GET /comments?postId={id} dari JSONPlaceholder menggunakan Dio + flutter_riverpod. Requirements: Model Comment dengan fromJson aman null (postId, id, name, email, body), CommentRepository dengan method fetchComments(postId) + timeout 10 detik, AsyncNotifierProvider dengan penanganan error otomatis (AsyncError) dan fungsi pesan error ramah pengguna untuk timeout, connection error, 404, dan 500, serta unit test dari json dengan field hilang."*

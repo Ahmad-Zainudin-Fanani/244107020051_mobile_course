@@ -13,6 +13,31 @@ Pada praktikum Week 4 ini, telah diimplementasikan integrasi REST API pada aplik
 - **Refactoring & Navigasi Router**: Mengabaikan pemanggilan langsung di UI dengan ekstrak `PostTile`, pemisahan modul `network_errors.dart`, serta integrasi `GoRouter` untuk halaman detail (`/post/:id`).
 - **Testing & Mock Repository**: Menguji unit test model, error handling, dan provider menggunakan `FakePostRepository` tanpa koneksi internet sungguhan.
 
+## 🧱 Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `dio` | ^5.11.1 (HTTP client, timeout & interceptor terpusat) |
+| `flutter_riverpod` | ^3.4.3 (state management) |
+| `go_router` | ^18.0.1 (navigasi ke halaman detail post) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## ▶️ Cara Menjalankan
+
+```bash
+cd 04-week-4-networking-rest-api
+flutter pub get
+flutter run      # butuh koneksi internet ke jsonplaceholder.typicode.com
+flutter test     # 8 unit + widget test
+flutter analyze
+```
+
+Aplikasi mengambil data dari `https://jsonplaceholder.typicode.com` (konfigurasi
+`baseUrl` terpusat di `lib/data/api_client.dart`). Tanpa internet, aplikasi tetap
+berjalan dan menampilkan pesan error yang ramah, bukan crash.
+
 ---
 
 ## 🛠️ Arsitektur Kode & Implementasi Fitur
@@ -198,3 +223,20 @@ class FakePostRepository extends PostRepository {
 00:03 +7: test/widget_test.dart: App renders PagedPostPage title
 00:03 +8: All tests passed!
 ```
+
+---
+
+## 📝 Refleksi Pembelajaran
+
+1. **Pemisahan lapisan membuat error lebih mudah dilacak.** Dengan `api_client.dart`
+   yang menyimpan `baseUrl` dan timeout, lalu repository, provider, dan widget,
+   saya bisa menunjuk lapisan mana yang bermasalah saat respons jaringan gagal.
+2. **Pesan error adalah bagian dari UX, bukan detail teknis.** Timeout, koneksi
+   putus, 404, dan 500 diterjemahkan lewat `friendlyErrorMessage` sehingga
+   pengguna melihat kalimat yang bisa ditindaklanjuti, bukan teks exception.
+3. **Pagination butuh penanda status, bukan hanya daftar data.** Tanpa flag
+   *loading more* dan *has more*, scroll di bagian bawah akan memicu permintaan
+   berulang atau berhenti tanpa penjelasan.
+4. **Detail post sebaiknya memanfaatkan data yang sudah ada.** `singlePostProvider`
+   membaca cache daftar lebih dulu dan hanya memanggil API jika post belum
+   pernah dimuat, sehingga navigasi terasa instan.

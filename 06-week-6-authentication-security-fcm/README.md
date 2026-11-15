@@ -16,6 +16,56 @@ verifikasi AI Challenge.
 - **Penanganan Tiga App State & Deep Linking:** Pemrosesan notifikasi payload gabungan (*notification* + *data*) pada kondisi *Foreground*, *Background*, dan *Terminated*, serta perutean otomatis menuju rute deep link (`/pengumuman/:id`).
 - **Clean Architecture & Testing:** Sentralisasi rute, ekstraksi parsing payload ke *pure function*, pemetaan error jaringan Dio, serta verifikasi *unit testing* dan analisis statis.
 
+## Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `firebase_core` | ^5.0.0 (inisialisasi Firebase) |
+| `firebase_messaging` | ^17.0.0 (FCM, izin, token, tiga app state) |
+| `flutter_local_notifications` | ^22.3.2 (banner notifikasi foreground) |
+| `flutter_secure_storage` | ^11.2.0 (Keystore/Keychain untuk token) |
+| `flutter_riverpod` | ^3.4.3 (state autentikasi & guard) |
+| `go_router` | ^18.1.0 (rute + deep link) |
+| `dio` | ^5.11.1 (klien API login/refresh) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## Cara Menjalankan
+
+```bash
+cd 06-week-6-authentication-security-fcm
+flutter pub get
+flutter run
+flutter test     # 10 unit + widget test
+flutter analyze
+```
+
+### Prasyarat Firebase (untuk FCM sungguhan)
+
+`lib/messaging/push_service.dart` memanggil `Firebase.initializeApp()`. Supaya
+notifikasi benar-benar terkirim, siapkan konfigurasi Firebase lebih dulu:
+
+1. Buat project di [console.firebase.google.com](https://console.firebase.google.com)
+   lalu tambahkan aplikasi Android (dan iOS bila dipakai).
+2. Pasang FlutterFire CLI, lalu jalankan dari folder minggu ini:
+
+   ```bash
+   dart pub global activate flutterfire_cli
+   flutterfire configure
+   ```
+
+   Perintah ini membuat `lib/firebase_options.dart` serta
+   `android/app/google-services.json` (dan `GoogleService-Info.plist` untuk iOS).
+   Berkas kredensial itu **tidak di-commit** karena folder `android/`/`ios/`
+   di-ignore dan dibuat ulang lewat `flutter create .`.
+3. Aktifkan Cloud Messaging di Firebase Console, lalu kirim pesan uji ke token
+   perangkat yang tampil di layar beranda (sudah dipotong/*masked*).
+
+Tanpa langkah di atas aplikasi tetap bisa dibuka: `initializeFirebase()`
+menangkap kegagalan inisialisasi, mengembalikan `false`, dan fitur FCM dinonaktifkan
+sementara login, secure storage, dan navigasi tetap berjalan.
+
 ---
 
 ## PRAKTIKUM 1: Login, Secure Storage, & Token Refresh

@@ -249,3 +249,22 @@ Sebagai fitur penutup berstandar industri, saya telah mengimplementasikan:
 - **Dokumentasi Aturan Konflik:** Mendefinisikan dan mendokumentasikan aturan resolusi konflik secara eksplisit di dalam file `sync.dart`.
 
 <img src="screenshots/miniindustry.png" width="300">
+
+---
+
+## Refleksi Pembelajaran
+
+1. **Local-first dan cache-first menyelesaikan masalah yang berbeda.** Catatan
+   harus tetap bisa ditulis saat offline, sehingga SQLite menjadi sumber
+   kebenaran. Posts hanya salinan server, jadi cukup cache-first: tampilkan
+   salinan lama, lalu segarkan di belakang.
+2. **Dirty flag adalah inti sinkronisasi.** Tanpa penanda per baris, aplikasi
+   tidak tahu data mana yang perlu dikirim dan akan mengirim ulang semuanya
+   atau tidak sama sekali.
+3. **Pilihan penyimpanan mengikuti bentuk data.** `SharedPreferences` cukup
+   untuk preferensi tema dan waktu buka terakhir; data berkoleksi seperti
+   catatan butuh tabel, query, dan indeks di SQLite.
+4. **Batasan pengujian harus diakui, bukan ditutupi.** `sqflite` memerlukan
+   platform channel, sehingga repository belum diuji otomatis. Yang bisa
+   dilakukan adalah memisahkan pembuatan skema dari penentuan path database
+   agar logika skema tetap dapat diuji.

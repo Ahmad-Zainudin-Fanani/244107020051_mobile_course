@@ -18,17 +18,10 @@ import collections
 import pathlib
 import sys
 
-# Berkas yang tidak dapat dijangkau dari `lib/main.dart`. Dikecualikan dari
-# angka "kode yang benar-benar berjalan" agar cakupan tidak terlihat lebih
-# buruk hanya karena sisa fitur lama masih tertinggal di repositori.
-EXCLUDED = {
-    "lib/data/sync.dart": "SyncService & PostsSyncService tidak dipakai UI",
-    "lib/data/repositories/note_repository.dart": "repository versi lama",
-    "lib/data/repositories/post_repository.dart": "fitur Posts tidak dirutekan",
-    "lib/data/local/note.dart": "model versi lama",
-    "lib/data/local/post.dart": "fitur Posts tidak dirutekan",
-    "lib/pages/posts_page.dart": "fitur Posts tidak dirutekan",
-}
+# Tidak ada lagi berkas yang dikecualikan. Sisa fitur lama (SyncService,
+# repository versi lama, model Note/Post lokal, dan PostsPage) sudah dihapus
+# dari repositori, sehingga seluruh isi `lib/` memang dipakai aplikasi.
+EXCLUDED: dict[str, str] = {}
 
 MODULES = [
     ("Fitur catatan", "lib/features/notes/"),
@@ -106,22 +99,29 @@ def build_report(
     out.append("| Cakupan | Baris | Persentase |")
     out.append("| :--- | ---: | ---: |")
     out.append(f"| Seluruh `lib/` | {covered}/{total} | **{percent(covered, total)}** |")
-    out.append(
-        f"| Kode yang dijangkau aplikasi | {live_covered}/{live_total} | "
-        f"**{percent(live_covered, live_total)}** |"
-    )
-    out.append(
-        f"| Kode mati / tidak dirutekan (dikecualikan) | {ex_covered}/{ex_total} | "
-        f"{percent(ex_covered, ex_total)} |\n"
-    )
-    out.append(
-        "Angka kedua adalah dasar evaluasi: berkas pada bagian 4 memang tidak "
-        "bisa dijalankan dari `lib/main.dart`, sehingga mengujinya hanya "
-        "menaikkan persentase tanpa memeriksa perilaku yang dipakai pengguna. "
-        "Cara memutuskan hal ini dijelaskan di `README.md` bagian temuan.\n"
-    )
+    if excluded:
+        out.append(
+            f"| Kode yang dijangkau aplikasi | {live_covered}/{live_total} | "
+            f"**{percent(live_covered, live_total)}** |"
+        )
+        out.append(
+            f"| Kode mati / tidak dirutekan (dikecualikan) | {ex_covered}/{ex_total} | "
+            f"{percent(ex_covered, ex_total)} |\n"
+        )
+        out.append(
+            "Angka kedua adalah dasar evaluasi: berkas pada bagian 4 memang tidak "
+            "bisa dijalankan dari `lib/main.dart`, sehingga mengujinya hanya "
+            "menaikkan persentase tanpa memeriksa perilaku yang dipakai pengguna. "
+            "Cara memutuskan hal ini dijelaskan di `README.md` bagian temuan.\n"
+        )
+    else:
+        out.append("")
+        out.append(
+            "Seluruh berkas di `lib/` dapat dijangkau dari `lib/main.dart`; tidak "
+            "ada kode mati yang dikecualikan dari angka ini.\n"
+        )
 
-    out.append("## 2. Per modul (kode yang dijangkau)\n")
+    out.append("## 2. Per modul\n")
     out.append("| Modul | Baris | Persentase |")
     out.append("| :--- | ---: | ---: |")
     grouped: dict[str, list[int]] = {}

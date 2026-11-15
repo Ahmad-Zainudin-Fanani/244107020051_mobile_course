@@ -127,14 +127,14 @@ Get-ChildItem -Recurse -Filter *.dart lib\features\notes\domain, lib\core |
 
 ## 5. Quality Gate Mesin
 
-Dijalankan di `08-week-8-mid-project-review/sourceCode`:
+Dijalankan di `08-week-8-mid-project-review`:
 
 | Perintah | Hasil | Bukti |
 | :--- | :--- | :--- |
-| `flutter analyze` | `No issues found!` | `Screenshots/verif_flutter_analyze.png` |
-| `dart format --output=none --set-exit-if-changed .` | `Formatted 29 files (0 changed)` | `Screenshots/verif_dart_format.png` |
-| `flutter test` | `All tests passed!` — 10 test | `Screenshots/verif_flutter_test.png` |
-| GitHub Actions `ci` | Semua langkah hijau | `Screenshots/verif_ci.png` |
+| `flutter analyze` | `No issues found!` | `screenshots/verif_flutter_analyze.png` |
+| `dart format --output=none --set-exit-if-changed .` | `Formatted 29 files (0 changed)` | `screenshots/verif_dart_format.png` |
+| `flutter test` | `All tests passed!` — 10 test | `screenshots/verif_flutter_test.png` |
+| GitHub Actions `ci` | Semua langkah hijau | `screenshots/verif_ci.png` |
 
 ---
 
@@ -146,7 +146,7 @@ Dijalankan di `08-week-8-mid-project-review/sourceCode`:
 - [x] Minimal 1 issue + 1 PR kecil di-merge melalui review (Issue #1 → PR #2).
 - [x] Commit jelas dan PR kecil; salinan baseline dipisah dari commit fitur.
 - [x] README memuat status paruh semester, peta issue/PR, fitur, stack, cara menjalankan, dan hasil.
-- [x] Screenshot aplikasi dan bukti mesin tersedia di `Screenshots/`.
+- [x] Screenshot aplikasi dan bukti mesin tersedia di `screenshots/`.
 - [x] Semua komentar review (R1–R5) ditindaklanjuti atau dijawab dengan alasan.
 - [x] Dokumentasi prompt AI, output awal, tabel usulan-vs-keputusan, dan bukti penerimaan/penolakan tersedia di `docs/ai-review-vs-keputusan.md`.
 - [x] Aplikasi berjalan identik dengan akhir Minggu 7 (hanya perilaku validasi quick-add yang diperbaiki).
@@ -168,11 +168,11 @@ Dijalankan di `08-week-8-mid-project-review/sourceCode`:
 
 | Bukti | Lokasi |
 | :--- | :--- |
-| Issue awal | `Screenshots/verif_issue.png` |
-| Pull Request + review | `Screenshots/verif_pr.png` |
-| Workflow CI | `Screenshots/verif_ci.png` |
-| Aplikasi berjalan | `Screenshots/app_home.png` |
-| Validasi judul kosong | `Screenshots/app_validation.png` |
-| Analyze project Minggu 5 setelah perbaikan | `Screenshots/verif_fix_week5.png` |
+| Issue awal | `screenshots/verif_issue.png` |
+| Pull Request + review | `screenshots/verif_pr.png` |
+| Workflow CI | `screenshots/verif_ci.png` |
+| Aplikasi berjalan | `screenshots/app_home.png` |
+| Validasi judul kosong | `screenshots/app_validation.png` |
+| Analyze project Minggu 5 setelah perbaikan | `screenshots/verif_fix_week5.png` |
 | Issue lanjutan | https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/3 |
 | Pull Request lanjutan | https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/4 |

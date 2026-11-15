@@ -203,7 +203,7 @@ dilaporkan sebagai sukses".
 
 ## 7. Pengujian integrasi
 
-Berkas: `sourceCode/integration_test/app_test.dart`.
+Berkas: `integration_test/app_test.dart`.
 
 Alur yang diuji dalam satu test di perangkat:
 
@@ -268,7 +268,7 @@ angkanya menjadi 88,1%.
 
 ## 10. Cara mereproduksi
 
-Dari `12-week-12-testing-quality-assurance/sourceCode`:
+Dari `12-week-12-testing-quality-assurance`:
 
 ```bash
 flutter pub get

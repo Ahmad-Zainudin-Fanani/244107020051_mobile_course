@@ -8,7 +8,7 @@
 #     -Before docs/measurements/baseline.json,docs/measurements/baseline-2.json `
 #     -After docs/measurements/after.json,docs/measurements/after-2.json `
 #     -BeforeRebuilds 5052 -AfterRebuilds 887 `
-#     -OutDir Screenshots
+#     -OutDir screenshots
 
 param(
   [Parameter(Mandatory = $true)][string[]]$Before,

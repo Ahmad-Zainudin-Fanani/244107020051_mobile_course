@@ -81,18 +81,18 @@ Saya memverifikasi tiga hal utama:
 ### 1. Tahap 4: Profil Dasar & Eksperimen Overflow
 | Profil Dasar | Eksperimen Overflow |
 | :---: | :---: |
-| <img src="Screenshots/tahap4.jpeg" width="250"> | <img src="Screenshots/tahap4Eksperimen.jpeg" width="250"> |
+| <img src="screenshots/tahap4.jpeg" width="250"> | <img src="screenshots/tahap4Eksperimen.jpeg" width="250"> |
 
 ### 2. Tahap 5: Grid Layout & Interaksi Tema
 | Grid (Light Mode) | Grid (Dark Mode) |
 | :---: | :---: |
-| <img src="Screenshots/tahap5L.jpeg" width="250"> | <img src="Screenshots/tahap5N.jpeg" width="250"> |
+| <img src="screenshots/tahap5L.jpeg" width="250"> | <img src="screenshots/tahap5N.jpeg" width="250"> |
 
 ### 3. Tahap 6: Academic Overview (Final)
 | Portrait (1 Kolom, Light Mode) | Portrait (1 Kolom, Dark Mode) |
 | :---: | :---: |
-| <img src="Screenshots/6portraitL.jpeg" width="250"> | <img src="Screenshots/6portraitN.jpeg" width="250"> |
+| <img src="screenshots/6portraitL.jpeg" width="250"> | <img src="screenshots/6portraitN.jpeg" width="250"> |
 
 | Landscape (2 Kolom, Light Mode) | Landscape (2 Kolom, Dark Mode) |
 | :---: | :---: |
-| <img src="Screenshots/6landscapeL.jpeg" width="400"> | <img src="Screenshots/6landscapeN.jpeg" width="400"> |
+| <img src="screenshots/6landscapeL.jpeg" width="400"> | <img src="screenshots/6landscapeN.jpeg" width="400"> |

@@ -20,84 +20,84 @@ jobs:
           cache: true
 
       - name: Week 8 - install dependencies
-        working-directory: 08-week-8-mid-project-review/sourceCode
+        working-directory: 08-week-8-mid-project-review
         run: flutter pub get
 
       - name: Week 8 - static analysis
-        working-directory: 08-week-8-mid-project-review/sourceCode
+        working-directory: 08-week-8-mid-project-review
         run: flutter analyze
 
       - name: Week 8 - formatting check
-        working-directory: 08-week-8-mid-project-review/sourceCode
+        working-directory: 08-week-8-mid-project-review
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Week 8 - unit tests
-        working-directory: 08-week-8-mid-project-review/sourceCode
+        working-directory: 08-week-8-mid-project-review
         run: flutter test
 
       - name: Week 9 - install dependencies
-        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        working-directory: 09-week-9-ai-assisted-development
         run: flutter pub get
 
       - name: Week 9 - static analysis
-        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        working-directory: 09-week-9-ai-assisted-development
         run: flutter analyze
 
       - name: Week 9 - formatting check
-        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        working-directory: 09-week-9-ai-assisted-development
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Week 9 - unit tests
-        working-directory: 09-week-9-ai-assisted-development/sourceCode
+        working-directory: 09-week-9-ai-assisted-development
         run: flutter test
 
       - name: Week 10 - install dependencies
-        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        working-directory: 10-week-10-ai-feature-integration
         run: flutter pub get
 
       - name: Week 10 - static analysis
-        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        working-directory: 10-week-10-ai-feature-integration
         run: flutter analyze
 
       - name: Week 10 - formatting check
-        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        working-directory: 10-week-10-ai-feature-integration
         run: dart format --output=none --set-exit-if-changed .
 
       - name: Week 10 - unit tests
-        working-directory: 10-week-10-ai-feature-integration/sourceCode
+        working-directory: 10-week-10-ai-feature-integration
         run: flutter test
 
       - name: Week 11 - install dependencies
-        working-directory: 11-week-11-performance-optimization/sourceCode
+        working-directory: 11-week-11-performance-optimization
         run: flutter pub get
 
       - name: Week 11 - static analysis
-        working-directory: 11-week-11-performance-optimization/sourceCode
+        working-directory: 11-week-11-performance-optimization
         run: flutter analyze
 
       - name: Week 11 - formatting check
-        working-directory: 11-week-11-performance-optimization/sourceCode
+        working-directory: 11-week-11-performance-optimization
         run: dart format --output=none --set-exit-if-changed lib test integration_test tool
 
       - name: Week 11 - unit and widget tests
-        working-directory: 11-week-11-performance-optimization/sourceCode
+        working-directory: 11-week-11-performance-optimization
         run: flutter test
 
       - name: Week 12 - install SQLite for FFI tests
         run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
 
       - name: Week 12 - install dependencies
-        working-directory: 12-week-12-testing-quality-assurance/sourceCode
+        working-directory: 12-week-12-testing-quality-assurance
         run: flutter pub get
 
       - name: Week 12 - static analysis
-        working-directory: 12-week-12-testing-quality-assurance/sourceCode
+        working-directory: 12-week-12-testing-quality-assurance
         run: flutter analyze
 
       - name: Week 12 - formatting check
-        working-directory: 12-week-12-testing-quality-assurance/sourceCode
+        working-directory: 12-week-12-testing-quality-assurance
         run: dart format --output=none --set-exit-if-changed lib test integration_test tool
 
       - name: Week 12 - unit and widget tests with coverage
-        working-directory: 12-week-12-testing-quality-assurance/sourceCode
+        working-directory: 12-week-12-testing-quality-assurance
         run: flutter test --coverage

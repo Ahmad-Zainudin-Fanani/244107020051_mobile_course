@@ -116,7 +116,7 @@ Clean Architecture menetapkan hierarki ketergantungan terarah ke dalam. Lapisan 
 Penyusunan kode diorganisasikan per fitur fungsional dengan Clean Architecture penuh pada modul `features/notes/` serta arsitektur pendukung yang modular:
 
 ```text
-sourceCode/lib/
+lib/
 ├── core/
 │   ├── failures.dart                                # Hierarki Failure sealed class murni Dart
 │   └── format.dart                                  # Helper pemformatan tanggal & status murni Dart (testable)
@@ -197,7 +197,7 @@ rg "Dio\(|openDatabase|getDatabasesPath|FlutterSecureStorage|SharedPreferences\.
 *Hasil:* **0 temuan** (Lapisan antarmuka sepenuhnya bersih dan murni digerakkan oleh *state*).
 
 <div align="center">
-  <img src="Screenshots/verif_sterilisasi.png" alt="Verifikasi Sterilitas Presentation Layer" width="550">
+  <img src="screenshots/verif_sterilisasi.png" alt="Verifikasi Sterilitas Presentation Layer" width="550">
   <p><em>Gambar 4.1: Hasil inspeksi ripgrep memastikan presentation layer steril dari akses infrastruktur langsung.</em></p>
 </div>
 
@@ -211,7 +211,7 @@ rg "import 'package:flutter|import 'package:dio|import 'package:sqflite|import '
 *Hasil:* **0 temuan** (Lapisan domain murni berbasis Dart dan independen terhadap pustaka platform).
 
 <div align="center">
-  <img src="Screenshots/verif_sterilisasi_domain_core.png" alt="Verifikasi Sterilitas Domain dan Core Layer" width="550">
+  <img src="screenshots/verif_sterilisasi_domain_core.png" alt="Verifikasi Sterilitas Domain dan Core Layer" width="550">
   <p><em>Gambar 4.2: Hasil verifikasi bahwa domain dan core bebas dari dependensi framework eksternal.</em></p>
 </div>
 
@@ -225,7 +225,7 @@ flutter analyze
 *Hasil:* **No issues found!** (Basis kode bebas dari peringatan maupun kesalahan analisis).
 
 <div align="center">
-  <img src="Screenshots/verif_flutter_analyze.png" alt="Hasil Static Analysis Flutter Analyze" width="550">
+  <img src="screenshots/verif_flutter_analyze.png" alt="Hasil Static Analysis Flutter Analyze" width="550">
   <p><em>Gambar 4.3: Status flutter analyze yang bersih tanpa issue.</em></p>
 </div>
 
@@ -239,7 +239,7 @@ flutter test
 *Hasil:* Seluruh unit test pada `test/get_notes_test.dart`, `test/add_note_test.dart`, dan `test/format_test.dart` berhasil lulus 100% dalam waktu kurang dari satu detik.
 
 <div align="center">
-  <img src="Screenshots/verif_unit_test.png" alt="Hasil Pengujian Unit Test Menggunakan Fake Repository" width="550">
+  <img src="screenshots/verif_unit_test.png" alt="Hasil Pengujian Unit Test Menggunakan Fake Repository" width="550">
   <p><em>Gambar 4.4: Eksekusi unit test domain dan helper format berhasil dengan sempurna.</em></p>
 </div>
 
@@ -331,7 +331,7 @@ Berikut adalah dokumentasi hasil akhir antarmuka aplikasi catatan (*offline-firs
 Antarmuka beranda menyajikan daftar catatan yang terstruktur, indikator sinkronisasi real-time, kolom input instan (*quick-add capsule*), serta kartu catatan dengan aksen visual yang membedakan status sinkronisasi data secara tegas.
 
 <div align="center">
-  <img src="Screenshots/badge.jpeg" alt="Tampilan Halaman Utama Catatan - Light Theme" width="250">
+  <img src="screenshots/badge.jpeg" alt="Tampilan Halaman Utama Catatan - Light Theme" width="250">
   <p><em>Gambar 6.1: Halaman utama aplikasi dalam Mode Terang menampilkan Quick-Add Capsule, kartu catatan kustom beraksen warna, dan indikator sinkronisasi.</em></p>
 </div>
 
@@ -352,7 +352,7 @@ Antarmuka beranda menyajikan daftar catatan yang terstruktur, indikator sinkroni
 Fitur penambahan catatan lengkap disajikan melalui *Modal Bottom Sheet* yang muncul dengan animasi halus dari bawah layar.
 
 <div align="center">
-  <img src="Screenshots/add_note.jpeg" alt="Form Modal Bottom Sheet Buat Catatan Baru" width="250">
+  <img src="screenshots/add_note.jpeg" alt="Form Modal Bottom Sheet Buat Catatan Baru" width="250">
   <p><em>Gambar 6.2: Modal Bottom Sheet form penambahan catatan baru dengan pengikatan ke Use Case AddNote.</em></p>
 </div>
 
@@ -369,7 +369,7 @@ Fitur penambahan catatan lengkap disajikan melalui *Modal Bottom Sheet* yang mun
 Halaman pengaturan mengelompokkan preferensi aplikasi ke dalam kartu-kartu visual terpisah untuk meningkatkan keterbacaan (*readability*) dan kenyamanan pengguna.
 
 <div align="center">
-  <img src="Screenshots/dark_mode.jpeg" alt="Halaman Pengaturan - Grouped Card Settings" width="250">
+  <img src="screenshots/dark_mode.jpeg" alt="Halaman Pengaturan - Grouped Card Settings" width="250">
   <p><em>Gambar 6.3: Halaman pengaturan aplikasi dalam Mode Gelap dengan pengelompokan opsi kartu modern.</em></p>
 </div>
 
@@ -384,7 +384,7 @@ Halaman pengaturan mengelompokkan preferensi aplikasi ke dalam kartu-kartu visua
 Menampilkan adaptabilitas antarmuka pada tema gelap dengan kontras visual optimal dan pembaruan reaktif data catatan.
 
 <div align="center">
-  <img src="Screenshots/status_sinkronasi.jpeg" alt="Tampilan Beranda Catatan - Dark Mode & Sinkronisasi Real-time" width="250">
+  <img src="screenshots/status_sinkronasi.jpeg" alt="Tampilan Beranda Catatan - Dark Mode & Sinkronisasi Real-time" width="250">
   <p><em>Gambar 6.4: Tampilan beranda aplikasi dalam Mode Gelap dengan counter real-time (3 catatan, 2 perlu sinkron).</em></p>
 </div>
 

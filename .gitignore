@@ -1,3 +1,11 @@
 .vscode/
 .github/*
 !.github/workflows/
+
+# Artefak Flutter/Dart tidak boleh masuk repo.
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/coverage/

@@ -74,6 +74,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        key: const Key('add-note-button'),
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: Colors.white,
         elevation: 2,
@@ -153,6 +154,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               ),
               const SizedBox(height: 16),
               TextField(
+                key: const Key('add-note-title'),
                 controller: titleController,
                 autofocus: true,
                 decoration: InputDecoration(
@@ -166,6 +168,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
               ),
               const SizedBox(height: 12),
               TextField(
+                key: const Key('add-note-body'),
                 controller: bodyController,
                 maxLines: 4,
                 decoration: InputDecoration(
@@ -182,6 +185,7 @@ class _NotesPageState extends ConsumerState<NotesPage> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton.icon(
+                  key: const Key('add-note-save'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Colors.white,

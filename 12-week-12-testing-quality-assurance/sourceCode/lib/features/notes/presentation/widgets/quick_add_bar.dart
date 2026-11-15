@@ -41,6 +41,7 @@ class QuickAddBar extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
+                key: const Key('quick-add-field'),
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: 'Tulis catatan cepat di sini...',

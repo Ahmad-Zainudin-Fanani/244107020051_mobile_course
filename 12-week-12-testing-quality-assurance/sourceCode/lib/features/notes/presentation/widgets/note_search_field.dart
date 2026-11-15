@@ -44,6 +44,7 @@ class NoteSearchField extends StatelessWidget {
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
+                key: const Key('search-field'),
                 controller: controller,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(

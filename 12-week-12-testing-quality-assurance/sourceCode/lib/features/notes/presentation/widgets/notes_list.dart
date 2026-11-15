@@ -78,7 +78,19 @@ class _NotesListState extends ConsumerState<NotesList> {
             ),
             onPressed: () async {
               Navigator.pop(dialogContext);
-              await ref.read(noteRepositoryProvider).deleteNote(id);
+              final result = await ref
+                  .read(noteRepositoryProvider)
+                  .deleteNote(id);
+              if (!mounted) return;
+              if (result.failure != null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(result.failure!.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
               ref.invalidate(notesProvider);
             },
             child: const Text('Hapus'),

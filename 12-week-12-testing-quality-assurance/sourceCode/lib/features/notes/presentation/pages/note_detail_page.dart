@@ -196,7 +196,20 @@ class NoteDetailPage extends ConsumerWidget {
             ),
             onPressed: () async {
               Navigator.pop(dialogContext);
-              await ref.read(noteRepositoryProvider).deleteNote(noteId);
+              final result = await ref
+                  .read(noteRepositoryProvider)
+                  .deleteNote(noteId);
+              if (result.failure != null) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(result.failure!.message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+                return;
+              }
               ref.invalidate(notesProvider);
               if (context.mounted) {
                 context.pop();

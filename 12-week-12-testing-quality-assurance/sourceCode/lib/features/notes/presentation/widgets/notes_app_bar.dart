@@ -54,6 +54,7 @@ class _SyncButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
+      key: const Key('sync-notes-button'),
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -103,19 +104,39 @@ Future<void> _syncNotes(BuildContext context, WidgetRef ref) async {
     }
 
     final countResult = await repo.countDirty();
-    final dirtyCount = countResult.count;
-    if (dirtyCount > 0) {
-      await Future.delayed(const Duration(milliseconds: 500));
-      await repo.markAllSynced();
-      ref.invalidate(notesProvider);
+    if (countResult.failure != null) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Berhasil! Seluruh catatan telah disinkronkan.'),
-            backgroundColor: Color(0xFF10B981),
+          SnackBar(
+            content: Text(countResult.failure!.message),
+            backgroundColor: Colors.red,
           ),
         );
       }
+      return;
+    }
+
+    final dirtyCount = countResult.count;
+    if (dirtyCount > 0) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      final syncResult = await repo.markAllSynced();
+      if (!context.mounted) return;
+      if (syncResult.failure != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(syncResult.failure!.message),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      ref.invalidate(notesProvider);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Berhasil! Seluruh catatan telah disinkronkan.'),
+          backgroundColor: Color(0xFF10B981),
+        ),
+      );
     } else if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

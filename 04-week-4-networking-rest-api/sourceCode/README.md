@@ -122,7 +122,7 @@ Setiap jenis `DioExceptionType` dipetakan secara spesifik dalam Bahasa Indonesia
 
 #### 4. Apakah konfigurasi `baseUrl` dan timeout terpusat?
 **Hasil Verifikasi:** **Terpusat.**  
-Dio mengacu pada `dioProvider` yang membungkus `createDio()` di [`api_client.dart`](file:///d:/244107020051_mobile_course/week4_api/sourceCode/lib/data/api_client.dart), ditambah batas durasi 10 detik per request pada `CommentRepository`.
+Dio mengacu pada `dioProvider` yang membungkus `createDio()` di [`api_client.dart`](lib/data/api_client.dart), ditambah batas durasi 10 detik per request pada `CommentRepository`.
 
 ---
 

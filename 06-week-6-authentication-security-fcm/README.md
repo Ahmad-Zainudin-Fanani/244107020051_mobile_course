@@ -4,6 +4,10 @@
 
 Mempelajari dan mengimplementasikan arsitektur autentikasi modern, standar keamanan aplikasi mobile (*mobile security best practices*), serta integrasi *push notification* berbasis Firebase Cloud Messaging (FCM) pada platform Flutter.
 
+Dokumen pendukung: [`docs/progress.md`](docs/progress.md) berisi status checkpoint
+pengerjaan, dan [`docs/ai_challenge.md`](docs/ai_challenge.md) berisi prompt serta
+verifikasi AI Challenge.
+
 ## Fokus Pembelajaran
 
 - **Autentikasi & Guard Route:** Alur login/register, pemisahan *access token* dan *refresh token*, serta proteksi rute navigasi menggunakan GoRouter dan Riverpod.
@@ -99,6 +103,8 @@ Pada pengujian ini, aplikasi berada dalam kondisi *terminated* (ditutup sepenuhn
 ---
 
 ## AI CHALLENGE
+
+Dokumen lengkap: [`docs/ai_challenge.md`](docs/ai_challenge.md).
 
 Berikut adalah hasil evaluasi teknis, verifikasi arsitektur, dan pengujian terhadap implementasi aplikasi:
 

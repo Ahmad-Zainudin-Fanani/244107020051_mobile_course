@@ -5,6 +5,37 @@
 
 ---
 
+## Tujuan
+
+Latihan pertama Flutter: mengenal struktur project, widget dasar, serta siklus
+*hot reload* dan *hot restart* melalui aplikasi Profil Mahasiswa.
+
+## Fitur
+
+- Satu halaman berisi nama, NIM, program studi, dan keterangan minggu.
+- Ikon dan teks dasar (`Icon`, `Text`) di dalam `Column` yang dipusatkan `Center`.
+
+## Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `cupertino_icons` | ^1.0.8 (ikon bawaan) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## Cara Menjalankan
+
+```bash
+cd 01-week-1-mobile-development-ecosystem-flutter-refresh
+flutter pub get
+flutter run      # butuh emulator atau perangkat fisik
+flutter test     # 1 widget test
+flutter analyze
+```
+
+---
+
 ## Kendala Setup & Instalasi
 Selama proses instalasi dan menjalankan aplikasi untuk pertama kalinya, terdapat dua kendala utama yang saya temui:
 

@@ -5,6 +5,9 @@
 **Mata Kuliah:** Pemrograman Mobile
 **Basis Proyek:** `week5_offline_notes` — hasil Minggu 10 (`10-week-10-ai-feature-integration`)
 **Tautan Repositori:** [244107020051_mobile_course](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course)
+**Issue:** [#23 perf: optimasi performa aplikasi catatan Minggu 11](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/23)
+**Pull Request:** [#24 perf: optimasi performa aplikasi catatan Minggu 11](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/24)
+**Rilis ke `main`:** [#25 release: praktikum Minggu 11 - optimasi performa](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/25)
 **Laporan performa lengkap:** [`docs/performance-report.md`](docs/performance-report.md)
 **Temuan profiling:** [`docs/performance-findings.md`](docs/performance-findings.md)
 
@@ -416,8 +419,11 @@ sekadar dokumentasi angka: ia gagal bila `NotesPage` kembali mengamati provider
 data. Tanpa penjaga itu, satu `ref.watch` yang terlihat tidak berbahaya bisa
 mengembalikan 5.000 rebuild tanpa ada yang sadar.
 
-**Status Git.** Pekerjaan Minggu 11 sudah di-commit di branch
-`feature/23-performance-optimization`: satu commit baseline (`chore`) dan satu
-commit optimasi (`perf`) supaya diff-nya mudah direview. Branch ini belum
-di-push, sehingga nomor issue/PR baru bisa ditautkan di sini setelah alur Git
-di GitHub dijalankan.
+**Status Git.** Pekerjaan Minggu 11 di-commit dalam empat commit di branch
+`feature/23-performance-optimization` — baseline (`chore`), optimasi (`perf`),
+laporan (`docs`), dan verifikasi CI (`ci`) — lalu di-merge ke `develop` lewat
+[PR #24](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/24)
+dan dirilis ke `main` lewat
+[PR #25](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/25).
+Issue acuannya adalah
+[#23](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/23).

@@ -4,7 +4,7 @@ Skema mengikuti lib/data/local/db.dart. Jalankan:
 
     python docs/tools/seed_device_db.py offline_notes.db
 
-Lalu dorong ke perangkat (lihat README bagian Screenshots).
+Lalu dorong ke perangkat (lihat README bagian screenshots).
 """
 
 import datetime

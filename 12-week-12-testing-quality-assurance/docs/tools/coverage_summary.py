@@ -4,7 +4,7 @@
 Dipakai setelah `flutter test --coverage`:
 
     python docs/tools/coverage_summary.py \
-        --lcov sourceCode/coverage/lcov.info \
+        --lcov coverage/lcov.info \
         --out docs/coverage-summary.md
 
 Skrip sengaja tidak memakai paket pihak ketiga supaya bisa dijalankan di

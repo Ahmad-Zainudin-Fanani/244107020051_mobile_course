@@ -50,7 +50,7 @@ Aplikasi mampu menangani berbagai kondisi respon jaringan dan menerjemahkannya k
 
 | Success Data | Error Timeout / Offline | Connection Error |
 | :---: | :---: | :---: |
-| <img src="Screenshots/Success%20Loading.png" height="450"> | <img src="Screenshots/Error%20(No%20Internet%20dan%20Salah%20URL).png" height="450"> | <img src="Screenshots/Error%20(No%20URL).png" height="450"> |
+| <img src="screenshots/Success%20Loading.png" height="450"> | <img src="screenshots/Error%20(No%20Internet%20dan%20Salah%20URL).png" height="450"> | <img src="screenshots/Error%20(No%20URL).png" height="450"> |
 
 ---
 
@@ -134,12 +134,12 @@ Setiap jenis `DioExceptionType` dipetakan secara spesifik dalam Bahasa Indonesia
 
 #### 4. Apakah konfigurasi `baseUrl` dan timeout terpusat?
 **Hasil Verifikasi:** **Terpusat.**  
-Dio mengacu pada `dioProvider` yang membungkus `createDio()` di [`api_client.dart`](sourceCode/lib/data/api_client.dart), ditambah batas durasi 10 detik per request pada `CommentRepository`.
+Dio mengacu pada `dioProvider` yang membungkus `createDio()` di [`api_client.dart`](lib/data/api_client.dart), ditambah batas durasi 10 detik per request pada `CommentRepository`.
 
 ---
 
 #### 5. Pengujian Unit & Mock Repository (Testing)
-Unit test di [`test/post_test.dart`](sourceCode/test/post_test.dart) menggunakan `FakePostRepository` tanpa koneksi internet sungguhan, serta [`test/comment_test.dart`](sourceCode/test/comment_test.dart):
+Unit test di [`test/post_test.dart`](test/post_test.dart) menggunakan `FakePostRepository` tanpa koneksi internet sungguhan, serta [`test/comment_test.dart`](test/comment_test.dart):
 
 ```dart
 class FakePostRepository extends PostRepository {

@@ -3,7 +3,7 @@
 **Nama:** Ahmad Zainudin Fanani
 **NIM:** 244107020051
 **Fitur:** asisten chat AI (Gemini) dengan API key aman dan fallback tanpa key
-**Basis proyek:** `week5_offline_notes` hasil Minggu 9, disalin apa adanya dari `09-week-9-ai-assisted-development/sourceCode`
+**Basis proyek:** `week5_offline_notes` hasil Minggu 9, disalin apa adanya dari `09-week-9-ai-assisted-development`
 **Branch:** `feature/14-ai-assistant-chat` → `develop` → `main`
 **Issue:** [#14](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/14)
 **Pull Request:** [#15](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/15)
@@ -141,7 +141,7 @@ Daftar catatanmu terdiri dari "Rencana rapat", "Belanja harian", dan
 Minggu 8" dan "Belajar Clean Architecture".
 ```
 
-Output itu cocok dengan label di layar, **"5 judul catatan akan disertakan"**, dan dengan daftar catatan di perangkat. Bukti: [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
+Output itu cocok dengan label di layar, **"5 judul catatan akan disertakan"**, dan dengan daftar catatan di perangkat. Bukti: [`../screenshots/assistant_reply.png`](../screenshots/assistant_reply.png).
 
 Contoh output streaming lain dari Gemini untuk pertanyaan **"Sebutkan tiga judul catatan yang cocok untuk rencana belanja bulanan"**:
 
@@ -188,7 +188,7 @@ POST "https://generativelanguage.googleapis.com/v1beta/interactions?alt=sse"
 
 **Keputusan:** tolak `gemini-pro` dan `generateContent`. Pakai Interactions API dengan `gemini-3.5-flash-lite` (stabil, tanpa tanggal shutdown, dan varian termurah). Parameter `store: false`, `system_instruction`, `alt=sse`, dan `x-goog-api-key` saya cocokkan satu per satu dengan halaman resmi sebelum ditulis ke kode.
 
-Bukti di kode: [`gemini_assistant.dart`](../sourceCode/lib/features/assistant/data/gemini_assistant.dart) menyimpan endpoint dan nama model sebagai konstanta, dan test memeriksa keduanya:
+Bukti di kode: [`gemini_assistant.dart`](../lib/features/assistant/data/gemini_assistant.dart) menyimpan endpoint dan nama model sebagai konstanta, dan test memeriksa keduanya:
 
 ```dart
 expect(request.url.toString(), contains('/v1beta/interactions'));
@@ -303,7 +303,7 @@ final assistantContextTitlesProvider = Provider<List<String>>((ref) {
 });
 ```
 
-Hasil di perangkat: label berubah menjadi **"5 judul catatan akan disertakan"**, dan balasan AI menyebut kelima judul catatan (`Rencana rapat`, `Belanja harian`, `Belanja bulanan`, `Review PR Minggu 8`, `Belajar Clean Architecture`). Bukti: [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
+Hasil di perangkat: label berubah menjadi **"5 judul catatan akan disertakan"**, dan balasan AI menyebut kelima judul catatan (`Rencana rapat`, `Belanja harian`, `Belanja bulanan`, `Review PR Minggu 8`, `Belajar Clean Architecture`). Bukti: [`../screenshots/assistant_reply.png`](../screenshots/assistant_reply.png).
 
 Empat test regresi mengunci perilaku ini: konteks mati tidak membaca judul, daftar termuat mengirim judul, daftar yang masih dimuat tidak dikirim setengah jadi, dan mematikan saklar mengosongkan konteks lagi. Total suite menjadi 43 test hijau.
 
@@ -373,13 +373,13 @@ Percobaan pertama dengan key sungguhan justru membongkar bug yang tidak terlihat
 
 Key uji sudah dihapus dari perangkat setelah verifikasi. Karena key tersebut sempat dibagikan di luar aplikasi, key itu wajib dicabut di AI Studio dan diganti; tidak ada key yang ditulis ke repo, dokumentasi, atau screenshot.
 
-Bukti visual: [`../Screenshots/assistant_empty.png`](../Screenshots/assistant_empty.png), [`../Screenshots/assistant_no_key.png`](../Screenshots/assistant_no_key.png), [`../Screenshots/settings_api_key.png`](../Screenshots/settings_api_key.png), [`../Screenshots/settings_key_saved.png`](../Screenshots/settings_key_saved.png), [`../Screenshots/assistant_reply.png`](../Screenshots/assistant_reply.png).
+Bukti visual: [`../screenshots/assistant_empty.png`](../screenshots/assistant_empty.png), [`../screenshots/assistant_no_key.png`](../screenshots/assistant_no_key.png), [`../screenshots/settings_api_key.png`](../screenshots/settings_api_key.png), [`../screenshots/settings_key_saved.png`](../screenshots/settings_key_saved.png), [`../screenshots/assistant_reply.png`](../screenshots/assistant_reply.png).
 
 ---
 
 ## 7. Quality gate mesin
 
-Dijalankan di `10-week-10-ai-feature-integration/sourceCode`:
+Dijalankan di `10-week-10-ai-feature-integration`:
 
 ```text
 $ flutter analyze
@@ -394,7 +394,7 @@ $ flutter test
 
 `flutter test` mencakup 17 test lama Minggu 5-9 dan 26 test baru untuk fitur asisten (22 test awal + 4 test regresi konteks dari Issue #17).
 
-Bukti CI pada PR: [`verif_pr.png`](../Screenshots/verif_pr.png) dan [`verif_ci.png`](../Screenshots/verif_ci.png).
+Bukti CI pada PR: [`verif_pr.png`](../screenshots/verif_pr.png) dan [`verif_ci.png`](../screenshots/verif_ci.png).
 
 ---
 

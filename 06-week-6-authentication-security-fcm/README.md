@@ -38,7 +38,7 @@ Aplikasi menginisialisasi Firebase secara asinkron sebelum menjalankan antarmuka
 
 **Screenshot Notifikasi Berhasil Dikirim dari Firebase Console:**
 
-<img src="Screenshots/fcm-notification.jpeg" alt="Screenshot notifikasi berhasil dikirim dari Firebase Console" width="280">
+<img src="screenshots/fcm-notification.jpeg" alt="Screenshot notifikasi berhasil dikirim dari Firebase Console" width="280">
 
 ### 2. Tampilan Token Terpotong (Masked Token)
 Untuk mematuhi rekomendasi standar keamanan **OWASP Mobile Application Security**, token autentikasi maupun *FCM registration token* tidak boleh ditampilkan secara utuh pada layar publik aplikasi guna mencegah pencurian kredensial (*shoulder surfing* maupun *screenshot sniffing*):
@@ -46,7 +46,7 @@ Untuk mematuhi rekomendasi standar keamanan **OWASP Mobile Application Security*
 
 **Screenshot Token Terpotong pada Layar Beranda:**
 
-<img src="Screenshots/token-terpotong.jpeg" alt="Screenshot token terpotong" width="340">
+<img src="screenshots/token-terpotong.jpeg" alt="Screenshot token terpotong" width="340">
 
 ---
 
@@ -61,7 +61,7 @@ Pada pengujian ini, aplikasi sedang dalam keadaan terbuka atau aktif di layar pe
 
 **Screenshot Pengujian Foreground:**
 
-<img src="Screenshots/fcm-notification-foreground.jpeg" alt="Screenshot notifikasi foreground" width="340">
+<img src="screenshots/fcm-notification-foreground.jpeg" alt="Screenshot notifikasi foreground" width="340">
 
 ### 2. Hasil Pengujian State: Background
 Pada pengujian ini, aplikasi berada dalam keadaan latar belakang (*background*) karena pengguna menekan tombol *Home*:
@@ -70,7 +70,7 @@ Pada pengujian ini, aplikasi berada dalam keadaan latar belakang (*background*) 
 
 **Screenshot Pengujian Background:**
 
-<img src="Screenshots/fcm-notification-background.jpeg" alt="Screenshot notifikasi background" width="280">
+<img src="screenshots/fcm-notification-background.jpeg" alt="Screenshot notifikasi background" width="280">
 
 ### 3. Hasil Pengujian State: Terminated
 Pada pengujian ini, aplikasi berada dalam kondisi *terminated* (ditutup sepenuhnya melalui *swipe-close* pada menu *Recent Apps*):
@@ -80,11 +80,11 @@ Pada pengujian ini, aplikasi berada dalam kondisi *terminated* (ditutup sepenuhn
 
 **Screenshot Pengujian Terminated:**
 
-<img src="Screenshots/fcm-notification-terminated.jpeg" alt="Screenshot notifikasi terminated banner" width="280">
+<img src="screenshots/fcm-notification-terminated.jpeg" alt="Screenshot notifikasi terminated banner" width="280">
 
 <br/>
 
-<img src="Screenshots/fcm-notification-terminated-2.jpeg" alt="Screenshot notifikasi terminated recent apps" width="280">
+<img src="screenshots/fcm-notification-terminated-2.jpeg" alt="Screenshot notifikasi terminated recent apps" width="280">
 
 ---
 
@@ -141,7 +141,7 @@ Seluruh basis kode telah divalidasi dan terverifikasi bersih melalui pengujian s
 
 **Screenshot Hasil Flutter Analyze dan Flutter Test:**
 
-![Screenshot hasil Flutter Analyze dan Flutter Test](Screenshots/flutter-analyze-test.png)
+![Screenshot hasil Flutter Analyze dan Flutter Test](screenshots/flutter-analyze-test.png)
 
 ---
 
@@ -152,7 +152,7 @@ Sesuai rekomendasi OWASP Mobile Application Security Best Practices, token auten
 
 **Screenshot Token Terpotong pada Layar Beranda:**
 
-<img src="Screenshots/token-terpotong.jpeg" alt="Screenshot token terpotong" width="340">
+<img src="screenshots/token-terpotong.jpeg" alt="Screenshot token terpotong" width="340">
 
 ---
 

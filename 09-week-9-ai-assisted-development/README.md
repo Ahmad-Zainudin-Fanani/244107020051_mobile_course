@@ -105,7 +105,7 @@ Baseline project Minggu 8 disalin lebih dulu pada commit `chore`, sehingga diff 
 ## 5. Cara menjalankan
 
 ```bash
-cd 09-week-9-ai-assisted-development/sourceCode
+cd 09-week-9-ai-assisted-development
 flutter pub get
 flutter run
 ```
@@ -144,17 +144,17 @@ $ flutter test
 ```
 
 <div align="center">
-  <img src="Screenshots/verif_flutter_analyze.png" alt="Hasil flutter analyze" width="650">
+  <img src="screenshots/verif_flutter_analyze.png" alt="Hasil flutter analyze" width="650">
   <p><em>Gambar 6.1: Static analysis bersih tanpa issue.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_dart_format.png" alt="Hasil dart format" width="650">
+  <img src="screenshots/verif_dart_format.png" alt="Hasil dart format" width="650">
   <p><em>Gambar 6.2: Seluruh berkas sesuai format resmi Dart.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_flutter_test.png" alt="Hasil flutter test" width="650">
+  <img src="screenshots/verif_flutter_test.png" alt="Hasil flutter test" width="650">
   <p><em>Gambar 6.3: 17 test lulus, termasuk 5 test pencarian, 1 widget test empty state, dan 1 test siklus hidup query.</em></p>
 </div>
 
@@ -163,17 +163,17 @@ $ flutter test
 Diambil dari `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 13 (API 33)`.
 
 <div align="center">
-  <img src="Screenshots/app_notes_home.png" alt="Daftar catatan dengan kolom cari" width="260">
+  <img src="screenshots/app_notes_home.png" alt="Daftar catatan dengan kolom cari" width="260">
   <p><em>Gambar 6.4: Kolom cari di atas daftar catatan.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/app_search_results.png" alt="Hasil pencarian belanja" width="260">
+  <img src="screenshots/app_search_results.png" alt="Hasil pencarian belanja" width="260">
   <p><em>Gambar 6.5: Query <code>belanja</code> mengembalikan dua catatan.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/app_search_empty.png" alt="Empty state pencarian" width="260">
+  <img src="screenshots/app_search_empty.png" alt="Empty state pencarian" width="260">
   <p><em>Gambar 6.6: Query <code>zzz</code> menampilkan empty state dan tombol hapus pencarian.</em></p>
 </div>
 
@@ -182,12 +182,12 @@ Diambil dari `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 
 Review tahap kedua menemukan bug: setelah mencari lalu pindah tab, kolom cari kosong tetapi daftar tetap tersaring. Penyebabnya query hidup lebih lama daripada halaman. Sesudah provider dibuat `autoDispose`, seluruh catatan kembali tampil.
 
 <div align="center">
-  <img src="Screenshots/fix_search_state_before.png" alt="Sebelum perbaikan: kolom kosong tapi daftar tersaring" width="260">
+  <img src="screenshots/fix_search_state_before.png" alt="Sebelum perbaikan: kolom kosong tapi daftar tersaring" width="260">
   <p><em>Gambar 6.7: Sebelum perbaikan — kolom cari kosong, tetapi hanya dua catatan <code>Belanja</code> yang tampil.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/fix_search_state_after.png" alt="Sesudah perbaikan: seluruh catatan tampil" width="260">
+  <img src="screenshots/fix_search_state_after.png" alt="Sesudah perbaikan: seluruh catatan tampil" width="260">
   <p><em>Gambar 6.8: Sesudah perbaikan — pindah tab mengembalikan seluruh catatan dan mengosongkan pencarian.</em></p>
 </div>
 
@@ -234,7 +234,7 @@ Commit yang dibuat:
 
 Branch `main` tetap hanya menerima perubahan lewat PR rilis, dan `develop` menjadi target default PR fitur.
 
-Bukti alur di GitHub: [`verif_issue.png`](Screenshots/verif_issue.png) (issue #8), [`verif_pr.png`](Screenshots/verif_pr.png) (checks PR #9), dan [`verif_ci.png`](Screenshots/verif_ci.png) (Actions run).
+Bukti alur di GitHub: [`verif_issue.png`](screenshots/verif_issue.png) (issue #8), [`verif_pr.png`](screenshots/verif_pr.png) (checks PR #9), dan [`verif_ci.png`](screenshots/verif_ci.png) (Actions run).
 
 ---
 
@@ -243,9 +243,19 @@ Bukti alur di GitHub: [`verif_issue.png`](Screenshots/verif_issue.png) (issue #8
 ```text
 09-week-9-ai-assisted-development/
 ├── README.md
+├── lib/                               # project Flutter (berkas yang berubah Minggu 9)
+│   └── features/notes/
+│       ├── domain/usecases/search_notes.dart
+│       ├── presentation/providers/notes_providers.dart
+│       ├── presentation/pages/notes_page.dart
+│       └── presentation/widgets/search_empty_view.dart
+├── test/
+│   ├── search_notes_test.dart
+│   ├── search_empty_view_test.dart
+│   └── search_query_lifecycle_test.dart
 ├── docs/
 │   └── ai-log.md
-├── Screenshots/
+├── screenshots/
 │   ├── app_notes_home.png
 │   ├── app_search_results.png
 │   ├── app_search_empty.png
@@ -257,12 +267,7 @@ Bukti alur di GitHub: [`verif_issue.png`](Screenshots/verif_issue.png) (issue #8
 │   ├── verif_issue.png
 │   ├── verif_pr.png
 │   └── verif_ci.png
-└── sourceCode/
-    ├── lib/features/notes/domain/usecases/search_notes.dart
-    ├── lib/features/notes/presentation/providers/notes_providers.dart
-    ├── lib/features/notes/presentation/pages/notes_page.dart
-    ├── lib/features/notes/presentation/widgets/search_empty_view.dart
-    └── test/search_notes_test.dart, test/search_empty_view_test.dart, test/search_query_lifecycle_test.dart
+└── pubspec.yaml / pubspec.lock         # dependensi (agar test bisa dijalankan)
 ```
 
 ---

@@ -9,3 +9,20 @@
 **/.flutter-plugins-dependencies
 **/.packages
 **/coverage/
+
+# Sisa cakupan yang dilaporkan sebagai artefak Minggu 12.
+!12-week-12-testing-quality-assurance/coverage/
+!12-week-12-testing-quality-assurance/coverage/**
+
+# Scaffolding platform tidak disimpan; buat ulang dengan `flutter create .`.
+**/android/
+**/ios/
+**/linux/
+**/macos/
+**/windows/
+**/web/
+**/.metadata
+**/*.iml
+**/.idea/
+**/local.properties
+**/GeneratedPluginRegistrant.*

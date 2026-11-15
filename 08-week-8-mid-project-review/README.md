@@ -135,7 +135,7 @@ Detail observasi → dampak → usulan, checklist kesiapan, serta status tindak 
 
 ## 6. Quality Gate Mesin
 
-Semua pemeriksaan dijalankan di `08-week-8-mid-project-review/sourceCode`:
+Semua pemeriksaan dijalankan di `08-week-8-mid-project-review`:
 
 ```bash
 flutter analyze
@@ -150,17 +150,17 @@ flutter test
 | `flutter test` | `All tests passed!` — 10 test |
 
 <div align="center">
-  <img src="Screenshots/verif_flutter_analyze.png" alt="Hasil flutter analyze" width="650">
+  <img src="screenshots/verif_flutter_analyze.png" alt="Hasil flutter analyze" width="650">
   <p><em>Gambar 6.1: Static analysis bersih tanpa issue.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_dart_format.png" alt="Hasil dart format" width="650">
+  <img src="screenshots/verif_dart_format.png" alt="Hasil dart format" width="650">
   <p><em>Gambar 6.2: Seluruh berkas sesuai format resmi Dart.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_flutter_test.png" alt="Hasil flutter test" width="650">
+  <img src="screenshots/verif_flutter_test.png" alt="Hasil flutter test" width="650">
   <p><em>Gambar 6.3: Sepuluh unit test lulus, termasuk empat test validasi baru.</em></p>
 </div>
 
@@ -168,14 +168,14 @@ flutter test
 
 ## 7. CI: Penolakan Otomatis
 
-Workflow [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) menjalankan empat langkah pada setiap Pull Request ke `develop`/`main`: `flutter pub get`, `flutter analyze`, `dart format --set-exit-if-changed .`, dan `flutter test` di direktori `08-week-8-mid-project-review/sourceCode`.
+Workflow [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) menjalankan empat langkah pada setiap Pull Request ke `develop`/`main`: `flutter pub get`, `flutter analyze`, `dart format --set-exit-if-changed .`, dan `flutter test` di direktori `08-week-8-mid-project-review`.
 
 Versi Flutter di-pin ke **3.47.2** (sama dengan SDK pengembangan) agar hasil `flutter analyze` konsisten. Tanpa pin, runner `stable` terbaru menandai `package:flutter/material.dart` sebagai deprecated dan menggagalkan pipeline meskipun kode berjalan normal di SDK proyek.
 
 Dengan demikian PR yang kotor ditolak mesin sebelum dibaca manusia, dan debat gaya/spasi tidak lagi memakan waktu review.
 
 <div align="center">
-  <img src="Screenshots/verif_ci.png" alt="Workflow CI hijau" width="750">
+  <img src="screenshots/verif_ci.png" alt="Workflow CI hijau" width="750">
   <p><em>Gambar 7.1: Workflow CI berhasil pada branch fitur.</em></p>
 </div>
 
@@ -208,7 +208,19 @@ Setiap temuan yang diterima memiliki bukti (`grep`/hasil test), dan setiap penol
 ├── docs/
 │   ├── review-checklist.md            # audit Git, review checklist, kesiapan mid semester
 │   └── ai-review-vs-keputusan.md      # prompt AI, temuan, verifikasi, keputusan final
-├── Screenshots/                       # kapital, konsisten dengan folder minggu sebelumnya
+├── lib/                               # project Flutter (lanjutan Minggu 7)
+│   ├── core/validation.dart           # aturan validasi judul (baru)
+│   ├── features/notes/                # domain, data, presentation
+│   ├── data/                          # SQLite, prefs, sync
+│   ├── pages/                         # settings, posts
+│   ├── router.dart
+│   └── main.dart
+├── test/
+│   ├── validate_note_test.dart        # 4 test baru
+│   ├── add_note_test.dart
+│   ├── get_notes_test.dart
+│   └── format_test.dart
+├── screenshots/                       # bukti aplikasi dan verifikasi
 │   ├── app_home.png                   # aplikasi berjalan
 │   ├── app_add_note.png               # form tambah catatan
 │   ├── app_validation.png             # SnackBar validasi judul kosong
@@ -219,20 +231,7 @@ Setiap temuan yang diterima memiliki bukti (`grep`/hasil test), dan setiap penol
 │   ├── verif_fix_week5.png            # analyze project Minggu 5 setelah perbaikan
 │   ├── verif_issue.png
 │   └── verif_pr.png
-└── sourceCode/                        # project Flutter (lanjutan Minggu 7)
-    ├── lib/
-    │   ├── core/validation.dart       # aturan validasi judul (baru)
-    │   ├── features/notes/            # domain, data, presentation
-    │   ├── data/                      # SQLite, prefs, sync
-    │   ├── pages/                     # settings, posts
-    │   ├── router.dart
-    │   └── main.dart
-    ├── test/
-    │   ├── validate_note_test.dart    # 4 test baru
-    │   ├── add_note_test.dart
-    │   ├── get_notes_test.dart
-    │   └── format_test.dart
-    └── pubspec.yaml
+└── pubspec.yaml / pubspec.lock         # dependensi (agar test bisa dijalankan)
 ```
 
 ---
@@ -265,7 +264,7 @@ Setiap temuan yang diterima memiliki bukti (`grep`/hasil test), dan setiap penol
 ## 11. Cara Menjalankan
 
 ```bash
-cd 08-week-8-mid-project-review/sourceCode
+cd 08-week-8-mid-project-review
 flutter pub get
 flutter run -d 2209116AG   # atau nama device lain dari `flutter devices`
 ```
@@ -290,17 +289,17 @@ Untuk menguji validasi secara manual:
 ## 12. Dokumentasi Aplikasi
 
 <div align="center">
-  <img src="Screenshots/app_home.png" alt="Halaman utama catatan" width="250">
+  <img src="screenshots/app_home.png" alt="Halaman utama catatan" width="250">
   <p><em>Gambar 12.1: Halaman utama dengan quick-add capsule, kartu catatan, dan indikator sinkronisasi.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/app_add_note.png" alt="Form tambah catatan" width="250">
+  <img src="screenshots/app_add_note.png" alt="Form tambah catatan" width="250">
   <p><em>Gambar 12.2: Modal pembuatan catatan yang memanggil use case AddNote.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/app_validation.png" alt="Validasi judul kosong" width="250">
+  <img src="screenshots/app_validation.png" alt="Validasi judul kosong" width="250">
   <p><em>Gambar 12.3: Umpan balik validasi judul kosong pada quick-add setelah perbaikan Minggu 8.</em></p>
 </div>
 

@@ -130,7 +130,7 @@ Baseline Minggu 9 disalin lebih dulu pada commit `chore`, sehingga diff fitur te
 ## 5. Cara menjalankan
 
 ```bash
-cd 10-week-10-ai-feature-integration/sourceCode
+cd 10-week-10-ai-feature-integration
 flutter pub get
 flutter run
 ```
@@ -203,27 +203,27 @@ $ flutter test
 Diambil dari `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 13 (API 33)`.
 
 <div align="center">
-  <img src="Screenshots/assistant_empty.png" alt="Empty state tab Asisten" width="260">
+  <img src="screenshots/assistant_empty.png" alt="Empty state tab Asisten" width="260">
   <p><em>Gambar 6.1: Tab Asisten — empty state, contoh pertanyaan, saklar konteks mati, dan ikon key-off karena key belum diatur.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/assistant_no_key.png" alt="Fallback saat API key belum diatur" width="260">
+  <img src="screenshots/assistant_no_key.png" alt="Fallback saat API key belum diatur" width="260">
   <p><em>Gambar 6.2: Fallback tanpa API key — pertanyaan tetap tampil, banner menjelaskan langkah berikutnya, aplikasi tidak crash.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/settings_api_key.png" alt="Kartu API key di Pengaturan" width="260">
+  <img src="screenshots/settings_api_key.png" alt="Kartu API key di Pengaturan" width="260">
   <p><em>Gambar 6.3: Kartu API key di Pengaturan — status "Belum diatur", kolom key tersembunyi, dan tombol simpan.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/settings_key_saved.png" alt="Status key tersimpan" width="260">
+  <img src="screenshots/settings_key_saved.png" alt="Status key tersimpan" width="260">
   <p><em>Gambar 6.4: Setelah key disimpan — status berubah menjadi "Tersimpan", kolom dikosongkan, dan key tidak pernah ditampilkan.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/assistant_reply.png" alt="Balasan Gemini sungguhan di perangkat" width="260">
+  <img src="screenshots/assistant_reply.png" alt="Balasan Gemini sungguhan di perangkat" width="260">
   <p><em>Gambar 6.5: Balasan Gemini sungguhan dengan konteks lima judul catatan perangkat.</em></p>
 </div>
 
@@ -306,17 +306,17 @@ Commit yang dibuat:
 Bukti alur di GitHub:
 
 <div align="center">
-  <img src="Screenshots/verif_issue.png" alt="Issue 14" width="700">
+  <img src="screenshots/verif_issue.png" alt="Issue 14" width="700">
   <p><em>Gambar 9.1: Issue #14 sebagai titik awal branch fitur.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_pr.png" alt="Checks PR 15" width="700">
+  <img src="screenshots/verif_pr.png" alt="Checks PR 15" width="700">
   <p><em>Gambar 9.2: PR #15 — check <code>analyze, format, test</code> hijau.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/verif_ci.png" alt="Actions run" width="700">
+  <img src="screenshots/verif_ci.png" alt="Actions run" width="700">
   <p><em>Gambar 9.3: GitHub Actions run #27 selesai sukses dalam 1m 52s.</em></p>
 </div>
 
@@ -327,9 +327,19 @@ Bukti alur di GitHub:
 ```text
 10-week-10-ai-feature-integration/
 ├── README.md
+├── lib/                               # project Flutter (berkas yang berubah Minggu 10)
+│   ├── features/assistant/
+│   │   ├── domain/{entities,services,usecases}/
+│   │   ├── data/{gemini_assistant,api_key_store}.dart
+│   │   └── presentation/{pages,providers,widgets}/
+│   ├── router.dart
+│   └── pages/settings_page.dart
+├── test/
+│   └── {build_system_prompt,gemini_stream,chat_controller,
+│        assistant_empty_view,api_key_card}_test.dart
 ├── docs/
 │   └── ai-log.md
-├── Screenshots/
+├── screenshots/
 │   ├── assistant_empty.png
 │   ├── assistant_no_key.png
 │   ├── assistant_reply.png
@@ -338,15 +348,7 @@ Bukti alur di GitHub:
 │   ├── verif_issue.png
 │   ├── verif_pr.png
 │   └── verif_ci.png
-└── sourceCode/
-    ├── lib/features/assistant/
-    │   ├── domain/{entities,services,usecases}/
-    │   ├── data/{gemini_assistant,api_key_store}.dart
-    │   └── presentation/{pages,providers,widgets}/
-    ├── lib/router.dart
-    ├── lib/pages/settings_page.dart
-    └── test/{build_system_prompt,gemini_stream,chat_controller,
-             assistant_empty_view,api_key_card}_test.dart
+└── pubspec.yaml / pubspec.lock         # dependensi (agar test bisa dijalankan)
 ```
 
 ---

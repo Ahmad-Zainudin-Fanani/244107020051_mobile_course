@@ -134,7 +134,7 @@ database sungguhan tanpa emulator.
 
 ## 5. Cara menjalankan
 
-Dari `12-week-12-testing-quality-assurance/sourceCode`:
+Dari `12-week-12-testing-quality-assurance`:
 
 ```bash
 flutter pub get
@@ -184,7 +184,7 @@ $ flutter test --coverage
 | `dart format --set-exit-if-changed` | **67 berkas, 0 berubah** |
 | `flutter test` | **84 test lolos** |
 
-![Hasil flutter test](Screenshots/01-hasil-flutter-test.png)
+![Hasil flutter test](screenshots/01-hasil-flutter-test.png)
 
 ### 6.2 Pengujian integrasi di perangkat
 
@@ -200,7 +200,7 @@ Test ini memakai database sungguhan di perangkat, sehingga membuktikan widget,
 provider, use case, dan SQLite bekerja bersama — hal yang tidak bisa
 dibuktikan widget test dengan repository palsu.
 
-![Integration test di perangkat](Screenshots/03-integration-test-perangkat.png)
+![Integration test di perangkat](screenshots/03-integration-test-perangkat.png)
 
 Run pertama di perangkat **gagal** dan itu berguna: `find.text(title)`
 menemukan dua widget karena kolom pencarian juga memuat judul yang dicari.
@@ -221,7 +221,7 @@ Angka ini dihasilkan oleh `docs/tools/coverage_summary.py` dari
 `coverage/lcov.info`; rincian per berkas ada di
 [`docs/coverage-summary.md`](docs/coverage-summary.md).
 
-![Ringkasan cakupan](Screenshots/02-cakupan-kode.png)
+![Ringkasan cakupan](screenshots/02-cakupan-kode.png)
 
 ---
 
@@ -293,26 +293,26 @@ verifikasi Minggu 8–12 pada setiap pull request.
 ```text
 12-week-12-testing-quality-assurance/
 ├── README.md
+├── lib/                            # aplikasi Minggu 11 + perbaikan §7
+├── test/
+│   ├── support/                    # fake + harness
+│   └── *_test.dart                 # 20 berkas, 84 test
+├── integration_test/
+│   └── app_test.dart               # alur utama di perangkat
 ├── docs/
-│   ├── coverage-summary.md        # dibuat oleh tools/coverage_summary.py
-│   ├── test-report.md             # laporan lengkap
+│   ├── coverage-summary.md         # dibuat oleh tools/coverage_summary.py
+│   ├── test-report.md              # laporan lengkap
 │   └── tools/
-│       └── coverage_summary.py    # parser lcov, tanpa dependensi
-├── Screenshots/
+│       └── coverage_summary.py     # parser lcov, tanpa dependensi
+├── screenshots/
 │   ├── 01-hasil-flutter-test.png
 │   ├── 02-cakupan-kode.png
 │   ├── 03-integration-test-perangkat.png
 │   └── 04-struktur-test.png
-└── sourceCode/
-    ├── lib/                       # aplikasi Minggu 11 + perbaikan §7
-    ├── test/
-    │   ├── support/               # fake + harness
-    │   └── *_test.dart            # 20 berkas, 84 test
-    └── integration_test/
-        └── app_test.dart          # alur utama di perangkat
+└── pubspec.yaml / pubspec.lock      # dependensi (agar test bisa dijalankan)
 ```
 
-![Struktur pengujian](Screenshots/04-struktur-test.png)
+![Struktur pengujian](screenshots/04-struktur-test.png)
 
 Gambar 01–04 adalah **keluaran perintah yang sebenarnya**, dirender menjadi PNG
 oleh [`docs/tools/render_log.ps1`](docs/tools/render_log.ps1) supaya teksnya

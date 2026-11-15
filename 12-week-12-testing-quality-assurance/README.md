@@ -9,6 +9,7 @@
 **Ringkasan cakupan (dibuat otomatis):** [`docs/coverage-summary.md`](docs/coverage-summary.md)
 **Issue:** [#26 test: pengujian dan jaminan kualitas aplikasi catatan Minggu 12](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/26)
 **Pull Request:** [#27 test: pengujian dan jaminan kualitas aplikasi catatan Minggu 12](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/27)
+**Rilis ke `main`:** [#28 release: praktikum Minggu 12 - pengujian dan jaminan kualitas](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/28)
 
 ---
 
@@ -273,11 +274,17 @@ docs: laporan pengujian, cakupan, dan screenshot Minggu 12
 docs: tautkan issue dan PR Minggu 11 di README
 ci: verifikasi Minggu 12 di pipeline
 ci: pasang libsqlite3 untuk test FFI Minggu 12
+docs: sesuaikan daftar commit Minggu 12 dengan riwayat sebenarnya
+docs: tautkan issue #26 dan PR #27 di README Minggu 12
 ```
 
 Issue: [#26](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/26),
 pull request: [#27](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/27)
-→ `develop` (`Closes #26`), lalu PR rilis `develop` → `main`.
+→ `develop` (`Closes #26`), lalu dirilis ke `main` lewat
+[PR #28](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/28).
+Alur yang dipakai konsisten dengan minggu sebelumnya: branch fitur → `develop`
+lewat pull request → `main` lewat pull request rilis. CI menjalankan seluruh
+verifikasi Minggu 8–12 pada setiap pull request.
 
 ---
 

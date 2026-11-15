@@ -24,9 +24,8 @@ Hasil utamanya:
 | Aspek | Sebelum | Sesudah |
 | :--- | ---: | ---: |
 | Test otomatis | 44 | **84** |
-| Cakupan seluruh `lib/` | 57,4% | **79,1%** |
-| Cakupan kode yang dijangkau aplikasi | — | **88,1%** |
-| Cakupan fitur catatan | — | **94,3%** |
+| Cakupan seluruh `lib/` | 57,4% | **87,9%** |
+| Cakupan fitur catatan | — | **94,1%** |
 | Cacat ditemukan & diperbaiki | — | **4** |
 
 Empat cacat itu bukan hipotetis: dua di antaranya membuat aplikasi
@@ -42,8 +41,8 @@ membuat kegagalan hapus tidak terlihat sama sekali oleh pengguna.
 | Satu pengujian integrasi alur utama | **Lolos** — `integration_test/app_test.dart` di `5751c2fd0013` |
 | `flutter test` | **Lolos** — 84 test |
 | `flutter analyze` | **Lolos** — `No issues found!` |
-| `flutter test --coverage` sebagai bahan evaluasi | **Lolos** — 79,1% total / 88,1% kode yang dijangkau |
-| Temuan belum terselesaikan dicatat di README | **Lolos** — §7 dan §10 |
+| `flutter test --coverage` sebagai bahan evaluasi | **Lolos** — 87,9% dari seluruh `lib/` |
+| Temuan belum terselesaikan dicatat di README | **Lolos** — §8 dan `docs/test-report.md` §9 |
 
 ---
 
@@ -65,9 +64,10 @@ Prinsip yang saya pakai untuk memilih bagian yang diuji:
 3. **Fake untuk kontrol, database asli untuk kebenaran.** Widget test memakai
    fake supaya cepat dan deterministik; repository diuji dengan SQLite
    in-memory supaya SQL-nya benar-benar dijalankan.
-4. **Kode mati tidak diuji.** Enam berkas sisa fitur lama tidak dapat
-   dijangkau dari `main.dart`; mengujinya hanya mempercantik angka. Alasannya
-   dicatat di §7 dan di `docs/coverage-summary.md`.
+4. **Kode mati dihapus, bukan diuji.** Sisa fitur lama tidak dapat dijangkau
+   dari `main.dart`, sehingga mengujinya hanya mempercantik angka. Lima berkas
+   dihapus dan `sync.dart` dipangkas; alasannya dicatat di §8 dan di
+   `docs/coverage-summary.md`.
 
 ---
 
@@ -95,9 +95,9 @@ Daftar berkas test dan jumlahnya ada di [`docs/test-report.md` §3](docs/test-re
 | :--- | :--- | :--- |
 | `lib/data/local/db.dart` | `createNotesSchema(Database)` diekstrak dari `openNotesDb` | test memakai skema yang sama, tidak menyalin SQL |
 | `quick_add_bar.dart`, `note_search_field.dart`, `notes_app_bar.dart`, `notes_page.dart` | `Key` pada 7 kontrol | pencarian widget tidak bergantung pada teks |
-| `notes_list.dart` | periksa hasil `deleteNote` | cacat §6.1 |
-| `note_detail_page.dart` | periksa hasil `deleteNote` | cacat §6.2 |
-| `notes_app_bar.dart` | periksa `countDirty` dan `markAllSynced` | cacat §6.3 dan §6.4 |
+| `notes_list.dart` | periksa hasil `deleteNote` | cacat #1 |
+| `note_detail_page.dart` | periksa hasil `deleteNote` | cacat #2 |
+| `notes_app_bar.dart` | periksa `countDirty` dan `markAllSynced` | cacat #3 dan #4 |
 
 Tidak ada logika bisnis yang dipindahkan hanya demi test. Repository dan use
 case memang sudah dipisah sejak Minggu 7, jadi yang kurang hanya titik masuk
@@ -211,10 +211,9 @@ Test diperbaiki memakai `find.widgetWithText(NoteTile, title)`.
 | Ukuran | Minggu 11 | Minggu 12 |
 | :--- | ---: | ---: |
 | Test | 44 | **84** |
-| Baris tercakup / total | 520/906 | **789/997** |
-| Seluruh `lib/` | 57,4% | **79,1%** |
-| Kode yang dijangkau aplikasi | — | **88,1%** (787/893) |
-| `lib/features/notes/` | 88–96% per berkas | **94,3%** (496/526) |
+| Baris tercakup / total | 520/906 | **788/896** |
+| Seluruh `lib/` | 57,4% | **87,9%** |
+| `lib/features/notes/` | 88–96% per berkas | **94,1%** (495/526) |
 | `lib/features/assistant/` | — | **80,1%** (273/341) |
 
 Angka ini dihasilkan oleh `docs/tools/coverage_summary.py` dari
@@ -244,17 +243,15 @@ memeriksa perilaku, bukan test yang sekadar lulus.
 
 | Temuan | Dampak | Rencana |
 | :--- | :--- | :--- |
-| `SyncService`, `syncServiceProvider`, `NoteRepository` lama, model `Note`/`Post` lokal, `PostsPage` tidak dipakai | kode mati, membingungkan, menurunkan cakupan | hapus pada pembersihan terpisah |
-| Fitur Posts tidak dirutekan | tidak bisa diuji end-to-end | putuskan: hidupkan atau hapus |
 | `openNotesDb()` butuh platform channel | 7 baris `db.dart` tidak tercakup | skema sudah diuji; sisanya hanya path database |
 | Panggilan Gemini sungguhan tidak diuji | kesalahan format respons nyata tidak tertangkap | rekam respons untuk test kontrak |
 | Cakupan integration test tidak digabung ke `lcov` | alur perangkat tidak menambah angka | gabungkan manual bila perlu |
 | Retry Riverpod 3 aktif di produksi, mati di test | perilaku produksi dan test berbeda | pertimbangkan `retry` eksplisit di `ProviderScope` |
 
-Keputusan yang saya ambil sadar: **enam berkas kode mati (104 baris) tidak
-diuji** dan dikecualikan dari angka 88,1%. Menguji kode yang tidak bisa
-dijalankan pengguna akan membuat laporan terlihat lebih baik tanpa menambah
-satu pun perilaku yang terlindungi.
+Kode mati yang dulu tercatat di sini — `SyncService`, `PostsSyncService`,
+repository versi lama, model `Note`/`Post` lokal, dan `PostsPage` — sudah
+dihapus. Dengan begitu seluruh isi `lib/` dapat dijangkau dari `lib/main.dart`
+dan cakupannya naik dari 79,1% ke **87,9%** tanpa menambah satu pun test baru.
 
 ---
 
@@ -364,10 +361,11 @@ Test yang mengandalkan jumlah panggilan akan lulus atau gagal tergantung waktu.
 Solusinya mematikan retry di harness test — dan konsekuensinya dicatat sebagai
 temuan, karena produksi tetap memakai retry.
 
-**Cakupan bukan target.** Angka naik dari 57,4% ke 79,1% bukan karena mengejar
+**Cakupan bukan target.** Angka naik dari 57,4% ke 87,9% bukan karena mengejar
 persentase, tetapi karena repository, provider, dan halaman akhirnya diuji
-lewat perilakunya. Sebaliknya, saya sengaja **tidak** menguji 104 baris kode
-mati meskipun itu akan menaikkan angka menjadi 88,1%.
+lewat perilakunya. Kenaikan terakhir datang dari arah sebaliknya: 104 baris kode
+mati dihapus, bukan diuji, sehingga angka tidak lagi dihitung dari kode yang
+tidak bisa dijalankan pengguna.
 
 **Yang paling murah justru paling berguna.** `createNotesSchema` hanya
 memindahkan SQL ke fungsi terpisah, tetapi efeknya besar: test repository

@@ -8,6 +8,17 @@
 
 ---
 
+## Tujuan
+
+- Memahami **aturan dependensi** Clean Architecture: lapisan `domain` tidak
+  boleh bergantung pada `data` atau `presentation`.
+- Menerapkan prinsip **SOLID** pada kode Minggu 5 yang masih monolitik, tanpa
+  mengubah perilaku yang dilihat pengguna.
+- Membuktikan pemisahan lapisan bisa diperiksa, bukan hanya diklaim: lewat
+  `flutter analyze`, test yang tetap lulus, dan pemeriksaan arah impor.
+
+---
+
 ## 1. Deskripsi & Latar Belakang Arsitektur
 
 Laporan praktikum Minggu ke-7 ini mendokumentasikan proses restrukturisasi arsitektur perangkat lunak pada proyek basis **Minggu 5 (`week5_offline_notes`)**. Fokus utama dari kegiatan ini adalah mentransformasikan basis kode yang sebelumnya berpola monolitik (*tightly coupled*) menjadi arsitektur bersih (**Clean Architecture**) berbasis modul fitur (**Feature-First**) dengan mematuhi kaidah-kaidah perancangan **SOLID**.

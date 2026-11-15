@@ -21,13 +21,13 @@ Aplikasi catatan punya tiga area besar:
 | :--- | :---: | :--- |
 | Fitur catatan | ya | daftar, tambah, rincian, hapus, cari, sinkronisasi |
 | Fitur asisten AI | ya | chat Gemini, penyimpanan API key, konteks catatan |
-| Fitur Posts + `SyncService` | **tidak** | sisa eksperimen lokal, tidak dirutekan dari `main.dart` |
 
 Prioritas pengujian mengikuti risiko, bukan jumlah baris. Fitur catatan mengatur
 data pengguna, jadi kesalahan hapus atau kesalahan klaim "berhasil" berdampak
 langsung. Fitur asisten menyentuh jaringan dan kredensial, jadi bagian yang
 mudah diuji tanpa jaringan (kontrak, prompt, pengelolaan state) yang diuji.
-Kode mati tidak diuji dan tidak dihitung — lihat bagian 9.
+Kode mati yang dulu ada di `lib/data/` dan `lib/pages/` sudah dihapus — lihat
+bagian 9.
 
 ---
 
@@ -236,10 +236,9 @@ otorisasi USB diberikan, instalasi dan test berjalan normal.
 | Ukuran | Sebelum (Minggu 11) | Sesudah |
 | :--- | ---: | ---: |
 | Test | 44 | **84** |
-| Baris tercakup / total | 520/906 | **789/997** |
-| Persentase seluruh `lib/` | 57,4% | **79,1%** |
-| Persentase kode yang dijangkau aplikasi | — | **88,1%** (787/893) |
-| Fitur catatan | — | **94,3%** (496/526) |
+| Baris tercakup / total | 520/906 | **788/896** |
+| Persentase seluruh `lib/` | 57,4% | **87,9%** |
+| Fitur catatan | — | **94,1%** (495/526) |
 
 Rincian per berkas ada di [`coverage-summary.md`](coverage-summary.md).
 
@@ -247,9 +246,10 @@ Cakupan naik paling banyak di lapisan yang sebelumnya nol: repository
 implementasi, model, provider, dan halaman. Kenaikan itu bukan tujuan, tetapi
 efek samping dari menguji perilaku yang penting.
 
-Angka 79,1% tidak dinaikkan dengan menguji kode mati. Enam berkas sisa fitur
-lama (104 baris) dikecualikan dengan alasan tertulis. Jika ikut dihitung,
-angkanya menjadi 88,1%.
+Angka 87,9% tidak berasal dari menguji kode mati. Sisa fitur lama (104 baris:
+lima berkas dan bagian `sync.dart`) dihapus dari repositori, bukan diuji atau
+disembunyikan dari hitungan, sehingga seluruh isi `lib/` memang dipakai
+aplikasi.
 
 ---
 
@@ -257,8 +257,6 @@ angkanya menjadi 88,1%.
 
 | Temuan | Dampak | Rencana |
 | :--- | :--- | :--- |
-| `SyncService`, `syncServiceProvider`, `NoteRepository` lama, `Note`/`Post` lokal, `PostsPage` tidak dipakai | kode mati, membingungkan pembaca, menurunkan cakupan | hapus pada pembersihan terpisah; dihapus dari hitungan cakupan sekarang |
-| Fitur Posts tidak dirutekan | tidak bisa diuji end-to-end, tidak terlihat pengguna | putuskan: hidupkan atau hapus |
 | `openNotesDb()` butuh platform channel | 7 baris `db.dart` tidak tercakup | skema sudah diuji lewat `createNotesSchema`; sisa baris hanya path database |
 | Panggilan Gemini sungguhan tidak diuji | kesalahan format respons nyata tidak tertangkap | tambahkan test kontrak dengan rekaman respons (VCR) bila jaringan diizinkan |
 | Cakupan integration test tidak digabung | alur perangkat tidak menambah angka `lcov` | gabungkan manual bila diperlukan; angka saat ini hanya unit + widget |

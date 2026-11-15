@@ -7,8 +7,8 @@
 **Tautan Repositori:** [244107020051_mobile_course](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course)
 **Laporan pengujian lengkap:** [`docs/test-report.md`](docs/test-report.md)
 **Ringkasan cakupan (dibuat otomatis):** [`docs/coverage-summary.md`](docs/coverage-summary.md)
-**Issue:** _dibuat sebelum PR — lihat §9_
-**Pull Request:** _branch `feature/testing-quality-assurance` — lihat §9_
+**Issue:** [#26 test: pengujian dan jaminan kualitas aplikasi catatan Minggu 12](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/26)
+**Pull Request:** [#27 test: pengujian dan jaminan kualitas aplikasi catatan Minggu 12](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/27)
 
 ---
 
@@ -275,13 +275,9 @@ ci: verifikasi Minggu 12 di pipeline
 ci: pasang libsqlite3 untuk test FFI Minggu 12
 ```
 
-Langkah yang masih perlu dilakukan di GitHub (tidak bisa dari CLI karena `gh`
-tidak terpasang di mesin ini):
-
-1. Buat issue `test: pengujian dan jaminan kualitas aplikasi catatan Minggu 12`.
-2. Buat PR dari `feature/testing-quality-assurance` ke `develop`, isi
-   `Closes #<nomor issue>`.
-3. Setelah nomor issue dan PR ada, tautkan di header README ini.
+Issue: [#26](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/26),
+pull request: [#27](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/pull/27)
+→ `develop` (`Closes #26`), lalu PR rilis `develop` → `main`.
 
 ---
 

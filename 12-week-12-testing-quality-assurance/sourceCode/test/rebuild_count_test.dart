@@ -1,40 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:week5_offline_notes/core/failures.dart';
 import 'package:week5_offline_notes/features/notes/domain/entities/note.dart';
-import 'package:week5_offline_notes/features/notes/domain/repositories/note_repository.dart';
 import 'package:week5_offline_notes/features/notes/presentation/pages/notes_page.dart';
 import 'package:week5_offline_notes/features/notes/presentation/providers/notes_providers.dart';
 
-/// Repository palsu: test ini hanya mengukur rebuild, bukan database.
-class _NoopNoteRepository implements NoteRepository {
-  @override
-  Future<({List<Note> notes, Failure? failure})> fetchNotes() async =>
-      (notes: const <Note>[], failure: null);
-
-  @override
-  Future<({Note? note, Failure? failure})> addNote({
-    required String title,
-    String body = '',
-  }) async => (note: null, failure: null);
-
-  @override
-  Future<({Note? note, Failure? failure})> getNote(int id) async =>
-      (note: null, failure: null);
-
-  @override
-  Future<({bool success, Failure? failure})> deleteNote(int id) async =>
-      (success: true, failure: null);
-
-  @override
-  Future<({int count, Failure? failure})> countDirty() async =>
-      (count: 0, failure: null);
-
-  @override
-  Future<({bool success, Failure? failure})> markAllSynced() async =>
-      (success: true, failure: null);
-}
+import 'support/note_fakes.dart';
 
 List<Note> _seedNotes(int count) {
   const titles = [
@@ -69,7 +40,7 @@ void main() {
       ProviderScope(
         overrides: [
           notesProvider.overrideWith((ref) => notes),
-          noteRepositoryProvider.overrideWithValue(_NoopNoteRepository()),
+          noteRepositoryProvider.overrideWithValue(FakeNoteRepository()),
         ],
         child: const MaterialApp(home: NotesPage()),
       ),

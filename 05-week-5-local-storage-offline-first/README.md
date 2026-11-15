@@ -19,6 +19,38 @@ Aplikasi yang dikembangkan pada minggu ini memiliki beberapa kapabilitas utama:
 4. **Preferensi UI:** *Dark mode toggle* dan pencatatan akses terakhir aplikasi.
 5. **Routing Modern:** Navigasi berbasis path menggunakan `GoRouter`.
 
+## Stack
+
+| Komponen | Versi / Peran |
+| :--- | :--- |
+| Flutter | 3.47.2 (stable) |
+| Dart | 3.13.2 |
+| `sqflite` | ^2.4.4 (database lokal untuk catatan) |
+| `shared_preferences` | ^2.5.5 (preferensi tema & waktu buka terakhir) |
+| `flutter_riverpod` | ^3.4.3 (state management) |
+| `dio` | ^5.11.1 (klien HTTP untuk sinkronisasi) |
+| `go_router` | ^18.0.2 (navigasi deklaratif) |
+| `path` | ^1.9.1 (penyusunan path database) |
+| `flutter_lints` | ^6.0.0 (aturan analisis) |
+
+## Cara Menjalankan
+
+```bash
+cd 05-week-5-local-storage-offline-first
+flutter pub get
+flutter run      # butuh emulator/perangkat Android atau iOS (SQLite native)
+flutter test     # 1 widget test
+flutter analyze
+```
+
+Catatan:
+
+- `sqflite` membutuhkan platform channel, jadi aplikasi dijalankan di emulator
+  atau perangkat, bukan di browser.
+- `flutter test` tidak menyentuh database perangkat: test meng-override
+  `notesProvider` dengan daftar kosong dan memakai
+  `SharedPreferences.setMockInitialValues({})`.
+
 ---
 
 ## Konsep Arsitektur: Local-First vs Cache-First
@@ -186,19 +218,27 @@ Menambahkan halaman detail catatan menggunakan `GoRouter` dengan *path* `/note/:
 
 ## Unit Testing
 
-Terdapat beberapa kendala di mana pengujian praktikum awal tidak lolos. Berikut adalah solusinya:
+Test yang ada di folder `test/` adalah satu widget test
+(`test/widget_test.dart`) yang memverifikasi layar utama aplikasi:
 
-1. **Memperbaiki Error pada Provider:**
-   - Menambahkan import `notes_page.dart` agar `notesProvider` dapat diakses di dalam file *test*.
-   - Mengubah `fetchNotes()` dari melempar error *synchronous* (`throw`) menjadi fungsi asinkron `Future.error()`.
-   - Membuat *provider* khusus pengujian yaitu `testNotesProvider` yang bersifat **non-autoDispose**.
-   - Mengubah logika *test error* dengan menggunakan `container.listen` dan memeriksa secara langsung *property* `.error`, bukan menggunakan pengecekan tipe `isA<AsyncError>()`.
+- `MyApp` dipasang di dalam `ProviderScope`.
+- `SharedPreferences.setMockInitialValues({})` dipakai agar `darkModeProvider`
+  dan `lastOpenedProvider` tidak membutuhkan penyimpanan perangkat.
+- `notesProvider` di-override dengan daftar kosong, sehingga test tidak
+  menyentuh SQLite maupun platform channel.
+- Yang diperiksa: judul `Offline Notes`, empty state `No notes yet.`, serta dua
+  tab navigasi `Notes` dan `Posts`.
 
-2. **Cakupan Fungsi Tes yang Diselesaikan:**
-   - **`fromMap` aman terhadap field yang hilang:** Memastikan metode `Note.fromMap()` tidak *crash* meskipun field `body`, `updated_at`, atau `dirty` tidak ditemukan pada *map*; nilai *default* akan selalu disisipkan.
-   - **Flag dirty bertahan pada serialisasi:** Memastikan bahwa konversi bolak-balik (Note → Map → Note) tetap dapat mempertahankan status *dirty* dengan tepat.
-   - **Penyedia sukses dengan repositori palsu:** Memastikan `notesProvider` (autoDispose) dapat merespons repositori (mock) dan mengembalikan data `List<Note>` dengan benar.
-   - **Kesalahan penyedia dengan repositori palsu:** Menggunakan `testNotesProvider` (non-autoDispose) untuk memverifikasi kemampuan menangkap kesalahan (error) dari repositori via pengecekan nilai `.error`.
+```bash
+flutter test
+# 00:00 +1: All tests passed!
+```
+
+**Yang belum tercakup:** `NoteRepository`, `PostRepository`, dan `SyncService`
+tidak diuji otomatis karena `openNotesDb()` membutuhkan platform channel
+`sqflite`. Pengujian lapisan database baru bisa dilakukan dengan
+`sqflite_common_ffi` di lingkungan desktop/CI; ini dicatat sebagai batasan,
+bukan diklaim sebagai cakupan yang sudah ada.
 
 ---
 

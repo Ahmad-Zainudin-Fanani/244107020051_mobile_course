@@ -56,5 +56,6 @@ Folder platform (`android/`, `ios/`, `linux/`, `macos/`, `windows/`, `web/`)
 tidak disimpan karena hanya boilerplate; folder itu bisa dibuat ulang kapan saja
 dengan `flutter create .` di folder minggu terkait. Workflow
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) menjalankan
-`flutter analyze` dan `flutter test` untuk minggu 8-12 dari folder minggu
-masing-masing.
+`flutter analyze` dan `flutter test` untuk **semua minggu 1-12** dari folder
+minggu masing-masing. Pemeriksaan format (`dart format`) hanya berlaku untuk
+minggu 8-12 karena kode minggu 1-7 masih memakai gaya formatter lama.

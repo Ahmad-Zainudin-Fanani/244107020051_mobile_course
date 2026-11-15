@@ -24,4 +24,6 @@ Portfolio ini berisi rangkuman materi serta tugas yang dikerjakan selama proses 
 | 8 | Mid Project Review & Code Review | Selesai | [Lihat Materi dan Tugas](./08-week-8-mid-project-review) |
 | 9 | AI-Assisted Development (Search + Empty State) | Selesai | [Lihat Materi dan Tugas](./09-week-9-ai-assisted-development) |
 | 10 | AI Feature Integration (Chat Asisten Gemini + Secure API Key) | Selesai | [Lihat Materi dan Tugas](./10-week-10-ai-feature-integration) |
-| 11-16 | Materi dan proyek lanjutan | Belum dikerjakan | - |
+| 11 | Optimasi Performa (Profiling, Rebuild, dan Query) | Selesai | [Lihat Materi dan Tugas](./11-week-11-performance-optimization) |
+| 12 | Pengujian dan Jaminan Kualitas (Unit, Widget, Integration Test) | Selesai | [Lihat Materi dan Tugas](./12-week-12-testing-quality-assurance) |
+| 13-16 | Materi dan proyek lanjutan | Belum dikerjakan | - |

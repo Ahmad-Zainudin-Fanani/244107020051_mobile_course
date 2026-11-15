@@ -1,0 +1,40 @@
+{
+  "device": "2209116AG",
+  "serial": "5751c2fd0013",
+  "method": "ProcessInfo.currentRss sebelum dan sesudah 5x buka-tutup halaman detail",
+  "source": "integration_test/perf_test.dart (PERF_MEMORY)",
+  "runs": [
+    {
+      "condition": "before",
+      "run": 1,
+      "rss_before_mb": 236,
+      "rss_after_mb": 240,
+      "delta_mb": 3,
+      "nav_loops": 5
+    },
+    {
+      "condition": "before",
+      "run": 2,
+      "rss_before_mb": 234,
+      "rss_after_mb": 240,
+      "delta_mb": 6,
+      "nav_loops": 5
+    },
+    {
+      "condition": "after",
+      "run": 1,
+      "rss_before_mb": 239,
+      "rss_after_mb": 242,
+      "delta_mb": 2,
+      "nav_loops": 5
+    },
+    {
+      "condition": "after",
+      "run": 2,
+      "rss_before_mb": 231,
+      "rss_after_mb": 237,
+      "delta_mb": 5,
+      "nav_loops": 5
+    }
+  ]
+}

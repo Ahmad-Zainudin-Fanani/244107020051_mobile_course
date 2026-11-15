@@ -27,3 +27,19 @@ Portfolio ini berisi rangkuman materi serta tugas yang dikerjakan selama proses 
 | 11 | Optimasi Performa (Profiling, Rebuild, dan Query) | Selesai | [Lihat Materi dan Tugas](./11-week-11-performance-optimization) |
 | 12 | Pengujian dan Jaminan Kualitas (Unit, Widget, Integration Test) | Selesai | [Lihat Materi dan Tugas](./12-week-12-testing-quality-assurance) |
 | 13-16 | Materi dan proyek lanjutan | Belum dikerjakan | - |
+
+## Struktur Setiap Folder Minggu
+
+Semua folder minggu memakai pola yang sama, supaya mudah dicari:
+
+| Isi | Lokasi |
+| :--- | :--- |
+| Laporan dan dokumentasi | `README.md` serta `docs/` di akar folder minggu |
+| Tangkapan layar | `Screenshots/` |
+| Proyek Flutter | `sourceCode/` — di dalamnya ada `lib/`, `test/`, `pubspec.yaml`, dan platform (`android/`, `ios/`, dan seterusnya) |
+
+Modul menuliskan struktur `lib/`, `test/`, `docs/`, `README.md`, dan `screenshots/`
+langsung di folder minggu. Di repo ini proyek diletakkan di dalam `sourceCode/`
+agar laporan dan kode tidak bercampur dalam satu direktori; isi `sourceCode/`
+tetap `lib/` dan `test/` seperti yang diminta modul, dan perintah Flutter
+dijalankan dari dalam `sourceCode/`.

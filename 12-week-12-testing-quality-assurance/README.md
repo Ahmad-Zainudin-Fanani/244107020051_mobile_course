@@ -266,10 +266,13 @@ Commit dipisah agar diff mudah direview:
 
 ```text
 chore: salin baseline project Minggu 11 ke folder Minggu 12
-test: tambah unit, widget, dan integration test fitur catatan
-fix: laporkan kegagalan hapus dan sinkronisasi dengan benar
+refactor(notes): ekstrak skema database dan beri Key pada kontrol utama
+fix(notes): laporkan kegagalan hapus dan sinkronisasi dengan benar
+test: tambah unit, widget, dan integration test alur utama
 docs: laporan pengujian, cakupan, dan screenshot Minggu 12
-ci: verifikasi Minggu 11 dan 12 di pipeline
+docs: tautkan issue dan PR Minggu 11 di README
+ci: verifikasi Minggu 12 di pipeline
+ci: pasang libsqlite3 untuk test FFI Minggu 12
 ```
 
 Langkah yang masih perlu dilakukan di GitHub (tidak bisa dari CLI karena `gh`

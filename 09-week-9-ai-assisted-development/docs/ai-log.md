@@ -3,7 +3,7 @@
 **Nama:** Ahmad Zainudin Fanani
 **NIM:** 244107020051
 **Fitur:** pencarian judul catatan + empty state
-**Basis proyek:** `week5_offline_notes` hasil refaktor Minggu 7, disalin dari `08-week-8-mid-project-review/sourceCode`
+**Basis proyek:** `week5_offline_notes` hasil refaktor Minggu 7, disalin dari `08-week-8-mid-project-review`
 **Branch:** `feature/8-search-notes`, lalu `fix/11-search-query-lifecycle` → `develop`
 **Issue:** [#8](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/8), lanjutan [#11](https://github.com/Ahmad-Zainudin-Fanani/244107020051_mobile_course/issues/11)
 
@@ -186,7 +186,7 @@ lalu hijau setelah provider memakai `autoDispose`:
 00:00 +1: All tests passed!
 ```
 
-Bukti visual: [`fix_search_state_before.png`](../Screenshots/fix_search_state_before.png) dan [`fix_search_state_after.png`](../Screenshots/fix_search_state_after.png).
+Bukti visual: [`fix_search_state_before.png`](../screenshots/fix_search_state_before.png) dan [`fix_search_state_after.png`](../screenshots/fix_search_state_after.png).
 
 ### 3.4 Cek batas layer
 
@@ -242,13 +242,13 @@ Perangkat: `2209116AG (mobile) • 5751c2fd0013 • android-arm64 • Android 13
 | Query kosong | tekan tombol hapus | Kembali ke daftar penuh, kolom cari kosong | Lolos |
 | Pindah tab saat query aktif | `belanja` -> Pengaturan -> Catatan | Sebelum perbaikan: daftar tetap tersaring padahal kolom kosong. Sesudah perbaikan: seluruh catatan tampil | **Lolos setelah fix R1** |
 
-Bukti visual ada di [`../Screenshots/app_notes_home.png`](../Screenshots/app_notes_home.png), [`../Screenshots/app_search_results.png`](../Screenshots/app_search_results.png), [`../Screenshots/app_search_empty.png`](../Screenshots/app_search_empty.png), [`../Screenshots/fix_search_state_before.png`](../Screenshots/fix_search_state_before.png), dan [`../Screenshots/fix_search_state_after.png`](../Screenshots/fix_search_state_after.png).
+Bukti visual ada di [`../screenshots/app_notes_home.png`](../screenshots/app_notes_home.png), [`../screenshots/app_search_results.png`](../screenshots/app_search_results.png), [`../screenshots/app_search_empty.png`](../screenshots/app_search_empty.png), [`../screenshots/fix_search_state_before.png`](../screenshots/fix_search_state_before.png), dan [`../screenshots/fix_search_state_after.png`](../screenshots/fix_search_state_after.png).
 
 ---
 
 ## 7. Quality gate mesin
 
-Dijalankan di `09-week-9-ai-assisted-development/sourceCode`:
+Dijalankan di `09-week-9-ai-assisted-development`:
 
 ```text
 $ flutter analyze
@@ -261,7 +261,7 @@ $ flutter test
 00:00 +17: All tests passed!
 ```
 
-Tangkapan layar: [`verif_flutter_analyze.png`](../Screenshots/verif_flutter_analyze.png), [`verif_dart_format.png`](../Screenshots/verif_dart_format.png), [`verif_flutter_test.png`](../Screenshots/verif_flutter_test.png).
+Tangkapan layar: [`verif_flutter_analyze.png`](../screenshots/verif_flutter_analyze.png), [`verif_dart_format.png`](../screenshots/verif_dart_format.png), [`verif_flutter_test.png`](../screenshots/verif_flutter_test.png).
 
 ---
 

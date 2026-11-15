@@ -30,16 +30,31 @@ Portfolio ini berisi rangkuman materi serta tugas yang dikerjakan selama proses 
 
 ## Struktur Setiap Folder Minggu
 
-Semua folder minggu memakai pola yang sama, supaya mudah dicari:
+Semua folder minggu memakai pola yang sama seperti pohon pada modul:
 
-| Isi | Lokasi |
-| :--- | :--- |
-| Laporan dan dokumentasi | `README.md` serta `docs/` di akar folder minggu |
-| Tangkapan layar | `Screenshots/` |
-| Proyek Flutter | `sourceCode/` — di dalamnya ada `lib/`, `test/`, `pubspec.yaml`, dan platform (`android/`, `ios/`, dan seterusnya) |
+```text
+XX-week-XX-nama-materi/
+├── README.md            # laporan tiap minggu
+├── lib/                 # kode aplikasi Flutter
+├── test/                # unit dan widget test
+├── docs/                # dokumen pendukung (minggu 8-12)
+├── screenshots/         # tangkapan layar dan bukti verifikasi
+├── pubspec.yaml         # dependensi
+├── pubspec.lock
+└── analysis_options.yaml
+```
 
-Modul menuliskan struktur `lib/`, `test/`, `docs/`, `README.md`, dan `screenshots/`
-langsung di folder minggu. Di repo ini proyek diletakkan di dalam `sourceCode/`
-agar laporan dan kode tidak bercampur dalam satu direktori; isi `sourceCode/`
-tetap `lib/` dan `test/` seperti yang diminta modul, dan perintah Flutter
-dijalankan dari dalam `sourceCode/`.
+Minggu 11 dan 12 menambah `integration_test/`, `test_driver/`, dan `tool/`
+untuk pengujian di perangkat serta skrip bantu. Minggu 12 juga menyimpan
+`coverage/` berisi `lcov.info` hasil `flutter test --coverage`.
+
+`pubspec.yaml`, `pubspec.lock`, dan `analysis_options.yaml` sengaja dipertahankan
+walau tidak digambar pada pohon modul, supaya `flutter analyze` dan `flutter test`
+bisa dijalankan langsung dari folder minggu dan hasilnya dapat diverifikasi.
+
+Folder platform (`android/`, `ios/`, `linux/`, `macos/`, `windows/`, `web/`)
+tidak disimpan karena hanya boilerplate; folder itu bisa dibuat ulang kapan saja
+dengan `flutter create .` di folder minggu terkait. Workflow
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) menjalankan
+`flutter analyze` dan `flutter test` untuk minggu 8-12 dari folder minggu
+masing-masing.

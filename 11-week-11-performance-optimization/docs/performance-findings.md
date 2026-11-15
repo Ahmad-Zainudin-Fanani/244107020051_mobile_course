@@ -14,7 +14,7 @@ pengukuran di perangkat, bukan perkiraan.
 ## 1. Cara mengukur ulang
 
 ```bash
-cd 11-week-11-performance-optimization/sourceCode
+cd 11-week-11-performance-optimization
 
 # Profiling CPU + memori (hasil JSON ditulis ke build/integration_response_data.json)
 flutter drive --profile --no-dds -d 5751c2fd0013 \

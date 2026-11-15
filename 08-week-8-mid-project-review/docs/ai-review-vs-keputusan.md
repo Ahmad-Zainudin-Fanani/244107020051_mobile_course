@@ -75,7 +75,7 @@ Sesuai checklist codelab, sebelum saran diterapkan:
 | ID | Level | Usulan AI | Keputusan | Alasan teknis & bukti |
 | :---: | :---: | :--- | :---: | :--- |
 | A1 | Blocker | Ekstrak validasi judul ke satu fungsi murni | **Diterima** | Terbukti literal pesan ada di `add_note.dart:17` dan `notes_page.dart:340`. Setelah perbaikan hanya tersisa di `lib/core/validation.dart:8`. |
-| A2 | Blocker | Tampilkan SnackBar saat quick-add kosong | **Diterima** | Reproduksi manual: menekan tombol kirim pada input kosong tidak memberi umpan balik. Setelah perbaikan muncul SnackBar (lihat `Screenshots/app_validation.png`). |
+| A2 | Blocker | Tampilkan SnackBar saat quick-add kosong | **Diterima** | Reproduksi manual: menekan tombol kirim pada input kosong tidak memberi umpan balik. Setelah perbaikan muncul SnackBar (lihat `screenshots/app_validation.png`). |
 | A3 | Saran | Hapus validasi domain; cukup `TextFormField.validator` | **Ditolak** | Quick-add bukan `Form`; memindahkan aturan ke UI membuat aturan bisnis hilang dari domain dan tidak dapat diuji tanpa widget. Dependency rule: domain harus tetap menjadi pemilik aturan. |
 | A4 | Saran | Tambah `form_builder`/`intl` | **Ditolak** | `validateNoteTitle` hanya 8 baris dan sudah diuji. Dependensi baru menambah waktu build serta permukaan perawatan tanpa manfaat untuk satu aturan. |
 | A5 | Test | Tambah test whitespace, tab, dan newline | **Diterima** | `test/validate_note_test.dart` berisi 4 test; `flutter test` lulus 10 test. |
@@ -92,16 +92,16 @@ Sesuai checklist codelab, sebelum saran diterapkan:
 Sebelum (project Minggu 7):
 
 ```text
-07-week-7-clean-architecture/sourceCode/lib/features/notes/domain/usecases/add_note.dart:17:
+07-week-7-clean-architecture/lib/features/notes/domain/usecases/add_note.dart:17:
   failure: const LocalFailure('Judul catatan tidak boleh kosong.'),
-07-week-7-clean-architecture/sourceCode/lib/features/notes/presentation/pages/notes_page.dart:340:
+07-week-7-clean-architecture/lib/features/notes/presentation/pages/notes_page.dart:340:
   content: Text('Judul catatan tidak boleh kosong.'),
 ```
 
 Sesudah (project Minggu 8):
 
 ```text
-08-week-8-mid-project-review/sourceCode/lib/core/validation.dart:8:
+08-week-8-mid-project-review/lib/core/validation.dart:8:
   const String emptyNoteTitleMessage = 'Judul catatan tidak boleh kosong.';
 ```
 
@@ -115,7 +115,7 @@ Perilaku yang diuji:
 2. Biarkan kolom quick-add kosong.
 3. Tekan tombol kirim.
 
-Hasil: SnackBar merah **“Judul catatan tidak boleh kosong.”** tampil, dan tidak ada catatan kosong yang tersimpan. Bukti visual: `Screenshots/app_validation.png`.
+Hasil: SnackBar merah **“Judul catatan tidak boleh kosong.”** tampil, dan tidak ada catatan kosong yang tersimpan. Bukti visual: `screenshots/app_validation.png`.
 
 ### 5.3 Bukti A5 — test kasus batas
 

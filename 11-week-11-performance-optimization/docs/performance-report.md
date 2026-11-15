@@ -74,7 +74,7 @@ terburuk. Contohnya frame raster terburuk baseline: **33,8 ms** di run 1 dan
 ### 2.4 Reproduksi
 
 ```bash
-cd 11-week-11-performance-optimization/sourceCode
+cd 11-week-11-performance-optimization
 
 flutter drive --profile --no-dds -d 5751c2fd0013 \
   --driver=test_driver/integration_test.dart \
@@ -264,22 +264,22 @@ datang dari jaringan.
 ## 5. Bukti visual
 
 <div align="center">
-  <img src="../Screenshots/01-daftar-1500-catatan-sebelum.png" alt="Daftar 1.500 catatan sebelum optimasi" width="260">
+  <img src="../screenshots/01-daftar-1500-catatan-sebelum.png" alt="Daftar 1.500 catatan sebelum optimasi" width="260">
   <p><em>Gambar 5.1: Kondisi awal — 1.500 catatan, 215 belum sinkron.</em></p>
 </div>
 
 <div align="center">
-  <img src="../Screenshots/02-daftar-1500-catatan-sesudah.png" alt="Daftar 1.500 catatan sesudah optimasi" width="260">
+  <img src="../screenshots/02-daftar-1500-catatan-sesudah.png" alt="Daftar 1.500 catatan sesudah optimasi" width="260">
   <p><em>Gambar 5.2: Setelah optimasi — tampilan tetap sama; yang berubah adalah biaya membangunnya.</em></p>
 </div>
 
 <div align="center">
-  <img src="../Screenshots/03-frame-timings.png" alt="Grafik frame time sebelum dan sesudah" width="820">
+  <img src="../screenshots/03-frame-timings.png" alt="Grafik frame time sebelum dan sesudah" width="820">
   <p><em>Gambar 5.3: Frame build dan raster per frame (rata-rata 2 run). Garis putus-putus = budget 16,67 ms.</em></p>
 </div>
 
 <div align="center">
-  <img src="../Screenshots/04-ringkasan-metrik.png" alt="Ringkasan metrik" width="820">
+  <img src="../screenshots/04-ringkasan-metrik.png" alt="Ringkasan metrik" width="820">
   <p><em>Gambar 5.4: Ringkasan metrik sebelum vs sesudah.</em></p>
 </div>
 

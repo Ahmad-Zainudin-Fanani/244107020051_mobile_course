@@ -4,7 +4,7 @@
 # Contoh:
 #   powershell -File docs/tools/render_log.ps1 `
 #     -InputPath build/logs/flutter_test.txt `
-#     -OutputPath Screenshots/01-hasil-flutter-test.png `
+#     -OutputPath screenshots/01-hasil-flutter-test.png `
 #     -Title "flutter test --coverage" -Tail 30
 
 param(

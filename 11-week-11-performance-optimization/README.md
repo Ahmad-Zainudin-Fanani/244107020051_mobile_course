@@ -232,22 +232,22 @@ dilepas sebelum dispose, dan timer debounce dibatalkan.
 ### 5.4 Bukti di perangkat
 
 <div align="center">
-  <img src="Screenshots/01-daftar-1500-catatan-sebelum.png" alt="Daftar 1.500 catatan sebelum optimasi" width="260">
+  <img src="screenshots/01-daftar-1500-catatan-sebelum.png" alt="Daftar 1.500 catatan sebelum optimasi" width="260">
   <p><em>Gambar 5.1: Sebelum — 1.500 catatan, 215 belum sinkron.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/02-daftar-1500-catatan-sesudah.png" alt="Daftar 1.500 catatan sesudah optimasi" width="260">
+  <img src="screenshots/02-daftar-1500-catatan-sesudah.png" alt="Daftar 1.500 catatan sesudah optimasi" width="260">
   <p><em>Gambar 5.2: Sesudah — tampilan sama, biaya membangunnya yang berbeda.</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/03-frame-timings.png" alt="Grafik frame build dan raster" width="820">
+  <img src="screenshots/03-frame-timings.png" alt="Grafik frame build dan raster" width="820">
   <p><em>Gambar 5.3: Frame build dan raster per frame, rata-rata 2 run. Garis putus-putus = budget 16,67 ms (60 FPS).</em></p>
 </div>
 
 <div align="center">
-  <img src="Screenshots/04-ringkasan-metrik.png" alt="Ringkasan metrik" width="820">
+  <img src="screenshots/04-ringkasan-metrik.png" alt="Ringkasan metrik" width="820">
   <p><em>Gambar 5.4: Ringkasan metrik sebelum vs sesudah.</em></p>
 </div>
 
@@ -284,7 +284,7 @@ Diff terhadap baseline Minggu 10 (di luar `pubspec.lock` dan berkas generate):
 | `test/rebuild_count_test.dart` | **Baru** — penghitung rebuild + penjaga regresi |
 | `tool/search_bench.dart` | **Baru** — benchmark biaya penyaringan |
 | `pubspec.yaml` | `integration_test` (SDK) |
-| `docs/`, `Screenshots/` | Laporan, data mentah, grafik, screenshot |
+| `docs/`, `screenshots/` | Laporan, data mentah, grafik, screenshot |
 
 Tidak ada perubahan pada domain, data, maupun fitur Asisten AI dari Minggu 10.
 
@@ -293,7 +293,7 @@ Tidak ada perubahan pada domain, data, maupun fitur Asisten AI dari Minggu 10.
 ## 7. Cara menjalankan dan mengukur ulang
 
 ```bash
-cd 11-week-11-performance-optimization/sourceCode
+cd 11-week-11-performance-optimization
 flutter pub get
 flutter run
 ```
@@ -323,7 +323,7 @@ Membuat ulang grafik (PowerShell 5.1+):
   -Before @("docs/measurements/baseline.json","docs/measurements/baseline-2.json") `
   -After  @("docs/measurements/after.json","docs/measurements/after-2.json") `
   -BeforeRebuilds 5052 -AfterRebuilds 887 `
-  -OutDir Screenshots
+  -OutDir screenshots
 ```
 
 Membuat screenshot dengan 1.500 catatan di perangkat:
@@ -341,7 +341,18 @@ adb shell am start -n com.example.week5_offline_notes/.MainActivity
 
 ```text
 11-week-11-performance-optimization/
-├── README.md
+├── lib/features/notes/presentation/  # berkas yang dioptimalkan Minggu 11
+│   ├── pages/notes_page.dart
+│   ├── providers/notes_providers.dart
+│   └── widgets/{notes_app_bar,notes_list,note_search_field,quick_add_bar,note_tile}.dart
+├── test/
+│   └── rebuild_count_test.dart
+├── integration_test/
+│   └── perf_test.dart
+├── test_driver/
+│   └── integration_test.dart
+├── tool/
+│   └── search_bench.dart
 ├── docs/
 │   ├── performance-findings.md      # baseline + 5 temuan
 │   ├── performance-report.md        # laporan lengkap + trade-off
@@ -354,20 +365,12 @@ adb shell am start -n com.example.week5_offline_notes/.MainActivity
 │   └── tools/
 │       ├── plot_perf.ps1            # grafik dari JSON
 │       └── seed_device_db.py        # DB 1.500 catatan untuk screenshot
-├── Screenshots/
+├── screenshots/
 │   ├── 01-daftar-1500-catatan-sebelum.png
 │   ├── 02-daftar-1500-catatan-sesudah.png
 │   ├── 03-frame-timings.png
 │   └── 04-ringkasan-metrik.png
-└── sourceCode/
-    ├── lib/features/notes/presentation/
-    │   ├── pages/notes_page.dart
-    │   ├── providers/notes_providers.dart
-    │   └── widgets/{notes_app_bar,notes_list,note_search_field,quick_add_bar,note_tile}.dart
-    ├── integration_test/perf_test.dart
-    ├── test_driver/integration_test.dart
-    ├── test/rebuild_count_test.dart
-    └── tool/search_bench.dart
+└── pubspec.yaml / pubspec.lock         # dependensi (agar test bisa dijalankan)
 ```
 
 ---

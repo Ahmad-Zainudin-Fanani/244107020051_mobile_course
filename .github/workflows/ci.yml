@@ -83,6 +83,9 @@ jobs:
         working-directory: 11-week-11-performance-optimization/sourceCode
         run: flutter test
 
+      - name: Week 12 - install SQLite for FFI tests
+        run: sudo apt-get update && sudo apt-get install -y libsqlite3-dev
+
       - name: Week 12 - install dependencies
         working-directory: 12-week-12-testing-quality-assurance/sourceCode
         run: flutter pub get
